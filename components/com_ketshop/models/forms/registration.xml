@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldpath="/administrator/components/com_ketshop/models/fields">
+
+    <fieldset name="default" label="COM_USERS_REGISTRATION_DEFAULT_LABEL">
+
+	<field name="firstname"
+		type="text"
+		label="COM_USERS_REGISTER_FIRSTNAME_LABEL"
+		description="COM_USERS_REGISTER_FIRSTNAME_DESC"
+		filter="string"
+		required="true"
+		size="30" />
+
+	<field name="lastname"
+		type="text"
+		label="COM_USERS_REGISTER_LASTNAME_LABEL"
+		description="COM_USERS_REGISTER_LASTNAME_DESC"
+		filter="string"
+		required="true"
+		size="30" />
+
+	<field name="phone"
+		type="text"
+		label="COM_KETSHOP_REGISTER_PHONE_LABEL"
+		description="COM_KETSHOP_REGISTER_PHONE_DESC"
+		filter="string"
+		required="true"
+		size="30" />
+
+	<field name="street_billing"
+		type="text"
+		id="street_billing"
+		filter="string"
+		required="true"
+		label="COM_KETSHOP_FIELD_STREET_LABEL"
+		message="COM_KETSHOP_FIELD_STREET_MESSAGE"
+		size="30"  />
+
+	<field name="additional_billing"
+		type="text"
+		id="additional_billing"
+		filter="string"
+		label="COM_KETSHOP_FIELD_ADDITIONAL_LABEL"
+		message="COM_KETSHOP_FIELD_ADDITIONAL_MESSAGE"
+		size="30" />
+
+	<field name="city_billing"
+		type="text"
+		id="city_billing"
+		filter="string"
+		required="true"
+		label="COM_KETSHOP_FIELD_CITY_LABEL"
+		message="COM_KETSHOP_FIELD_CITY_MESSAGE"
+		size="30"  />
+
+	<field name="postcode_billing"
+		type="text"
+		id="postcode_billing"
+		filter="string"
+		required="true"
+		label="COM_KETSHOP_FIELD_POSTCODE_LABEL"
+		message="COM_KETSHOP_FIELD_POSTCODE_MESSAGE"
+		size="30"  />
+
+	<field name="region_code_billing"
+		type="regionlist"
+		id="region_code_billing"
+		filter="string"
+		required="true"
+		label="COM_KETSHOP_FIELD_REGION_LABEL"
+		message="COM_KETSHOP_FIELD_REGION_MESSAGE"
+		size="30"  />
+
+	<field name="country_code_billing"
+		type="countrylist"
+		id="country_code_billing"
+		required="true"
+		label="COM_KETSHOP_FIELD_COUNTRY_LABEL"
+		class="inputbox"  >
+	</field>
+
+	<field name="username"
+		type="text"
+		label="COM_USERS_REGISTER_USERNAME_LABEL"
+		description="COM_USERS_DESIRED_USERNAME"
+		class="validate-username"
+		filter="username"
+		required="true"
+		message="COM_USERS_REGISTER_USERNAME_MESSAGE"
+		size="30"
+		validate="username" />
+
+	<field name="email1"
+		type="email"
+		label="COM_USERS_REGISTER_EMAIL1_LABEL"
+		description="COM_USERS_REGISTER_EMAIL1_DESC"
+		field="id"
+		required="true"
+		filter="string"
+		size="30"
+		unique="true"
+		validate="email"
+		validDomains="com_users.domains"
+		autocomplete="email" />
+
+	<field
+		name="email2"
+		type="email"
+		label="COM_USERS_REGISTER_EMAIL2_LABEL"
+		description="COM_USERS_REGISTER_EMAIL2_DESC"
+		field="email1"
+		filter="string"
+		required="true"
+		message="COM_USERS_REGISTER_EMAIL2_MESSAGE"
+		
+		size="30"
+		validate="equals"
+	/>
+
+	<field name="password1" 
+		type="password"
+		label="COM_USERS_PROFILE_PASSWORD1_LABEL"
+		description="COM_USERS_DESIRED_PASSWORD"
+		autocomplete="off"
+		class="validate-password"
+		field="password1"
+		filter="raw"
+		required="true"
+		size="30"
+		validate="password" />
+
+	<field name="password2"
+		type="password"
+		label="COM_USERS_PROFILE_PASSWORD2_LABEL"
+		description="COM_USERS_PROFILE_PASSWORD2_DESC"
+		autocomplete="off"
+		class="validate-password"
+		field="password1"
+		required="true"
+		filter="raw"
+		message="COM_USERS_PROFILE_PASSWORD1_MESSAGE"
+		size="30"
+		validate="equals" />
+
+	<field name="captcha"
+		type="captcha"
+		label="COM_USERS_CAPTCHA_LABEL"
+		description="COM_USERS_CAPTCHA_DESC"
+		validate="captcha" />
+      </fieldset>
+
+      <fieldset name="shipping_address">
+
+	<field name="shipping_address" type="radio"
+	       class="btn-group btn-group-yesno"
+	       id="shipping_address"
+	       label="COM_KETSHOP_FIELD_SHIPPING_ADDRESS_LABEL"
+	       description="COM_KETSHOP_FIELD_SHIPPING_ADDRESS_DESC"
+	       default="0" >
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>
+
+	<field name="street_shipping"
+		type="text"
+		id="street_shipping"
+		filter="string"
+	        required="true"
+		label="COM_KETSHOP_FIELD_STREET_LABEL"
+		message="COM_KETSHOP_FIELD_STREET_MESSAGE"
+		size="30"  />
+
+	<field name="additional_shipping"
+		type="text"
+		id="additional_shipping"
+		filter="string"
+		label="COM_KETSHOP_FIELD_ADDITIONAL_LABEL"
+		message="COM_KETSHOP_FIELD_ADDITIONAL_MESSAGE"
+		size="30" />
+
+	<field name="city_shipping"
+		type="text"
+		id="city_shipping"
+		filter="string"
+	        required="true"
+		label="COM_KETSHOP_FIELD_CITY_LABEL"
+		message="COM_KETSHOP_FIELD_CITY_MESSAGE"
+		size="30"  />
+
+	<field name="postcode_shipping"
+		type="text"
+		id="postcode_shipping"
+		filter="string"
+	        required="true"
+		label="COM_KETSHOP_FIELD_POSTCODE_LABEL"
+		message="COM_KETSHOP_FIELD_POSTCODE_MESSAGE"
+		size="30"  />
+
+	<field name="region_code_shipping"
+		type="regionlist"
+		id="region_code_shipping"
+		filter="string"
+	        required="true"
+		label="COM_KETSHOP_FIELD_REGION_LABEL"
+		message="COM_KETSHOP_FIELD_REGION_MESSAGE"
+		size="30" />
+
+	<field name="country_code_shipping"
+		type="countrylist"
+		id="country_code_shipping"
+	        required="true"
+		label="COM_KETSHOP_FIELD_COUNTRY_LABEL"
+		class="inputbox"  >
+	</field>
+    </fieldset>
+</form>
+

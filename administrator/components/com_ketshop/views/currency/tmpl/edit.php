@@ -1,0 +1,77 @@
+<?php
+/**
+ * @package KetShop
+ * @copyright Copyright (c) 2018 - 2019 Lucas Sanner
+ * @license GNU General Public License version 3, or later
+ */
+
+// No direct access to this file.
+defined('_JEXEC') or die('Restricted access'); 
+
+JHtml::_('behavior.formvalidation');
+JHtml::_('formbehavior.chosen', 'select');
+?>
+
+<script type="text/javascript">
+Joomla.submitbutton = function(task)
+{
+  if(task == 'currency.cancel' || document.formvalidator.isValid(document.getElementById('currency-form'))) {
+    Joomla.submitform(task, document.getElementById('currency-form'));
+  }
+}
+</script>
+
+<form action="<?php echo JRoute::_('index.php?option=com_ketshop&view=currency&layout=edit&id='.(int) $this->item->id); ?>" 
+ method="post" name="adminForm" id="currency-form" enctype="multipart/form-data" class="form-validate">
+
+  <?php echo JLayoutHelper::render('joomla.edit.title_alias', $this); ?>
+
+  <div class="form-horizontal">
+
+    <?php echo JHtml::_('bootstrap.startTabSet', 'myTab', array('active' => 'details')); ?>
+
+    <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'details', JText::_('COM_KETSHOP_TAB_DETAILS')); ?>
+
+      <div class="row-fluid">
+	<div class="span4">
+	  <div class="form-vertical">
+	    <?php
+		  echo $this->form->renderField('numerical');
+		  echo $this->form->renderField('alpha');
+		  echo $this->form->renderField('symbol');
+		  echo $this->form->renderField('continent_code');
+		  echo $this->form->renderField('fractional_unit');
+		  echo $this->form->renderField('exchange_rate');
+		  echo $this->form->renderField('lang_var');
+	      ?>
+	  </div>
+	</div>
+	<div class="span3">
+	  <?php echo JLayoutHelper::render('joomla.edit.global', $this); ?>
+	</div>
+      </div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
+
+
+      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
+      <div class="row-fluid form-horizontal-desktop">
+	<div class="span6">
+	  <?php echo JLayoutHelper::render('joomla.edit.publishingdata', $this); ?>
+	</div>
+	<div class="span6">
+	  <?php echo JLayoutHelper::render('joomla.edit.metadata', $this); ?>
+	</div>
+      </div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
+
+  </div>
+
+  <input type="hidden" name="task" value="" />
+  <?php echo JHtml::_('form.token'); ?>
+</form>
+
+<?php
+// Loads the required scripts.
+$doc = JFactory::getDocument();
+$doc->addScript(JURI::base().'components/com_ketshop/js/extra-handlers.js');
+

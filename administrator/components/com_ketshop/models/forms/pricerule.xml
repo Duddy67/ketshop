@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form addrulepath="/administrator/components/com_ketshop/models/rules">
+
+  <fieldset name="details">
+
+	<field name="description" type="textarea"
+		label="COM_KETSHOP_FIELD_DESCRIPTION_LABEL"
+		description="COM_KETSHOP_FIELD_DESCRIPTION_DESC"
+		rows="5" cols="10"
+		default=""></field>
+
+	<!-- layout: title_alias -->
+	<field name="name" type="text"
+		label="COM_KETSHOP_FIELD_NAME_LABEL"
+		description="COM_KETSHOP_FIELD_NAME_DESC"
+		class="input-xxlarge input-large-text"
+		size="25" required="true" />
+
+	<field name="operation" type="list"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_OPERATION_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_OPERATION_DESC"
+		size="1" default="subtract_percentage">
+		<option value="subtract_percentage">COM_KETSHOP_OPTION_SUBTRACT_PERCENTAGE</option>
+		<option value="add_percentage">COM_KETSHOP_OPTION_ADD_PERCENTAGE</option>
+		<option value="subtract_value">COM_KETSHOP_OPTION_SUBTRACT_VALUE</option>
+		<option value="add_value">COM_KETSHOP_OPTION_ADD_VALUE</option>
+		<option value="fixed_price">COM_KETSHOP_OPTION_FIXED_PRICE</option>
+	</field>
+
+	<field name="value" type="text"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_VALUE_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_VALUE_DESC"
+		size="15" validate="decimal" default="" required="true" />
+
+	<field name="application_level" type="list"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_APPLICATION_LEVEL_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_APPLICATION_LEVEL_DESC"
+		size="1" default="before_tax">
+		<option value="before_tax">COM_KETSHOP_OPTION_BEFORE_TAX</option>
+		<option value="after_tax">COM_KETSHOP_OPTION_AFTER_TAX</option>
+	</field>
+
+	<field name="target_type" type="list"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_TARGET_TYPE_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_TARGET_TYPE_DESC"
+		size="1" class="target-select" default="product">
+		<option value="product">COM_KETSHOP_OPTION_PRODUCT</option>
+		<option value="product_cat">COM_KETSHOP_OPTION_PRODUCT_CAT</option>
+		<option value="bundle">COM_KETSHOP_OPTION_BUNDLE</option>
+		<option value="shipping_cost">COM_KETSHOP_OPTION_SHIPPING_COST</option>
+		<option value="cart_amount">COM_KETSHOP_OPTION_CART_AMOUNT</option>
+	      </field>
+
+	<field name="condition_type" type="list"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_CONDITION_TYPE_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_CONDITION_TYPE_DESC"
+		size="1" class="condition-select" default="product">
+		<option value="product_qty">COM_KETSHOP_OPTION_PRODUCT_QUANTITY</option>
+		<option value="bundle_qty">COM_KETSHOP_OPTION_BUNDLE_QUANTITY</option>
+		<option value="product_cat_qty">COM_KETSHOP_OPTION_PRODUCT_CAT_QUANTITY</option>
+		<option value="product_cat_amount">COM_KETSHOP_OPTION_PRODUCT_CAT_AMOUNT</option>
+		<option value="total_prod_qty">COM_KETSHOP_OPTION_TOTAL_PRODUCT_QUANTITY</option>
+		<option value="total_prod_amount">COM_KETSHOP_OPTION_TOTAL_PRODUCT_AMOUNT</option>
+	</field>
+
+        <field name="comparison_opr" type="list"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_OPERATOR_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_COMPARISON_OPERATOR_DESC"
+		default="et">
+		<option value="et">=</option>
+		<option value="gt">&gt;</option>
+		<option value="lt">&lt;</option>
+		<option value="gtoet">&gt;=</option>
+		<option value="ltoet">&lt;=</option>
+	</field>
+
+	<field name="logical_opr" type="list"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_OPERATOR_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_LOGICAL_OPERATOR_DESC"
+		size="1" class="logical-operator" >
+		<option value="AND">COM_KETSHOP_OPTION_AND_CONDITION</option>
+		<option value="OR">COM_KETSHOP_OPTION_OR_CONDITION</option>
+	</field>
+
+	<field name="condition_qty" type="text"
+		label="COM_KETSHOP_ITEM_QUANTITY_LABEL"
+		description="COM_KETSHOP_ITEM_QUANTITY_LABEL" />
+
+	<field name="condition_amount" type="text"
+		label="COM_KETSHOP_ITEM_AMOUNT_LABEL"
+		description="COM_KETSHOP_ITEM_AMOUNT_LABEL" />
+
+	<field name="recipient_type" type="list"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_RECIPIENT_TYPE_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_RECIPIENT_TYPE_DESC"
+		size="1" class="recipient-select">
+		<option value="customer_group">COM_KETSHOP_OPTION_CUSTOMERS_GROUP</option>
+		<option value="customer">COM_KETSHOP_OPTION_CUSTOMER</option>
+	</field>
+
+	<field name="type" type="list"
+		label="COM_KETSHOP_FIELD_TYPE_LABEL"
+		description="COM_KETSHOP_FIELD_TYPE_DESC"
+		size="1" default="catalog">
+		<option value="catalog">COM_KETSHOP_OPTION_CATALOG</option>
+		<option value="cart">COM_KETSHOP_OPTION_CART</option>
+	</field>
+
+	<field name="type_info" type="text" label="COM_KETSHOP_FIELD_TYPE_LABEL"
+		description="COM_KETSHOP_FIELD_TYPE_DESC" readonly="true"
+		class="readonly" filter="unset" />
+
+	<field name="behavior" type="list"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_BEHAVIOR_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_BEHAVIOR_DESC"
+		size="1" default="AND">
+		<option value="AND">COM_KETSHOP_OPTION_CUMULATIVE</option>
+		<option value="XOR">COM_KETSHOP_OPTION_EXCLUSIVE</option>
+		<option value="CPN_AND">COM_KETSHOP_OPTION_COUPON_CUMULATIVE</option>
+		<option value="CPN_XOR">COM_KETSHOP_OPTION_COUPON_EXCLUSIVE</option>
+	</field>
+
+	<field name="all_variants_target" type="radio"
+	       class="btn-group btn-group-yesno"
+	       filter="unset"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_ALL_VARIANTS_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_ALL_VARIANTS_DESC"
+		default="1">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>
+
+	<field name="all_variants_condition" type="radio"
+	       class="btn-group btn-group-yesno"
+	       filter="unset"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_ALL_VARIANTS_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_ALL_VARIANTS_DESC"
+		default="1">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>
+
+	<!-- N.B: Both all_variants_target and all_variants_condition variables refer to the all_variants variable. -->
+	<field name="all_variants" type="hidden" />
+
+	<field name="show_rule" type="radio"
+	       class="btn-group btn-group-yesno"
+		label="COM_KETSHOP_FIELD_PRICE_RULE_SHOW_RULE_LABEL"
+		description="COM_KETSHOP_FIELD_PRICE_RULE_SHOW_RULE_DESC"
+		default="1">
+		<option value="1">JYES</option>
+		<option value="0">JNO</option>
+	</field>
+
+	<!-- layout: publishingdata -->
+	<field name="id" type="text" default="0" label="JGLOBAL_FIELD_ID_LABEL" 
+	       description="JGLOBAL_FIELD_ID_DESC"
+	       readonly="true" class="readonly" />
+
+	<field name="published" type="list"
+	       label="JSTATUS"
+	       description="JFIELD_PUBLISHED_DESC"
+	       class="inputbox" default="1">
+		<option value="1">JPUBLISHED</option>
+		<option value="0">JUNPUBLISHED</option>
+		<option value="2">JARCHIVED</option>
+		<option value="-2">JTRASHED</option>
+	</field>
+
+	<field name="created_by" type="user"
+		label="COM_KETSHOP_FIELD_CREATED_BY_LABEL" description="COM_KETSHOP_FIELD_CREATED_BY_DESC" />
+
+	<field name="created" type="calendar"
+		label="COM_KETSHOP_FIELD_CREATED_DATE_LABEL" description="COM_KETSHOP_FIELD_CREATED_DATE_DESC"
+		class="readonly" readonly="true"
+		translateformat="true"
+		showtime="true"
+		size="22" 
+		filter="user_utc" />
+
+         <field name="modified_by" type="user"
+                label="JGLOBAL_FIELD_MODIFIED_BY_LABEL"
+                class="readonly" readonly="true" filter="unset" />
+
+	<field name="modified" type="calendar" class="readonly"
+		label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_KETSHOP_FIELD_MODIFIED_DESC"
+		size="22" readonly="true"
+		translateformat="true"
+		showtime="true"
+		filter="user_utc" />
+
+	<field name="publish_up" type="calendar"
+	       label="JGLOBAL_FIELD_PUBLISH_UP_LABEL"
+	       description="JGLOBAL_FIELD_PUBLISH_UP_DESC"
+	       class="inputbox" size="22"
+	       translateformat="true"
+	       showtime="true"
+	       filter="user_utc" />
+
+	<field name="publish_down" type="calendar"
+	       label="JGLOBAL_FIELD_PUBLISH_DOWN_LABEL"
+	       description="JGLOBAL_FIELD_PUBLISH_DOWN_DESC"
+	       class="inputbox" size="22"
+	       translateformat="true"
+	       showtime="true"
+	       filter="user_utc" />
+
+        <field name="ordering" type="text" label="JFIELD_ORDERING_LABEL"
+	       description="JFIELD_ORDERING_DESC" class="inputbox" size="6"
+	       default="0" />
+	</fieldset>
+</form>
+
+
+
