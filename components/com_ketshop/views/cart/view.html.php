@@ -58,6 +58,7 @@ class KetshopViewCart extends JViewLegacy
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
     $this->shop_settings->can_edit = ($this->order->order_status == 'cart') ? true : false;
+    $this->shop_settings->view_name = 'cart';
     $this->shop_settings->price_display = $this->shop_settings->tax_method;
 
     // Check for errors.

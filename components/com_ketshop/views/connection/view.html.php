@@ -35,10 +35,17 @@ class KetshopViewConnection extends JViewLegacy
    */
   public function display($tpl = null)
   {
+    $this->user = JFactory::getUser();
+
+    // Redirect registered users to the shipment page.
+    if(!$this->user->guest) {
+      $app = JFactory::getApplication();
+      $app->redirect(JRoute::_('index.php?option=com_ketshop&view=shipment', false));
+    }
+
     // Initialise variables
     //$this->state = $this->get('State');
     $this->registration = $this->get('Form');
-    $this->user = JFactory::getUser();
     // Gets the global settings of the shop.
     $this->shop_settings = UtilityHelper::getShopSettings($this->user->get('id'));
 

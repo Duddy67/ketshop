@@ -56,7 +56,7 @@ $params = $displayData['params'];
       </td>
        <?php if($settings->can_edit) : ?>
 	 <td>
-	    <a class="btn" id="remove-product-<?php echo $product->prod_id; ?>-<?php echo $product->var_id; ?>" href="<?php echo 'index.php?option=com_ketshop&task=cart.removeFromCart&prod_id='.$product->prod_id.'&var_id='.$product->var_id; ?>"><span class="icon-shop-bin"></span></a> 
+	    <a class="btn" id="remove-product-<?php echo $product->prod_id; ?>-<?php echo $product->var_id; ?>" href="<?php echo 'index.php?option=com_ketshop&task='.$settings->view_name.'.removeFromCart&prod_id='.$product->prod_id.'&var_id='.$product->var_id; ?>"><span class="icon-shop-bin"></span></a> 
 	 </td>
        <?php endif; ?>
       </tr>

@@ -58,12 +58,13 @@ class KetshopModelShipment extends JModelItem
 
 
   /**
-   * 
+   * Collects the available shippings through the ketshop shipment plugins. 
    *
-   * @return array	An array of product objects.
+   * @return array	An array of shipping objects.
    */
   public function getShippings()
   {
+    // Gets the customer's delivery address.
     $addresses = ShopHelper::getCustomerAddresses();
     $deliveryAddress = $addresses['billing'];
 
@@ -77,15 +78,17 @@ class KetshopModelShipment extends JModelItem
     JPluginHelper::importPlugin('ketshopshipment');
     $dispatcher = JDispatcher::getInstance();
 
-    // Trigger the event. This event will be caught by all the shipment plugins.
+    // Trigger the event then retrieves the shippings from all the ketshop shipment plugins.
     $results = $dispatcher->trigger('onKetshopShipping', array($deliveryAddress, $nbProducts, $weightsDimensions));
 
     $priceRules = $this->order_model->getShippingPriceRules($this->order);
 
     $shippings = array();
 
+    // Loops through the results returned by the plugins.
     foreach($results as $result) {
       foreach($result as $shipping) {
+	// Sets both shipping price rules and cost.
 	$shipping->price_rules = $priceRules;
 	$shippings[] = $this->getShippingCost($shipping);
       }

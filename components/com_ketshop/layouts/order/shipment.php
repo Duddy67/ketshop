@@ -54,6 +54,7 @@ if(!$isPicker) {
       <span class="price-column">
 	<?php echo UtilityHelper::floatFormat($shipping->final_shipping_cost).' '.$settings->currency; ?>
       </span>
+      <input type="hidden" name="shipping_cost" id="shipping-cost-<?php echo $shipping->id; ?>" value="<?php echo UtilityHelper::floatFormat($shipping->final_shipping_cost); ?>" />
     </td>
   </tr>
 <?php endforeach; ?>

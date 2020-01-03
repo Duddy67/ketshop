@@ -59,6 +59,16 @@ class KetshopController extends JControllerLegacy
 			    'filter-ordering' => 'STRING', 'lang' => 'CMD',
 			    'Itemid' => 'INT');
 
+    // Ensures that the no logged-in users cannot access those views.
+    $unauthorizedViews = array('shipment', 'payment', 'orders', 'order');
+    $user = JFactory::getUser();
+
+    if($user->get('guest') == 1 && in_array($vName, $unauthorizedViews)) {
+      // Redirect to login page.
+      $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=connection', false));
+      return;
+    }
+
     // Display the view.
     parent::display($cachable, $safeurlparams);
   }
