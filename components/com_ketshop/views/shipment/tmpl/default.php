@@ -48,3 +48,5 @@ JHtml::_('jquery.framework');
 // Loads the jQuery scripts.
 $doc = JFactory::getDocument();
 $doc->addScript(JURI::root().'components/com_ketshop/js/shipment.js');
+$doc->addScript(JURI::root().'components/com_ketshop/js/cart.js');
+

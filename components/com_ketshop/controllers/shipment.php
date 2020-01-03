@@ -105,7 +105,7 @@ class KetshopControllerShipment extends JControllerForm
 
     $app = JFactory::getApplication();
     $app->enqueueMessage(JText::sprintf('COM_KETSHOP_CART_UPDATED'));
-    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=cart', false));
+    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=shipment', false));
   }
 
 
@@ -127,7 +127,7 @@ echo 'shipment';
 
     $app = JFactory::getApplication();
     $app->enqueueMessage(JText::sprintf('COM_KETSHOP_PRODUCT_REMOVED_FROM_CART'));
-    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=cart', false));*/
+    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=shipment', false));*/
   }
 }
 

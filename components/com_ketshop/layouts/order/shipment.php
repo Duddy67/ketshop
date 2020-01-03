@@ -19,12 +19,14 @@ if(!$isPicker) {
   // Puts the shipping object into an array.
   $shippings = array($shippings);
 }
+
+$colspan = ($settings->can_edit) ? 6 : 5;
 ?>
 
-<tr class="shipping-row-bgr font-bold"><td colspan="5">
+  <tr class="shipping-row-bgr font-bold"><td colspan="<?php echo $colspan; ?>">
  <?php echo JText::_('COM_KETSHOP_SHIPPING_LABEL'); ?>
 </td></tr>
-<tr><td colspan="5">
+<tr><td colspan="<?php echo $colspan; ?>">
 
 <table class="table product-row">
 <?php foreach($shippings as $i => $shipping) :
@@ -58,6 +60,19 @@ if(!$isPicker) {
     </td>
   </tr>
 <?php endforeach; ?>
+<?php if(!empty($shipping->price_rules)) :
+	$colspan = ($isPicker) ? 4 : 3;
+  ?>
+    <tr><td colspan="<?php echo $colspan; ?>">
+	<?php foreach($shipping->price_rules as $i => $priceRule) : 
+	        $br = ($i > 0) ? '<br />' : '';
+                echo $br;
+	   ?>
+           <span class="rule-name small"><?php echo $priceRule->name; ?></span>
+	   <span class="tax-method"><?php echo UtilityHelper::formatPriceRule($priceRule->operation, $priceRule->value); ?></span>
+	<?php endforeach; ?>
+    </td></tr>
+<?php endif; ?>
 </table>
 </td></tr>
 
