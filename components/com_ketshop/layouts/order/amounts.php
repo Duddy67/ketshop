@@ -13,6 +13,8 @@ $detailedAmounts = $displayData['detailed_amounts'];
 $amounts = $displayData['amounts'];
 $settings = $displayData['settings'];
 
+$cartPriceRules = (!empty($amounts->price_rules)) ? true : false;
+
 $colspan = ($settings->can_edit) ? 6 : 5;
 ?>
 
@@ -45,8 +47,21 @@ $colspan = ($settings->can_edit) ? 6 : 5;
 
 <table class="table-condensed amounts">
   <tr>
-  <?php if($amounts->incl_tax != $amounts->final_incl_tax) : ?>
-    <td class="striked-price-column"><?php echo UtilityHelper::floatFormat($amounts->excl_tax).' '.$settings->currency; ?></td>
+    <?php if($cartPriceRules) : // Displays price rule names. ?>
+      <td rowspan="2">
+	<?php foreach($amounts->price_rules as $i => $priceRule) : 
+	        $br = ($i > 0) ? '<br />' : '';
+                echo $br;
+	   ?>
+           <span class="rule-name small"><?php echo $priceRule->name; ?></span>
+	   <span class="tax-method"><?php echo UtilityHelper::formatPriceRule($priceRule->operation, $priceRule->value); ?></span>
+	<?php endforeach; ?>
+      </td>
+    <?php endif; ?>
+  <?php if($cartPriceRules) : ?>
+    <td class="striked-price-column">
+     <?php echo UtilityHelper::floatFormat($amounts->excl_tax).' '.$settings->currency; ?>
+    </td>
   <?php else : ?>
     <td></td>
   <?php endif; ?>

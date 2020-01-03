@@ -9,28 +9,13 @@ defined('_JEXEC') or die;
 
 JHtml::_('behavior.framework');
 
-// Create shortcuts.
-$cartAmount = $displayData['cart_amount'];
-$shippingData = $displayData['shipping_data'];
-
-$shippingFinalCost = 0;
-if(!empty($shippingData)) {
-   $shippingFinalCost = $shippingData['final_cost'];
-}
-//var_dump($shippingData);
-
+$amounts = $displayData['amounts'];
+$settings = $displayData['settings'];
 ?>
 
-  <tr class="total-row-bgr font-bold"><td colspan="<?php echo $displayData['col_span_nb']; ?>">
-     <?php echo JText::_('COM_KETSHOP_TOTAL_LABEL'); ?>
-  </td></tr>
-  <tr><td colspan="<?php echo $displayData['col_span_nb']; ?>">
-  <?php //Whatever the tax method, total amount is always computed with all taxes. ?>
-  <?php $totalAmount = $cartAmount['fnl_amt_incl_tax'] + $shippingFinalCost; ?>
-   <span class="total-amount">
-     <?php echo UtilityHelper::floatFormat($totalAmount, $displayData['digits_precision']); ?>
-     <?php echo $displayData['currency']; ?>
-   </span>
-   <span class="incl-taxes"><?php echo JText::_('COM_KETSHOP_INCLUDING_TAXES'); ?></span> 
-  </td></tr>
-
+<tr class="amount-row-bgr font-bold"><td colspan="5">
+ <?php echo JText::_('COM_KETSHOP_TOTAL_AMOUNT_LABEL'); ?>
+</td></tr>
+<tr><td colspan="5" class="price-column lead">
+  <div class="text-right"><span id="total-amount"><?php echo UtilityHelper::floatFormat($amounts->final_incl_tax); ?></span> <?php echo $settings->currency; ?> <span class="tax-method"><?php echo JText::_('COM_KETSHOP_FIELD_INCL_TAX_LABEL'); ?></span></div>
+</td></tr>
