@@ -106,7 +106,7 @@ class KetshopRouterRulesLegacy implements JComponentRouterRulesInterface
       return;
     }
 
-    $views = array('category', 'product', 'cart', 'connection', 'shipment', 'payment');
+    $views = array('category', 'product', 'cart', 'connection', 'checkout', 'order');
 
     if(in_array($view, $views)) {
       if(!$menuItemGiven) {

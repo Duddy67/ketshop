@@ -17,7 +17,7 @@ defined('_JEXEC') or die;
 
 <?php if(!empty($this->shippings)) : ?>
 
-  <form action="index.php?option=com_ketshop&task=shipment.updateCart" method="post" id="ketshop_shipment">
+  <form action="index.php?option=com_ketshop&task=checkout.updateCart" method="post" id="ketshop_checkout">
     <table class="table product-row end-table">
 
     <?php echo JLayoutHelper::render('order.product_header', $this->shop_settings); ?>
@@ -27,7 +27,7 @@ defined('_JEXEC') or die;
 
     <tr><td colspan="6">
       <span class="btn">
-	<a href="#" class="btn-link ketshop-btn" onclick="document.getElementById('ketshop_shipment').submit();">
+	<a href="#" class="btn-link ketshop-btn" onclick="document.getElementById('ketshop_checkout').submit();">
 	  <?php echo JText::_('COM_KETSHOP_UPDATE_CART'); ?> <span class="icon-shop-loop2"></span></a>
       </span>
    </td/></tr>
@@ -37,7 +37,7 @@ defined('_JEXEC') or die;
     </table>
 
     <span class="btn">
-    <a href="<?php echo JRoute::_('index.php?option=com_ketshop&shipment=payment', false); ?>" class="btn-link ketshop-btn">
+    <a id="proceed" href="<?php echo JRoute::_('index.php?option=com_ketshop&task=checkout.proceed&payment_id=0&shipping_id=0', false); ?>" class="btn-link ketshop-btn">
 	<?php echo JText::_('COM_KETSHOP_PAY_NOW'); ?> <span class="icon-shop-credit-card"></span></a>
     </span>
   </form>

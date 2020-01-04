@@ -11,7 +11,7 @@ defined('_JEXEC') or die;
 
 
 
-class KetshopViewShipment extends JViewLegacy
+class KetshopViewCheckout extends JViewLegacy
 {
   protected $state = null;
   protected $order_model = null;
@@ -62,7 +62,7 @@ class KetshopViewShipment extends JViewLegacy
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
     $this->shop_settings->can_edit = true;
-    $this->shop_settings->view_name = 'shipment';
+    $this->shop_settings->view_name = 'checkout';
     $this->shop_settings->price_display = $this->shop_settings->tax_method;
 
     // Check for errors.

@@ -32,7 +32,7 @@ class KetshopModelOrder extends JModelItem
     $query->select('*')
 	  ->from('#__ketshop_order')
           ->where('cookie_id='.$db->Quote($cookieId))
-          ->where('order_status='.$db->Quote('cart'));
+          ->where('order_status='.$db->Quote('shopping'));
     $db->setQuery($query);
     $currentOrder = $db->loadObject();
 
@@ -70,7 +70,7 @@ class KetshopModelOrder extends JModelItem
     $db->setQuery($query);
     $superUserId = $db->loadResult();
 
-    $item = array('cookie_id' => $cookieId, 'user_id' => $user->get('id'), 'name' => 'xxxxxxxx', 'order_status' => 'cart',
+    $item = array('cookie_id' => $cookieId, 'user_id' => $user->get('id'), 'name' => 'xxxxxxxx', 'order_status' => 'shopping',
 		  'payment_status' => 'pending', 'tax_method' => $settings->tax_method, 'currency_code' => $settings->currency_code,
 		  'rounding_rule' => $settings->rounding_rule, 'digits_precision' => $settings->digits_precision,
 		  'published' => 0, 'created' => $now, 'created_by' => $superUserId);

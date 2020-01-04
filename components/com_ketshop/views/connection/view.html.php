@@ -37,10 +37,10 @@ class KetshopViewConnection extends JViewLegacy
   {
     $this->user = JFactory::getUser();
 
-    // Redirect registered users to the shipment page.
+    // Redirect registered users to the checkout page.
     if(!$this->user->guest) {
       $app = JFactory::getApplication();
-      $app->redirect(JRoute::_('index.php?option=com_ketshop&view=shipment', false));
+      $app->redirect(JRoute::_('index.php?option=com_ketshop&view=checkout', false));
     }
 
     // Initialise variables

@@ -11,7 +11,7 @@ defined('_JEXEC') or die('Restricted access');
 JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/pricerule.php');
 
 
-class KetshopModelShipment extends JModelItem
+class KetshopModelCheckout extends JModelItem
 {
   use PriceruleTrait;
 
@@ -108,7 +108,7 @@ class KetshopModelShipment extends JModelItem
     JPluginHelper::importPlugin('ketshoppayment');
     $dispatcher = JDispatcher::getInstance();
 
-    // Trigger the event then retrieves the shippings from all the ketshop shipment plugins.
+    // Trigger the event then retrieves the shippings from all the ketshop payment plugins.
     $results = $dispatcher->trigger('onKetshopPayment');
 
     $paymentModes = array();
