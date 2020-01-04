@@ -96,5 +96,31 @@ class KetshopModelShipment extends JModelItem
 
     return $shippings;
   }
+
+
+  /**
+   * Collects the available payment modes through the ketshop payment plugins. 
+   *
+   * @return array	An array of payment objects.
+   */
+  public function getPaymentModes()
+  {
+    JPluginHelper::importPlugin('ketshoppayment');
+    $dispatcher = JDispatcher::getInstance();
+
+    // Trigger the event then retrieves the shippings from all the ketshop shipment plugins.
+    $results = $dispatcher->trigger('onKetshopPayment');
+
+    $paymentModes = array();
+
+    // Loops through the results returned by the plugins.
+    foreach($results as $result) {
+      foreach($result as $paymentMode) {
+	$paymentModes[] = $paymentMode;
+      }
+    }
+
+    return $paymentModes;
+  }
 }
 

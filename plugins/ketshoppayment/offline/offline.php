@@ -15,6 +15,22 @@ JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop
 class plgKetshoppaymentOffline extends JPlugin
 {
 
+  public function onKetshopPayment()
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('id, name, plugin_element, description')
+	  ->from('#__ketshop_payment_mode')
+	  ->where('plugin_element='.$db->Quote('offline'))
+	  ->where('published=1')
+	  ->order('ordering');
+    $db->setQuery($query);
+
+    return $db->loadObjectList();
+  }
+
+
   //Grab the event triggered by the payment controller.
   public function onKetshopPaymentOffline ($amounts, $cart, $settings, $utility)
   {

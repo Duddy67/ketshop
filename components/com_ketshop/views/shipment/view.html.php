@@ -21,6 +21,7 @@ class KetshopViewShipment extends JViewLegacy
   protected $amounts = null;
   protected $detailed_amounts = null;
   protected $shippings = null;
+  protected $payment_modes = null;
   protected $shop_settings = null;
 
 
@@ -57,6 +58,7 @@ class KetshopViewShipment extends JViewLegacy
     $this->detailed_amounts = $this->order_model->getDetailedAmounts($this->order);
     $user = JFactory::getUser();
     $this->shippings = $this->get('Shippings');
+    $this->payment_modes = $this->get('PaymentModes');
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
     $this->shop_settings->can_edit = true;
@@ -67,6 +69,12 @@ class KetshopViewShipment extends JViewLegacy
     if(count($errors = $this->get('Errors'))) {
       JError::raiseWarning(500, implode("\n", $errors));
       return false;
+    }
+
+    // Redirect registered users to the cart page.
+    if(empty($this->products)) {
+      $app = JFactory::getApplication();
+      $app->redirect(JRoute::_('index.php?option=com_ketshop&view=cart', false));
     }
 
     $this->params = $this->state->get('params');

@@ -23,17 +23,21 @@ defined('_JEXEC') or die;
     <?php echo JLayoutHelper::render('order.product_header', $this->shop_settings); ?>
     <?php echo JLayoutHelper::render('order.product_rows', array('products' => $this->products, 'settings' => $this->shop_settings, 'params' => $this->params)); ?>
     <?php echo JLayoutHelper::render('order.amounts', array('amounts' => $this->amounts, 'detailed_amounts' => $this->detailed_amounts, 'settings' => $this->shop_settings, 'params' => $this->params)); ?>
-    <?php echo JLayoutHelper::render('order.shipment', array('shippings' => $this->shippings, 'settings' => $this->shop_settings)); ?>
     <?php echo JLayoutHelper::render('order.total_amount', array('amounts' => $this->amounts, 'settings' => $this->shop_settings)); ?>
+
+    <tr><td colspan="6">
+      <span class="btn">
+	<a href="#" class="btn-link ketshop-btn" onclick="document.getElementById('ketshop_shipment').submit();">
+	  <?php echo JText::_('COM_KETSHOP_UPDATE_CART'); ?> <span class="icon-shop-loop2"></span></a>
+      </span>
+   </td/></tr>
+
+    <?php echo JLayoutHelper::render('order.shipment', array('shippings' => $this->shippings, 'settings' => $this->shop_settings)); ?>
+    <?php echo JLayoutHelper::render('order.payment', array('payment_modes' => $this->payment_modes, 'settings' => $this->shop_settings)); ?>
     </table>
 
     <span class="btn">
-      <a href="#" class="btn-link ketshop-btn" onclick="document.getElementById('ketshop_shipment').submit();">
-	<?php echo JText::_('COM_KETSHOP_UPDATE_CART'); ?> <span class="icon-shop-loop2"></span></a>
-    </span>
-
-    <span class="btn">
-    <a href="<?php echo JRoute::_('index.php?option=com_ketshop&view=payment', false); ?>" class="btn-link ketshop-btn">
+    <a href="<?php echo JRoute::_('index.php?option=com_ketshop&shipment=payment', false); ?>" class="btn-link ketshop-btn">
 	<?php echo JText::_('COM_KETSHOP_PAY_NOW'); ?> <span class="icon-shop-credit-card"></span></a>
     </span>
   </form>

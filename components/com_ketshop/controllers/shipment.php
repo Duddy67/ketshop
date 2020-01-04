@@ -72,6 +72,16 @@ class KetshopControllerShipment extends JControllerForm
 
 
   /**
+   * 
+   *
+   * @return  void
+   */
+  public function payment()
+  {
+  }
+
+
+  /**
    * Updates the cart.
    *
    * @return  void

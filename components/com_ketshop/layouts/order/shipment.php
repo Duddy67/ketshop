@@ -23,7 +23,7 @@ if(!$isPicker) {
 $colspan = ($settings->can_edit) ? 6 : 5;
 ?>
 
-  <tr class="shipping-row-bgr font-bold"><td colspan="<?php echo $colspan; ?>">
+<tr class="shipping-row-bgr font-bold"><td colspan="<?php echo $colspan; ?>">
  <?php echo JText::_('COM_KETSHOP_SHIPPING_LABEL'); ?>
 </td></tr>
 <tr><td colspan="<?php echo $colspan; ?>">

@@ -262,6 +262,20 @@ ENGINE = MyISAM DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
+-- Table `#__ketshop_order_shipping`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `#__ketshop_order_shipping`;
+CREATE TABLE `#__ketshop_order_shipping` (
+  `order_id` INT UNSIGNED NOT NULL ,
+  `shipping_id` INT UNSIGNED NOT NULL ,
+  `name` VARCHAR(80) NOT NULL,
+  `shipping_cost` DECIMAL(14,5) NOT NULL ,
+  `final_shipping_cost` DECIMAL(14,5) NOT NULL ,
+  INDEX `idx_order_id` (`order_id` ASC) )
+ENGINE = MyISAM DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
 -- Table `#__ketshop_order_transaction`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `#__ketshop_order_transaction`;

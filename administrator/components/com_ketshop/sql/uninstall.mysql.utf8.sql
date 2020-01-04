@@ -12,6 +12,7 @@ DROP TABLE IF EXISTS `#__ketshop_var_attrib`;
 DROP TABLE IF EXISTS `#__ketshop_order`;
 DROP TABLE IF EXISTS `#__ketshop_order_prod`;
 DROP TABLE IF EXISTS `#__ketshop_order_prule`;
+DROP TABLE IF EXISTS `#__ketshop_order_shipping`;
 DROP TABLE IF EXISTS `#__ketshop_order_transaction`;
 DROP TABLE IF EXISTS `#__ketshop_order_detailed_amount`;
 DROP TABLE IF EXISTS `#__ketshop_payment_mode`;
