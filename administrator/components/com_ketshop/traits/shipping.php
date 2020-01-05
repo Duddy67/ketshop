@@ -8,9 +8,15 @@
 // No direct access to this file.
 defined('_JEXEC') or die; 
 
+JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
+JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop.php');
+
 
 trait ShippingTrait
 {
+  use OrderTrait;
+
+
   /**
    * Returns the available shippings according to the shipping plugin and the min/max number of
    * products allowed.
@@ -86,6 +92,38 @@ trait ShippingTrait
       // at delivery point
       else {
 	$shippings[$i]->address = UtilityHelper::getAddress('shipping', 'delivery_point', $shipping->id);
+      }
+    }
+
+    return $shippings;
+  }
+
+
+  public function getShippingsFromPlugins($order)
+  {
+    // Gets the customer's delivery address.
+    $addresses = ShopHelper::getCustomerAddresses($order->user_id);
+    $deliveryAddress = (isset($addresses['shipping'])) ? $addresses['shipping'] : $addresses['billing'];
+
+    $nbProducts = $this->getNumberOfShippableProducts($order);
+    $weightsDimensions = $this->getWeightsAndDimensions($order);
+
+    JPluginHelper::importPlugin('ketshopshipment');
+    $dispatcher = JDispatcher::getInstance();
+
+    // Trigger the event then retrieves the shippings from all the ketshop shipment plugins.
+    $results = $dispatcher->trigger('onKetshopShipping', array($deliveryAddress, $nbProducts, $weightsDimensions));
+
+    $priceRules = $this->getShippingPriceRules($order);
+
+    $shippings = array();
+
+    // Loops through the results returned by the plugins.
+    foreach($results as $result) {
+      foreach($result as $shipping) {
+	// Sets both shipping price rules and cost.
+	$shipping->price_rules = $priceRules;
+	$shippings[] = $this->getShippingCost($shipping);
       }
     }
 

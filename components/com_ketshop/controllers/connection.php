@@ -46,7 +46,7 @@ class KetshopControllerConnection extends JControllerForm
     }
 
     // Success
-    $app->redirect(JRoute::_('index.php?option=com_ketshop&view=shipment', false));
+    $app->redirect(JRoute::_('index.php?option=com_ketshop&view=checkout', false));
   }
 
 

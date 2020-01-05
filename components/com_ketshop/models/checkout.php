@@ -122,5 +122,10 @@ class KetshopModelCheckout extends JModelItem
 
     return $paymentModes;
   }
+
+
+  public function getPluginName($pluginId)
+  {
+  }
 }
 

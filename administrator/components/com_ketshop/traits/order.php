@@ -266,7 +266,7 @@ trait OrderTrait
    */
   public function getProduct($productId, $variantId, $user, $coupons = array())
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     // Gets the required product data.
     $query->select('p.name,p.id,p.catid,p.type,t.rate AS tax_rate,p.alias,p.nb_variants,p.shippable,'.
@@ -296,7 +296,7 @@ trait OrderTrait
    */
   public function getProducts($order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     // 
     $query->select('*')
@@ -334,7 +334,7 @@ trait OrderTrait
    */
   public function getDetailedAmounts($order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     // 
     $query->select('*')
@@ -353,7 +353,7 @@ trait OrderTrait
    */
   public function getAmounts($order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     // 
     $query->select('amount_excl_tax AS excl_tax, amount_incl_tax AS incl_tax,'.
@@ -376,7 +376,7 @@ trait OrderTrait
    */
   public function storeProduct($product, $order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     // Ensures first that the product is not already in the order.
     $query->select('COUNT(*)')
@@ -418,7 +418,7 @@ trait OrderTrait
    */
   public function getNumberOfProducts($order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     $query->select('COUNT(*)')
@@ -439,7 +439,7 @@ trait OrderTrait
    */
   public function getNumberOfShippableProducts($order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     $query->select('COUNT(*)')
@@ -462,7 +462,7 @@ trait OrderTrait
    */
   public function getCartAmountPriceRules($order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     $query->select('name, operation, behavior, value, application_level')
@@ -486,7 +486,7 @@ trait OrderTrait
    */
   public function getShippingPriceRules($order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     $query->select('name, operation, behavior, value, application_level')
@@ -510,7 +510,7 @@ trait OrderTrait
    */
   public function getWeightsAndDimensions($order)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     $query->select('pv.weight, pv.length, pv.width, pv.height, p.weight_unit, p.dimension_unit')
@@ -536,7 +536,7 @@ trait OrderTrait
   private function storeProductPriceRules($product, $order)
   {
     if(!empty($product->price_rules)) {
-      $db = $this->getDbo();
+      $db = JFactory::getDbo();
       $query = $db->getQuery(true);
       $values = array();
 
@@ -569,7 +569,7 @@ trait OrderTrait
    */
   private function storeCartPriceRules($order, $priceRules)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     // First removes the possible old cart price rules.
@@ -645,6 +645,27 @@ trait OrderTrait
     $query->insert('#__ketshop_order_detailed_amount')
 	  ->columns($columns)
 	  ->values($values);
+    $db->setQuery($query);
+    $db->execute();
+  }
+
+
+  /**
+   * Updates the status of a given order.
+   *
+   * @param   string   $status		The new order status.
+   * @param   object   $order		The order to update.
+   *
+   * @return  void
+   */
+  public function updateOrderStatus($status, $order)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->update('#__ketshop_order')
+	  ->set('order_status='.$db->Quote($status))
+	  ->where('id='.(int)$order->id);
     $db->setQuery($query);
     $db->execute();
   }
@@ -751,6 +772,50 @@ trait OrderTrait
   }
 
 
+  public function setUserId($userId, $order)
+  {
+    if($order->user_id == 0) {
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+      $query->update('#__ketshop_order')
+	    ->set('user_id='.(int)$userId)
+	    ->where('id='.(int)$order->id);
+      $db->setQuery($query);
+      $db->execute();
+    }
+  }
+
+
+  /**
+   * Sets the shipping for a given order.
+   *
+   * @param   object   $shipping	A shipping object.
+   * @param   object   $order		The order for which to set shipping.
+   *
+   * @return  void
+   */
+  public function setShipping($shipping, $order)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->delete('#__ketshop_order_shipping')
+	  ->where('order_id='.(int)$order->id);
+    $db->setQuery($query);
+    $db->execute();
+
+    $columns = array('order_id', 'shipping_id', 'name', 'shipping_cost', 'final_shipping_cost');
+    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $shipping->shipping_cost, $shipping->final_shipping_cost);
+
+    $query->clear()
+	  ->insert('#__ketshop_order_shipping')
+	  ->columns($columns)
+	  ->values(implode(',', $values));
+    $db->setQuery($query);
+    $db->execute();
+  }
+
+
   /**
    * Checks the new product quantities to update. Modifies the quantity values if necessary.
    *
@@ -780,6 +845,8 @@ trait OrderTrait
 	       $product->quantity < $checking->min_quantity) {
 	  $products[$key]->quantity = $checking->min_quantity;
 	}
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
       }
     }
 

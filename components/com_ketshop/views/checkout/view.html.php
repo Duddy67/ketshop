@@ -9,10 +9,14 @@
 // No direct access
 defined('_JEXEC') or die;
 
+JLoader::register('ShippingTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/shipping.php');
 
 
 class KetshopViewCheckout extends JViewLegacy
 {
+  use ShippingTrait;
+
+
   protected $state = null;
   protected $order_model = null;
   protected $order = null;
@@ -50,14 +54,18 @@ class KetshopViewCheckout extends JViewLegacy
 
   function display($tpl = null)
   {
+    // Binds the order to the current user.
+    $user = JFactory::getUser();
+    $this->order_model->setUserId($user->id, $this->order);
+
     // Initialise variables
     $this->state = $this->get('State');
     $this->products = $this->order_model->getProducts($this->order);
     $this->amounts = $this->order_model->getAmounts($this->order);
     $this->amounts->price_rules = $this->order_model->getCartAmountPriceRules($this->order);
     $this->detailed_amounts = $this->order_model->getDetailedAmounts($this->order);
-    $user = JFactory::getUser();
-    $this->shippings = $this->get('Shippings');
+    //$this->shippings = $this->get('Shippings');
+    $this->shippings = $this->getShippingsFromPlugins($this->order);
     $this->payment_modes = $this->get('PaymentModes');
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.

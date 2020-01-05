@@ -47,6 +47,8 @@ class KetshopRouter extends JComponentRouterView
     $this->registerView($connection);
     $checkout = new JComponentRouterViewconfiguration('checkout');
     $this->registerView($checkout);
+    $payment = new JComponentRouterViewconfiguration('payment');
+    $this->registerView($payment);
     $order = new JComponentRouterViewconfiguration('order');
     $this->registerView($order);
 
