@@ -64,7 +64,6 @@ class KetshopViewCheckout extends JViewLegacy
     $this->amounts = $this->order_model->getAmounts($this->order);
     $this->amounts->price_rules = $this->order_model->getCartAmountPriceRules($this->order);
     $this->detailed_amounts = $this->order_model->getDetailedAmounts($this->order);
-    //$this->shippings = $this->get('Shippings');
     $this->shippings = $this->getShippingsFromPlugins($this->order);
     $this->payment_modes = $this->get('PaymentModes');
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);

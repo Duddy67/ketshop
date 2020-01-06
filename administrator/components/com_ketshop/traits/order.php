@@ -796,21 +796,36 @@ trait OrderTrait
    */
   public function setShipping($shipping, $order)
   {
+    $this->deleteShipping($order);
+
+    $columns = array('order_id', 'shipping_id', 'name', 'shipping_cost', 'final_shipping_cost');
+    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $shipping->shipping_cost, $shipping->final_shipping_cost);
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->insert('#__ketshop_order_shipping')
+	  ->columns($columns)
+	  ->values(implode(',', $values));
+    $db->setQuery($query);
+    $db->execute();
+  }
+
+
+  /**
+   * Deletes the shipping from a given order.
+   *
+   * @param   object   $order		The order for which to delete shipping from.
+   *
+   * @return  void
+   */
+  public function deleteShipping($order)
+  {
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
     $query->delete('#__ketshop_order_shipping')
 	  ->where('order_id='.(int)$order->id);
-    $db->setQuery($query);
-    $db->execute();
-
-    $columns = array('order_id', 'shipping_id', 'name', 'shipping_cost', 'final_shipping_cost');
-    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $shipping->shipping_cost, $shipping->final_shipping_cost);
-
-    $query->clear()
-	  ->insert('#__ketshop_order_shipping')
-	  ->columns($columns)
-	  ->values(implode(',', $values));
     $db->setQuery($query);
     $db->execute();
   }

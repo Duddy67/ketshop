@@ -6,6 +6,8 @@
 
     $('[name="shipping"]').change( function() { $.fn.setTotalAmount(); });
     $('[name="payment_mode"]').change( function() { $.fn.setPaymentId(); });
+    //$('#proceed').click( function(e) { $.fn.recap(e); });
+
     $.fn.setTotalAmount();
     $.fn.setPaymentId();
   });
@@ -38,4 +40,14 @@
     link = link.replace(regex, type+'='+id);
     $('#proceed').attr('href', link);
   };
+
+  $.fn.recap = function(e) {
+    let totalAmount = $('#total-amount').text();
+//Joomla.JText._('COM_KETSHOP_CART_')
+    if(confirm(totalAmount) === false) {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  }
 })(jQuery);

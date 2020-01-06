@@ -72,29 +72,6 @@ class KetshopControllerCheckout extends JControllerForm
 
 
   /**
-   * 
-   *
-   * @return  void
-   */
-  public function proceed()
-  {
-    // Gets the ids from GET.
-    echo $shippingId = $this->input->get('shipping_id', 0, 'uint');
-    echo $paymentId = $this->input->get('payment_id', 0, 'uint');
-
-    $order = $this->getModel('Checkout', 'KetshopModel');
-    $shippings = $order->getShippings();
-
-    foreach($shippings as $shipping) {
-      if($shipping->id == $shippingId) {
-	//$this->order_model->setShipping($shipping, $this->order);
-	break;
-      }
-    }
-  }
-
-
-  /**
    * Updates the cart.
    *
    * @return  void

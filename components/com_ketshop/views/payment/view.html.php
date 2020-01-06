@@ -5,7 +5,6 @@
  * @license GNU General Public License version 3, or later
  */
 
-
 // No direct access
 defined('_JEXEC') or die;
 
@@ -14,12 +13,14 @@ defined('_JEXEC') or die;
 class KetshopViewPayment extends JViewLegacy
 {
   protected $shop_settings = null;
+  protected $payment_mode = null;
 
 
   function display($tpl = null)
   {
     // Initialise variables
     $user = JFactory::getUser();
+    $this->payment_mode = $this->get('PaymentMode');
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
 
     JavascriptHelper::loadFieldLabels();

@@ -11,9 +11,9 @@ defined('_JEXEC') or die('Restricted access');
 JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/pricerule.php');
 
 
-class KetshopModelCheckout extends JModelItem
+class KetshopModelPayment extends JModelItem
 {
-  use PriceruleTrait;
+  //use PriceruleTrait;
 
   protected $order_model = null;
   protected $order = null;
@@ -58,28 +58,24 @@ class KetshopModelCheckout extends JModelItem
 
 
   /**
-   * Collects the available payment modes through the ketshop payment plugins. 
+   * Gets the chosen payment mode.
    *
-   * @return array	An array of payment objects.
+   * @return object	A payment object.
    */
-  public function getPaymentModes()
+  public function getPaymentMode()
   {
-    JPluginHelper::importPlugin('ketshoppayment');
-    $dispatcher = JDispatcher::getInstance();
+    $app = JFactory::getApplication('site');
+    $paymentId = $app->input->get('payment_id', 0, 'uint');
 
-    // Trigger the event then retrieves the shippings from all the ketshop payment plugins.
-    $results = $dispatcher->trigger('onKetshopPayment');
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
+    // 
+    $query->select('id, name, plugin_element, information')
+	  ->from('#__ketshop_payment_mode')
+          ->where('id='.(int)$paymentId);
+    $db->setQuery($query);
 
-    $paymentModes = array();
-
-    // Loops through the results returned by the plugins.
-    foreach($results as $result) {
-      foreach($result as $paymentMode) {
-	$paymentModes[] = $paymentMode;
-      }
-    }
-
-    return $paymentModes;
+    return $db->loadObject();
   }
 }
 
