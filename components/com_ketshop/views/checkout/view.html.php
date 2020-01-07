@@ -58,6 +58,8 @@ class KetshopViewCheckout extends JViewLegacy
     $user = JFactory::getUser();
     $this->order_model->setUserId($user->id, $this->order);
 
+    $this->order_model->deleteShipping($this->order);
+
     // Initialise variables
     $this->state = $this->get('State');
     $this->products = $this->order_model->getProducts($this->order);

@@ -798,11 +798,11 @@ trait OrderTrait
   {
     $this->deleteShipping($order);
 
-    $columns = array('order_id', 'shipping_id', 'name', 'shipping_cost', 'final_shipping_cost');
-    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $shipping->shipping_cost, $shipping->final_shipping_cost);
-
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
+
+    $columns = array('order_id', 'shipping_id', 'name', 'shipping_cost', 'final_shipping_cost');
+    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $shipping->shipping_cost, $shipping->final_shipping_cost);
 
     $query->insert('#__ketshop_order_shipping')
 	  ->columns($columns)

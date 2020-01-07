@@ -14,6 +14,7 @@ class KetshopViewPayment extends JViewLegacy
 {
   protected $shop_settings = null;
   protected $payment_mode = null;
+  protected $payment_form= null;
 
 
   function display($tpl = null)
@@ -21,6 +22,7 @@ class KetshopViewPayment extends JViewLegacy
     // Initialise variables
     $user = JFactory::getUser();
     $this->payment_mode = $this->get('PaymentMode');
+    $this->payment_form = $this->get('PaymentForm');
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
 
     JavascriptHelper::loadFieldLabels();

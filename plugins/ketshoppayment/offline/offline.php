@@ -5,7 +5,6 @@
  * @license GNU General Public License version 3, or later
  */
 
-
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
@@ -15,6 +14,11 @@ JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop
 class plgKetshoppaymentOffline extends JPlugin
 {
 
+  /**
+   * Collects and returns all the payment mode objects linked to the offline plugin.
+   *
+   * @return  array	A list of payment mode objects.
+   */
   public function onKetshopPayment()
   {
     $db = JFactory::getDbo();
@@ -32,7 +36,7 @@ class plgKetshoppaymentOffline extends JPlugin
 
 
   //Grab the event triggered by the payment controller.
-  public function onKetshopPaymentOffline ($amounts, $cart, $settings, $utility)
+  public function onKetshopPaymentOffline ($amounts, $order, $settings, $utility)
   {
     //Get the id of the offline payment chosen.
     $offlineId = $utility['offline_id'];
@@ -104,10 +108,10 @@ class plgKetshoppaymentOffline extends JPlugin
 
   public function onKetshopPaymentOfflineResponse($amounts, $cart, $settings, $utility)
   {
-    //Note: Payment results can only be ok with offline payment method since there's
-    //      no web procedure to pass through.
+    // NB: Payment results can only be ok with offline payment method since there's
+    //     no web procedure to pass through.
 
-    ShopHelper::createTransaction($amounts, $utility, $settings); 
+    //ShopHelper::createTransaction($amounts, $utility, $settings); 
 
     //Redirect the customer to the ending step.
     $utility['redirect_url'] = JRoute::_('index.php?option=com_ketshop&task=finalize.confirmPurchase', false);

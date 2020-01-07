@@ -9,7 +9,7 @@
 defined('_JEXEC') or die;
 ?>
 
-<form action="index.php?option=com_ketshop&task=payment.pay" method="post" id="ketshop_payment">
+<form action="index.php?option=com_ketshop&task=payment.startPayment" method="post" id="ketshop_payment">
   <div>
    <h3><?php echo $this->payment_mode->name; ?></h3>
     <?php if(!empty($this->payment_mode->information)) : ?>
@@ -21,8 +21,7 @@ defined('_JEXEC') or die;
 	<?php echo JText::_('COM_KETSHOP_CANCEL'); ?> <span class="icon-remove"></span></a>
     </span>
 
-    <span class="btn">
-      <a href="#" class="btn-link ketshop-btn" onclick="document.getElementById('ketshop_payment').submit();">
+    <span class="btn" onclick="document.getElementById('ketshop_payment').submit();">
 	<?php echo JText::_('COM_KETSHOP_PAY_NOW'); ?> <span class="icon-shop-credit-card"></span></a>
     </span>
 

@@ -79,12 +79,29 @@ class KetshopControllerPayment extends JControllerForm
 
     foreach($shippings as $shipping) {
       if($shipping->id == $shippingId) {
-	//$this->order_model->setShipping($shipping, $this->order);
+	$this->order_model->setShipping($shipping, $this->order);
 	break;
       }
     }
 
     $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=payment&payment_id='.(int)$paymentId, false));
+  }
+
+
+
+  public function startPayment()
+  {
+    echo $pluginName = $this->input->get('plugin_element', '', 'string');
+    echo 'start payment';
+//file_put_contents('debog_file.txt', print_r($pluginName, true));
+    $event = 'onKetshopPayment'.ucfirst($pluginName);
+    JPluginHelper::importPlugin('ketshoppayment');
+    $dispatcher = JDispatcher::getInstance();
+
+    $results = $dispatcher->trigger($event, array($this->order));
+    var_dump($results);
+
+    return;
   }
 }
 

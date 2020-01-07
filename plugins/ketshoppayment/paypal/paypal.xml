@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="ketshoppayment" method="upgrade">
+    <name>PLG_KETSHOPPAYMENT_PLUGIN_NAME</name>
+    <author>Lucas Sanner</author>
+    <creationDate>January 2020</creationDate>
+    <copyright> Copyright (C) 2020 - 2020 Lucas Sanner. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later http://www.gnu.org/licenses/gpl.html</license>
+    <authorEmail>lucas.sanner@gmail.com</authorEmail>
+    <version>1.0</version>
+    <description>PLG_KETSHOPPAYMENT_PAYPAL_XML_DESCRIPTION</description>
+	<files>
+	    <filename plugin="paypal">paypal.php</filename>
+	    <filename>index.html</filename>
+	    <folder>language</folder>
+	</files>
+
+	<config>
+	  <fields name="params">
+
+	    <fieldset name="basic">
+		<field name="api_url" type="text" label="PLG_KETSHOPPAYMENT_API_URL_LABEL"
+		  description="PLG_KETSHOPPAYMENT_API_URL_DESC" required="true" />
+
+		<field name="paypal_id" type="text" label="PLG_KETSHOPPAYMENT_PAYPAL_ID_LABEL"
+		  description="PLG_KETSHOPPAYMENT_PAYPAL_ID_DESC" required="true" />
+
+		<field name="return_url" type="text" label="PLG_KETSHOPPAYMENT_RETURN_URL_LABEL"
+		  description="PLG_KETSHOPPAYMENT_RETURN_URL_DESC" required="true" />
+
+		<field name="cancel_url" type="text" label="PLG_KETSHOPPAYMENT_CANCEL_URL_LABEL"
+		  description="PLG_KETSHOPPAYMENT_CANCEL_URL_DESC" required="true" />
+	    </fieldset>
+
+	  </fields>
+	</config>
+</extension>

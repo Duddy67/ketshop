@@ -26,8 +26,7 @@ defined('_JEXEC') or die;
     <?php echo JLayoutHelper::render('order.total_amount', array('amounts' => $this->amounts, 'settings' => $this->shop_settings)); ?>
 
     <tr><td colspan="6">
-      <span class="btn">
-	<a href="#" class="btn-link ketshop-btn" onclick="document.getElementById('ketshop_checkout').submit();">
+      <span class="btn" onclick="document.getElementById('ketshop_checkout').submit();">
 	  <?php echo JText::_('COM_KETSHOP_UPDATE_CART'); ?> <span class="icon-shop-loop2"></span></a>
       </span>
    </td/></tr>

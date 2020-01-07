@@ -25,8 +25,7 @@ JHtml::addIncludePath(JPATH_COMPONENT.'/helpers');
 
     </table>
 
-    <span class="btn">
-      <a href="#" class="btn-link ketshop-btn" onclick="document.getElementById('ketshop_cart').submit();">
+    <span class="btn" onclick="document.getElementById('ketshop_cart').submit();">
 	<?php echo JText::_('COM_KETSHOP_UPDATE_CART'); ?> <span class="icon-shop-loop2"></span></a>
     </span>
 

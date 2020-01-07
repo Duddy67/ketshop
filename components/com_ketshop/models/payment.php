@@ -77,5 +77,19 @@ class KetshopModelPayment extends JModelItem
 
     return $db->loadObject();
   }
+
+
+  public function getPaymentForm()
+  {
+    $paymentMode = $this->getPaymentMode();
+    $settings = UtilityHelper::getShopSettings();
+
+    $event = 'onKetshopPayment'.ucfirst($paymentMode->plugin_element);
+    JPluginHelper::importPlugin('ketshoppayment');
+    $dispatcher = JDispatcher::getInstance();
+
+    $results = $dispatcher->trigger($event, array($this->order, $settings));
+    var_dump($results);
+  }
 }
 
