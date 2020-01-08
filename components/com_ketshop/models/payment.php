@@ -87,9 +87,9 @@ class KetshopModelPayment extends JModelItem
     $event = 'onKetshopPayment'.ucfirst($paymentMode->plugin_element);
     JPluginHelper::importPlugin('ketshoppayment');
     $dispatcher = JDispatcher::getInstance();
-
     $results = $dispatcher->trigger($event, array($this->order, $settings));
-    var_dump($results);
+
+    return $results[0];
   }
 }
 

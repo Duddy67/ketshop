@@ -88,19 +88,18 @@ class KetshopControllerPayment extends JControllerForm
   }
 
 
-
-  public function startPayment()
+  public function action()
   {
-    echo $pluginName = $this->input->get('plugin_element', '', 'string');
-    echo 'start payment';
-//file_put_contents('debog_file.txt', print_r($pluginName, true));
-    $event = 'onKetshopPayment'.ucfirst($pluginName);
-    JPluginHelper::importPlugin('ketshoppayment');
-    $dispatcher = JDispatcher::getInstance();
+    echo 'action';
+    echo $action = $this->input->get('action', '', 'string');
+    echo $paymentMode = $this->input->get('payment_mode', '', 'string');
+    return;
+  }
 
-    $results = $dispatcher->trigger($event, array($this->order));
-    var_dump($results);
 
+  public function response()
+  {
+    echo 'response';
     return;
   }
 }
