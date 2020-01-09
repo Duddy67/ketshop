@@ -64,19 +64,19 @@ class KetshopControllerPayment extends JControllerForm
 
 
   /**
-   * 
+   * Stores the shipping data in the current order then redirect to the payment view.
    *
    * @return  void
    */
   public function proceed()
   {
-    // Gets the ids from GET.
-    echo $shippingId = $this->input->get('shipping_id', 0, 'uint');
-    echo $paymentId = $this->input->get('payment_id', 0, 'uint');
-    echo 'payment';
+    // Gets the needed ids from GET.
+    $shippingId = $this->input->get('shipping_id', 0, 'uint');
+    $paymentId = $this->input->get('payment_id', 0, 'uint');
 
     $shippings = $this->getShippingsFromPlugins($this->order);
 
+    // Searches for the shipping selected by the customer.
     foreach($shippings as $shipping) {
       if($shipping->id == $shippingId) {
 	$this->order_model->setShipping($shipping, $this->order);
@@ -84,23 +84,28 @@ class KetshopControllerPayment extends JControllerForm
       }
     }
 
+    // Redirect to the payment view in order to displays the payment form.
     $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=payment&payment_id='.(int)$paymentId, false));
   }
 
 
-  public function action()
+  public function trigger()
   {
-    echo 'action';
-    echo $action = $this->input->get('action', '', 'string');
+    echo 'trigger';
+    echo $suffix = $this->input->get('suffix', '', 'string');
     echo $paymentMode = $this->input->get('payment_mode', '', 'string');
-    return;
-  }
+    $settings = UtilityHelper::getShopSettings($this->user->get('id'));
 
-
-  public function response()
-  {
-    echo 'response';
+    echo $event = 'onKetshopPayment'.ucfirst($paymentMode).ucfirst($suffix);
+    JPluginHelper::importPlugin('ketshoppayment');
+    $dispatcher = JDispatcher::getInstance();
+    $results = $dispatcher->trigger($event, array($this->order, $settings));
+    var_dump($results);
+    $length = strlen(JUri::base(true));
+    $length = $length - ($length * 2);
+    echo substr(JUri::base(), 0, $length);
     return;
+    $this->setRedirect($results[0], false);
   }
 }
 

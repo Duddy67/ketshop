@@ -52,7 +52,7 @@ class plgKetshoppaymentPaypal extends JPlugin
   }
 
 
-  public function onKetshopPaymentNotify($order, $settings)
+  public function onKetshopPaymentPaypalNotify($order, $settings)
   {
     // CONFIG: Enable debug mode. This means we'll log requests into 'ipn.log' in the same directory.
     // Especially useful if you encounter network errors or other intermittent problems with IPN (validation).
@@ -217,7 +217,7 @@ class plgKetshoppaymentPaypal extends JPlugin
   }
 
 
-  public function onKetshopPaymentCancel($context, &$data, &$params, $limitstart)
+  public function onKetshopPaymentPaypalCancel($context, &$data, &$params, $limitstart)
   {
   }
 
