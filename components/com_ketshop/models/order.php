@@ -17,6 +17,28 @@ class KetshopModelOrder extends JModelItem
 
 
   /**
+   * Method to auto-populate the model state.
+   *
+   * Note. Calling getState in this method will result in recursion.
+   *
+   * @return  void
+   *
+   * @since   1.6
+   */
+  protected function populateState()
+  {
+    $app = JFactory::getApplication();
+    // Load state from the request.
+    $pk = $app->input->getInt('o_id');
+    $this->setState('order.id', $pk);
+
+    // Load the global parameters of the component.
+    $params = $app->getParams();
+    $this->setState('params', $params);
+  }
+
+
+  /**
    * Gets the current order. Creates one if it doesn't exist.
    *
    * @return  object	The current order.
@@ -32,12 +54,13 @@ class KetshopModelOrder extends JModelItem
     $query->select('*')
 	  ->from('#__ketshop_order')
           ->where('cookie_id='.$db->Quote($cookieId))
-          ->where('order_status='.$db->Quote('shopping'));
+          ->where('status='.$db->Quote('shopping'));
     $db->setQuery($query);
     $currentOrder = $db->loadObject();
 
     if($currentOrder === null) {
       if($this->createOrder($cookieId)) {
+	$this->setOrderNumber($cookieId);
 	// Now that a brand new order is created the function can be called again.
 	return $this->getCurrentOrder();
       }
@@ -70,8 +93,8 @@ class KetshopModelOrder extends JModelItem
     $db->setQuery($query);
     $superUserId = $db->loadResult();
 
-    $item = array('cookie_id' => $cookieId, 'user_id' => $user->get('id'), 'name' => 'xxxxxxxx', 'order_status' => 'shopping',
-		  'payment_status' => 'pending', 'tax_method' => $settings->tax_method, 'currency_code' => $settings->currency_code,
+    $item = array('cookie_id' => $cookieId, 'user_id' => $user->get('id'), 'name' => 'xxxxxxxx', 'status' => 'shopping',
+		  'tax_method' => $settings->tax_method, 'currency_code' => $settings->currency_code,
 		  'rounding_rule' => $settings->rounding_rule, 'digits_precision' => $settings->digits_precision,
 		  'published' => 0, 'created' => $now, 'created_by' => $superUserId);
 
@@ -97,5 +120,41 @@ class KetshopModelOrder extends JModelItem
 
     return true;
   }
+
+
+  /**
+   * Creates a uniq number for the current order.
+   *
+   * @param   string  $cookieId		The id of the current ketshop cookie.
+   *
+   * @return  void
+   */
+  private function setOrderNumber($cookieId)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('id, name, created')
+	  ->from('#__ketshop_order')
+	  ->where('cookie_id='.$db->Quote($cookieId));
+    $db->setQuery($query);
+    $order = $db->loadObject();
+
+    if($order->name == 'xxxxxxxx') {
+      // Collects some parts of the creating date time.
+      preg_match('#^[0-9]{2}([0-9]{2})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):[0-9]{2}$#', $order->created, $matches);
+      // Concatenates a uniq order number.
+      $orderNumber = $matches[2].$matches[3].$matches[1].$matches[4].$matches[5].'-'.$order->id;
+
+      $query->clear()
+	    ->update('#__ketshop_order')
+	    ->set('name='.$db->Quote($orderNumber))
+	    ->where('id='.(int)$order->id);
+      $db->setQuery($query);
+      $db->execute();
+    }
+  }
+
+
 }
 

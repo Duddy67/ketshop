@@ -168,8 +168,7 @@ CREATE TABLE `#__ketshop_order` (
   `name` VARCHAR(255) NOT NULL , -- as the order number.
   `user_id` INT UNSIGNED NOT NULL ,
   `cookie_id` VARCHAR(20) NOT NULL ,
-  `order_status` VARCHAR(15) NOT NULL ,
-  `payment_status` VARCHAR(15) NOT NULL ,
+  `status` VARCHAR(15) NOT NULL ,
   `amount_excl_tax` DECIMAL(14,5) NOT NULL ,
   `amount_incl_tax` DECIMAL(14,5) NOT NULL ,
   `final_amount_excl_tax` DECIMAL(14,5) NOT NULL ,
@@ -269,6 +268,7 @@ CREATE TABLE `#__ketshop_order_shipping` (
   `order_id` INT UNSIGNED NOT NULL ,
   `shipping_id` INT UNSIGNED NOT NULL ,
   `name` VARCHAR(80) NOT NULL,
+  `status` VARCHAR(15) NOT NULL ,
   `shipping_cost` DECIMAL(14,5) NOT NULL ,
   `final_shipping_cost` DECIMAL(14,5) NOT NULL ,
   INDEX `idx_order_id` (`order_id` ASC) )
@@ -282,6 +282,7 @@ DROP TABLE IF EXISTS `#__ketshop_order_transaction`;
 CREATE TABLE `#__ketshop_order_transaction` (
   `order_id` INT UNSIGNED NOT NULL ,
   `payment_mode` VARCHAR(80) NOT NULL,
+  `status` VARCHAR(15) NOT NULL ,
   `amount` DECIMAL(14,5) NOT NULL,
   `result` CHAR(15) NOT NULL ,
   `detail` TEXT NULL,

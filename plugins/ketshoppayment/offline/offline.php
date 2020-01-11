@@ -51,13 +51,37 @@ class plgKetshoppaymentOffline extends JPlugin
 
   public function onKetshopPaymentOfflineTransaction($order, $settings)
   {
-    // NB: Payment results can only be ok with offline payment method since there's
-    //     no web procedure to pass through.
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
 
-    //ShopHelper::createTransaction($amounts, $utility, $settings); 
+    $query->select('final_shipping_cost')
+	  ->from('#__ketshop_order_shipping')
+	  ->where('order_id='.(int)$order->id);
+    $db->setQuery($query);
+    $shippingCost = $db->loadResult();
 
-    //Redirect the customer to the ending step.
-    return JRoute::_('index.php?option=com_ketshop&task=payment.success', false);
+    $totalAmount = $order->final_amount_incl_tax + $shippingCost;
+    $transactionId = uniqid();
+    // Gets the current date and time (UTC).
+    $now = JFactory::getDate()->toSql();
+
+
+    // Creates the transaction.
+    // N.B: Payment results can only be ok with offline payment method since there's
+    //      no web procedure to pass through.
+
+    $columns = array('order_id', 'payment_mode', 'status', 'amount', 'result', 'transaction_id', 'created');
+    $values = array($order->id, $db->Quote('offline'), $db->Quote('pending'), $totalAmount, $db->Quote('success'),
+		    $db->Quote($transactionId), $db->Quote($now));
+
+    $query->clear()
+	  ->insert('#__ketshop_order_transaction')
+	  ->columns($columns)
+	  ->values(implode(',', $values));
+    $db->setQuery($query);
+    $db->execute();
+
+    return JRoute::_('index.php?option=com_ketshop&task=payment.end', false);
   }
 
 

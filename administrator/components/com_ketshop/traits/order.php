@@ -664,7 +664,7 @@ trait OrderTrait
     $query = $db->getQuery(true);
 
     $query->update('#__ketshop_order')
-	  ->set('order_status='.$db->Quote($status))
+	  ->set('status='.$db->Quote($status))
 	  ->where('id='.(int)$order->id);
     $db->setQuery($query);
     $db->execute();
@@ -801,8 +801,8 @@ trait OrderTrait
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $columns = array('order_id', 'shipping_id', 'name', 'shipping_cost', 'final_shipping_cost');
-    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $shipping->shipping_cost, $shipping->final_shipping_cost);
+    $columns = array('order_id', 'shipping_id', 'name', 'status', 'shipping_cost', 'final_shipping_cost');
+    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $db->Quote($shipping->status), $shipping->shipping_cost, $shipping->final_shipping_cost);
 
     $query->insert('#__ketshop_order_shipping')
 	  ->columns($columns)

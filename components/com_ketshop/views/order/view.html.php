@@ -9,10 +9,14 @@
 // No direct access
 defined('_JEXEC') or die;
 
+JLoader::register('ShippingTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/shipping.php');
 
 
-class KetshopViewCart extends JViewLegacy
+class KetshopViewOrder extends JViewLegacy
 {
+  use ShippingTrait;
+
+
   protected $state = null;
   protected $order_model = null;
   protected $order = null;
@@ -20,6 +24,8 @@ class KetshopViewCart extends JViewLegacy
   protected $products = null;
   protected $amounts = null;
   protected $detailed_amounts = null;
+  protected $shippings = null;
+  protected $payment_modes = null;
   protected $shop_settings = null;
 
 
@@ -54,17 +60,24 @@ class KetshopViewCart extends JViewLegacy
     $this->amounts = $this->order_model->getAmounts($this->order);
     $this->amounts->price_rules = $this->order_model->getCartAmountPriceRules($this->order);
     $this->detailed_amounts = $this->order_model->getDetailedAmounts($this->order);
-    $user = JFactory::getUser();
+    $this->shippings = $this->getShippingsFromPlugins($this->order);
+    $this->payment_modes = $this->get('PaymentModes');
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
-    $this->shop_settings->can_edit = ($this->order->status == 'shopping') ? true : false;
-    $this->shop_settings->view_name = 'cart';
+    $this->shop_settings->can_edit = false;
+    $this->shop_settings->view_name = 'order';
     $this->shop_settings->price_display = $this->shop_settings->tax_method;
 
     // Check for errors.
     if(count($errors = $this->get('Errors'))) {
       JError::raiseWarning(500, implode("\n", $errors));
       return false;
+    }
+
+    // Redirect registered users to the cart page.
+    if(empty($this->products)) {
+      $app = JFactory::getApplication();
+      $app->redirect(JRoute::_('index.php?option=com_ketshop&view=cart', false));
     }
 
     $this->params = $this->state->get('params');
@@ -74,7 +87,7 @@ class KetshopViewCart extends JViewLegacy
     $this->params->set('show_rule_name', 0);
     // Flag used to display prices either by unit or quantity.
     $this->params->def('product_price', '');
-    $this->params->def('display_type', 'cart');
+    $this->params->def('display_type', 'order');
 
     JavascriptHelper::loadFieldLabels();
 

@@ -79,6 +79,7 @@ class KetshopControllerPayment extends JControllerForm
     // Searches for the shipping selected by the customer.
     foreach($shippings as $shipping) {
       if($shipping->id == $shippingId) {
+	$shipping->status = 'pending';
 	$this->order_model->setShipping($shipping, $this->order);
 	break;
       }
@@ -106,6 +107,13 @@ class KetshopControllerPayment extends JControllerForm
     echo substr(JUri::base(), 0, $length);
     return;
     $this->setRedirect($results[0], false);
+  }
+
+
+  public function end()
+  {
+    $this->updateOrderStatus('pending', $this->order);
+    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=order&o_id='.(int)$this->order->id, false));
   }
 }
 
