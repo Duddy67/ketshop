@@ -154,7 +154,5 @@ class KetshopModelOrder extends JModelItem
       $db->execute();
     }
   }
-
-
 }
 

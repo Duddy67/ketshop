@@ -24,8 +24,8 @@ class KetshopViewOrder extends JViewLegacy
   protected $products = null;
   protected $amounts = null;
   protected $detailed_amounts = null;
-  protected $shippings = null;
-  protected $payment_modes = null;
+  protected $shipping = null;
+  protected $transaction = null;
   protected $shop_settings = null;
 
 
@@ -48,7 +48,6 @@ class KetshopViewOrder extends JViewLegacy
     parent::__construct($config);
 
     $this->order_model = JModelLegacy::getInstance('Order', 'KetshopModel');
-    $this->order = $this->order_model->getCurrentOrder();
   }
 
 
@@ -56,12 +55,14 @@ class KetshopViewOrder extends JViewLegacy
   {
     // Initialise variables
     $this->state = $this->get('State');
+    $this->order = $this->order_model->getOrder($this->state->get('order.id'));
     $this->products = $this->order_model->getProducts($this->order);
     $this->amounts = $this->order_model->getAmounts($this->order);
     $this->amounts->price_rules = $this->order_model->getCartAmountPriceRules($this->order);
     $this->detailed_amounts = $this->order_model->getDetailedAmounts($this->order);
-    $this->shippings = $this->getShippingsFromPlugins($this->order);
-    $this->payment_modes = $this->get('PaymentModes');
+    $this->shipping = $this->order_model->getShipping($this->order);
+    $this->transaction = $this->order_model->getTransaction($this->order);
+    $user = JFactory::getUser();
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
     $this->shop_settings->can_edit = false;
@@ -74,11 +75,8 @@ class KetshopViewOrder extends JViewLegacy
       return false;
     }
 
-    // Redirect registered users to the cart page.
-    if(empty($this->products)) {
-      $app = JFactory::getApplication();
-      $app->redirect(JRoute::_('index.php?option=com_ketshop&view=cart', false));
-    }
+    // Adds the shipping cost to get the total amount.
+    $this->amounts->total_amount =  $this->amounts->final_incl_tax + $this->shipping->final_shipping_cost;
 
     $this->params = $this->state->get('params');
     // Ensures prices are displayed.

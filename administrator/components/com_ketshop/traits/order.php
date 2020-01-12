@@ -19,6 +19,28 @@ trait OrderTrait
   private $total_qty = null;
 
 
+
+  /**
+   * Returns an order from a given order id.
+   *
+   * @param   integer  $orderId		An order id.
+   *
+   * @return  object	 		An order object.
+   */
+  public function getOrder($orderId)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('*')
+	  ->from('#__ketshop_order')
+	  ->where('id='.(int)$orderId);
+    $db->setQuery($query);
+
+    return $db->loadObject();
+  }
+
+
   /**
    * Stores the global and detailed amounts in the corresponding tables.
    *
@@ -772,17 +794,68 @@ trait OrderTrait
   }
 
 
+  /**
+   * Links the current user to the current order.
+   *
+   * @param   int      $userId		The id of the current user.
+   * @param   object   $order		The current order.
+   *
+   * @return  void
+   */
   public function setUserId($userId, $order)
   {
     if($order->user_id == 0) {
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
+
       $query->update('#__ketshop_order')
 	    ->set('user_id='.(int)$userId)
 	    ->where('id='.(int)$order->id);
       $db->setQuery($query);
       $db->execute();
     }
+  }
+
+
+  /**
+   * Returns the transaction data from a given order.
+   *
+   * @param   object   $order	An order object.
+   *
+   * @return  object	 	The transaction data.
+   */
+  public function getTransaction($order)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('*')
+	  ->from('#__ketshop_order_transaction')
+	  ->where('order_id='.(int)$order->id);
+    $db->setQuery($query);
+
+    return $db->loadObject();
+  }
+
+
+  /**
+   * Returns the shipping data from a given order.
+   *
+   * @param   object   $order	An order object.
+   *
+   * @return  object	 	The shipping data.
+   */
+  public function getShipping($order)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('*')
+	  ->from('#__ketshop_order_shipping')
+	  ->where('order_id='.(int)$order->id);
+    $db->setQuery($query);
+
+    return $db->loadObject();
   }
 
 

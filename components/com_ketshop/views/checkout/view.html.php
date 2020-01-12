@@ -86,6 +86,10 @@ class KetshopViewCheckout extends JViewLegacy
       $app->redirect(JRoute::_('index.php?option=com_ketshop&view=cart', false));
     }
 
+    // The shipping cost is not known yet, so for now the total amount is the final amount
+    // of the products.
+    $this->amounts->total_amount =  $this->amounts->final_incl_tax;
+
     $this->params = $this->state->get('params');
     // Ensures prices are displayed.
     $this->params->set('show_price', 1);
