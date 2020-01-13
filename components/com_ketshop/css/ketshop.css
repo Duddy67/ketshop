@@ -147,7 +147,7 @@ div[class^="leading-"] {  /* All divs which wrap a leading article. ie: leading-
 
 .shipping-row-bgr td {
   background-color: #bbdcff;
-  /*text-align: right !important;*/
+  text-align: right !important;
 }
 
 .amounts {
@@ -272,6 +272,10 @@ div[class^="leading-"] {  /* All divs which wrap a leading article. ie: leading-
   margin-bottom: 40px !important;
 }
 
+.no-bottom {
+  margin-bottom: 0 !important;
+}
+
 .product-row td {
   vertical-align: middle !important;
   /*border: 1px solid red;*/
@@ -290,6 +294,13 @@ div[class^="leading-"] {  /* All divs which wrap a leading article. ie: leading-
   width: 30px;
   margin-bottom: 0 !important;
   text-align: center;
+}
+
+.order-status {
+  font-size: 16px;
+  border-bottom: 1px solid #d3d3d3;
+  margin-bottom: 20px;
+  padding-bottom: 5px;
 }
 
 .even {

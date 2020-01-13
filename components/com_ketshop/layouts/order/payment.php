@@ -28,7 +28,7 @@ $colspan = ($settings->can_edit) ? 6 : 5;
 </td></tr>
 <tr><td colspan="<?php echo $colspan; ?>">
 
-  <table class="table product-row">
+  <table class="table product-row no-bottom">
     <?php foreach($paymentModes as $i => $paymentMode) :
 	    // The first radio button is checked by default. 
 	    $checked = ($i == 0) ? 'checked' : ''; 

@@ -874,8 +874,9 @@ trait OrderTrait
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $columns = array('order_id', 'shipping_id', 'name', 'status', 'shipping_cost', 'final_shipping_cost');
-    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $db->Quote($shipping->status), $shipping->shipping_cost, $shipping->final_shipping_cost);
+    $columns = array('order_id', 'shipping_id', 'name', 'delivery_type', 'status', 'shipping_cost', 'final_shipping_cost');
+    $values = array($order->id, $shipping->id, $db->Quote($shipping->name), $db->Quote($shipping->delivery_type),
+		    $db->Quote($shipping->status), $shipping->shipping_cost, $shipping->final_shipping_cost);
 
     $query->insert('#__ketshop_order_shipping')
 	  ->columns($columns)

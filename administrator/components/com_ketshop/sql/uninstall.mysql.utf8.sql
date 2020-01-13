@@ -7,7 +7,6 @@ DROP TABLE IF EXISTS `#__ketshop_attrib_option`;
 DROP TABLE IF EXISTS `#__ketshop_country`;
 DROP TABLE IF EXISTS `#__ketshop_currency`;
 DROP TABLE IF EXISTS `#__ketshop_customer`;
-DROP TABLE IF EXISTS `#__ketshop_delivery`;
 DROP TABLE IF EXISTS `#__ketshop_var_attrib`;
 DROP TABLE IF EXISTS `#__ketshop_order`;
 DROP TABLE IF EXISTS `#__ketshop_order_prod`;

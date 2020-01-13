@@ -268,6 +268,7 @@ CREATE TABLE `#__ketshop_order_shipping` (
   `order_id` INT UNSIGNED NOT NULL ,
   `shipping_id` INT UNSIGNED NOT NULL ,
   `name` VARCHAR(80) NOT NULL,
+  `delivery_type` VARCHAR(20) NOT NULL ,
   `status` VARCHAR(15) NOT NULL ,
   `shipping_cost` DECIMAL(14,5) NOT NULL ,
   `final_shipping_cost` DECIMAL(14,5) NOT NULL ,
@@ -305,29 +306,6 @@ CREATE TABLE `#__ketshop_tmp_data` (
   `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   INDEX `idx_order_id` (`order_id` ASC) )
 ENGINE = MyISAM DEFAULT CHARSET=utf8;
-
-
--- -----------------------------------------------------
--- Table `#__ketshop_delivery`
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `#__ketshop_delivery`;
-CREATE TABLE `#__ketshop_delivery` (
-  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `order_id` INT UNSIGNED NOT NULL ,
-  `delivery_type` VARCHAR(20) NOT NULL ,
-  `delivpnt_id` INT UNSIGNED NOT NULL , 
-  `address_id` INT UNSIGNED NOT NULL , 
-  `status` VARCHAR(15) NOT NULL ,
-  `shipping_cost` DECIMAL(14,5) NOT NULL ,
-  `final_shipping_cost` DECIMAL(14,5) NOT NULL ,
-  `shipping_name` VARCHAR(80) NOT NULL ,
-  `shipping_id` INT UNSIGNED NOT NULL , -- Just for information.
-  `delivery_date` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
-  `note` TEXT NULL ,
-  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' , -- in case of multiple deliveries
-  `modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' , -- idem
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
