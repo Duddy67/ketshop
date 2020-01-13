@@ -54,10 +54,12 @@ class KetshopViewCheckout extends JViewLegacy
 
   function display($tpl = null)
   {
-    // Binds the order to the current user.
     $user = JFactory::getUser();
+    // Binds the order to the current user.
     $this->order_model->setUserId($user->id, $this->order);
-
+    // Refreshes the order data (in case of the very first user id setting).
+    $this->order = $this->order_model->getCurrentOrder();
+    // In case the customer is back from the payment page.
     $this->order_model->deleteShipping($this->order);
 
     // Initialise variables

@@ -101,11 +101,8 @@ class KetshopControllerPayment extends JControllerForm
     JPluginHelper::importPlugin('ketshoppayment');
     $dispatcher = JDispatcher::getInstance();
     $results = $dispatcher->trigger($event, array($this->order, $settings));
-    var_dump($results);
-    $length = strlen(JUri::base(true));
-    $length = $length - ($length * 2);
-    echo substr(JUri::base(), 0, $length);
-    return;
+    var_dump($results[0]);
+
     $this->setRedirect($results[0], false);
   }
 

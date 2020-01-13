@@ -296,7 +296,32 @@ class UtilityHelper
 
 
   /**
-   * Return whether a given comparison between 2 decimal (or integer) values is true or not. 
+   * Returns the root url without path (if any). 
+   *
+   * @return  string	The root url.
+   */
+  public static function getRootUrl()
+  {
+    // Gets the root url.
+    $rootUrl = JUri::root();
+    // Gets the path only (if any).
+    $length = strlen(JUri::root(true));
+
+    if($length) {
+      // Turns the length in negative value.
+      $length = $length - ($length * 2);
+      $rootUrl = substr(JUri::root(), 0, $length);
+    }
+
+    // Removes possible slash from the end of the url.
+    $rootUrl = preg_replace('#(\/)$#', '', $rootUrl);
+
+    return $rootUrl;
+  }
+
+
+  /**
+   * Returns whether a given comparison between 2 decimal (or integer) values is true or not. 
    *
    * @param   decimal $leftValue	The left value to compare (can aso be an integer).
    * @param   string  $operator		The operator to use to compare values. 
@@ -304,7 +329,6 @@ class UtilityHelper
    *
    * @return  boolean          		The comparison result.
    */
-  //
   public static function isTrue($leftValue, $operator, $rightValue)
   {
     switch($operator) {

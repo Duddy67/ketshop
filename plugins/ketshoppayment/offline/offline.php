@@ -8,7 +8,7 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop.php');
+JLoader::register('UtilityHelper', JPATH_ADMINISTRATOR.'/components/com_ketshop/helpers/utility.php');
 
 
 class plgKetshoppaymentOffline extends JPlugin
@@ -81,13 +81,15 @@ class plgKetshoppaymentOffline extends JPlugin
     $db->setQuery($query);
     $db->execute();
 
-    return JRoute::_('index.php?option=com_ketshop&task=payment.end', false);
+    $url = UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end', false);
+
+    return $url;
   }
 
 
   public function onKetshopPaymentOfflineCancel($amounts, $cart, $settings, $utility)
   {
-    //Some code here if needed.
+    // Some code here if needed.
     //...
     return true;
   }
