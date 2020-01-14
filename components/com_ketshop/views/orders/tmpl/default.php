@@ -49,14 +49,17 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  <th width="20%">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_ORDER_NUMBER', 'order_nb', $listDirn, $listOrder); ?>
 	  </th>
-	  <th width="20%">
+	  <th width="10%">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_ORDER_STATUS', 'order_status', $listDirn, $listOrder); ?>
 	  </th>
-	  <th width="20%">
+	  <th width="10%">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_PAYMENT_STATUS', 'payment_status', $listDirn, $listOrder); ?>
 	  </th>
-	  <th width="20%">
+	  <th width="10%">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_SHIPPING_STATUS', 'shipping_status', $listDirn, $listOrder); ?>
+	  </th>
+	  <th width="20%">
+	  <?php echo JText::_('COM_KETSHOP_HEADING_PRODUCTS'); ?>
 	  </th>
 	  <th width="10%">
 	  <?php echo JHtml::_('searchtools.sort', 'JDATE', 'o.created', $listDirn, $listOrder); ?>
@@ -70,7 +73,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	<?php foreach ($this->items as $i => $item) : ?>
 
 	<tr class="row-<?php echo $i % 2; ?>"><td>
-		<a href="index.php?option=com_ketshop&task=order.editCustomerNote&order_id=<?php echo $item->id; ?>">
+		<a href="<?php echo JRoute::_('index.php?option=com_ketshop&view=order&o_id='.$item->id); ?>">
 			<?php echo $this->escape($item->order_nb); ?></a>
 		</td>
 		<td>
@@ -82,7 +85,19 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 		<td>
 		  <?php echo JText::_($status[$item->shipping_status]); ?>
 		</td>
-		<td>
+		<td class="small">
+                  <?php 
+                         $maxProducts = 3;
+                         foreach($item->products as $i => $product) {
+			   if($i >= $maxProducts) {
+			     break;
+			   }
+
+			   echo $product->name;
+			 }
+                   ?>
+		</td>
+		<td class="small">
 		  <?php echo JHTML::_('date',$item->created, JText::_('COM_KETSHOP_DATE_FORMAT')); ?>
 		</td>
 		<td class="center">

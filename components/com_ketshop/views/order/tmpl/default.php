@@ -15,7 +15,7 @@ defined('_JEXEC') or die;
 
 <div class="blog">
 
-  <form action="index.php?option=com_ketshop&task=checkout.updateCart" method="post" id="ketshop_checkout">
+<form action="<?php echo JRoute::_('index.php?option=com_ketshop&view=orders', false); ?>" method="post" id="ketshop_order">
     <div class="order-status">
 	<span><?php echo JText::_('COM_KETSHOP_FIELD_ORDER_STATUS_LABEL'); ?>:</span>
 	<span><?php echo JText::_('COM_KETSHOP_OPTION_'.$this->order->status.'_STATUS'); ?></span>
@@ -30,7 +30,9 @@ defined('_JEXEC') or die;
     <?php //echo JLayoutHelper::render('order.payment', array('payment_modes' => $this->payment_modes, 'settings' => $this->shop_settings)); ?>
     </table>
 
+    <span class="btn" onclick="document.getElementById('ketshop_order').submit();">
+	<?php echo JText::_('COM_KETSHOP_RETURN'); ?> <span class="icon-shop-loop2"></span></a>
+    </span>
   </form>
-
 </div>
 
