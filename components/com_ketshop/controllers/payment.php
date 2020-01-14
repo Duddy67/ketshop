@@ -85,28 +85,37 @@ class KetshopControllerPayment extends JControllerForm
       }
     }
 
-    // Redirect to the payment view in order to displays the payment form.
+    // Redirects to the payment view in order to displays the payment form.
     $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=payment&payment_id='.(int)$paymentId, false));
   }
 
 
+  /**
+   * Triggers a given plugin then redirects according to the url returned by the plugin. 
+   *
+   * @return  void
+   */
   public function trigger()
   {
-    echo 'trigger';
-    echo $suffix = $this->input->get('suffix', '', 'string');
-    echo $paymentMode = $this->input->get('payment_mode', '', 'string');
+    $suffix = $this->input->get('suffix', '', 'string');
+    $paymentMode = $this->input->get('payment_mode', '', 'string');
     $settings = UtilityHelper::getShopSettings($this->user->get('id'));
 
-    echo $event = 'onKetshopPayment'.ucfirst($paymentMode).ucfirst($suffix);
+    $event = 'onKetshopPayment'.ucfirst($paymentMode).ucfirst($suffix);
     JPluginHelper::importPlugin('ketshoppayment');
     $dispatcher = JDispatcher::getInstance();
+
     $results = $dispatcher->trigger($event, array($this->order, $settings));
-    var_dump($results[0]);
 
     $this->setRedirect($results[0], false);
   }
 
 
+  /**
+   * Ends the payment process and redirects to the order page.
+   *
+   * @return  void
+   */
   public function end()
   {
     $this->updateOrderStatus('pending', $this->order);

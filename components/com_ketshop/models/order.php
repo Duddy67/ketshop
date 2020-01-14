@@ -136,11 +136,13 @@ class KetshopModelOrder extends JModelItem
 
     $query->select('id, name, created')
 	  ->from('#__ketshop_order')
-	  ->where('cookie_id='.$db->Quote($cookieId));
+	  ->where('cookie_id='.$db->Quote($cookieId))
+	  ->where('status='.$db->Quote('shopping'))
+	  ->where('name='.$db->Quote('xxxxxxxx'));
     $db->setQuery($query);
     $order = $db->loadObject();
 
-    if($order->name == 'xxxxxxxx') {
+    if($order !== null) {
       // Collects some parts of the creating date time.
       preg_match('#^[0-9]{2}([0-9]{2})-([0-9]{2})-([0-9]{2}) ([0-9]{2}):([0-9]{2}):[0-9]{2}$#', $order->created, $matches);
       // Concatenates a uniq order number.
