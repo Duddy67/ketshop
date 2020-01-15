@@ -118,7 +118,13 @@ class KetshopControllerPayment extends JControllerForm
    */
   public function end()
   {
-    $this->updateOrderStatus('pending', $this->order);
+    // Gets the result sent from the payment plugin.
+    $result = $this->input->get('result', '', 'string');
+    // Sets the order status.
+    $status = ($result == 'success') ? 'pending' : $result;
+    JFactory::getApplication()->enqueueMessage(JText::_('COM_KETSHOP_MESSAGE_'.strtoupper($result)), 'message');
+
+    $this->order_model->finalizeOrder($status, $this->order);
     $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=order&o_id='.(int)$this->order->id, false));
   }
 }

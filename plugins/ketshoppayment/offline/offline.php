@@ -99,7 +99,7 @@ class plgKetshoppaymentOffline extends JPlugin
     $db->execute();
 
     // Tells the payment controller that the transaction is done. 
-    $url = UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end', false);
+    $url = UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success', false);
 
     return $url;
   }

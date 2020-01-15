@@ -71,6 +71,29 @@ class KetshopModelOrder extends JModelItem
 
 
   /**
+   * Updates some values of the current order.
+   *
+   * @param   string   $status		The new order status.
+   * @param   object   $order		The order to update.
+   *
+   * @return  void
+   */
+  public function finalizeOrder($status, $order)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $fields = array('status='.$db->Quote($status), 'published=1');
+
+    $query->update('#__ketshop_order')
+	  ->set($fields)
+	  ->where('id='.(int)$order->id);
+    $db->setQuery($query);
+    $db->execute();
+  }
+
+
+  /**
    * Creates a new order from the current cookie id.
    *
    * @param   string  $cookieId		The id of the current ketshop cookie.
@@ -86,7 +109,7 @@ class KetshopModelOrder extends JModelItem
 
     $db = $this->getDbo();
     $query = $db->getQuery(true);
-    // Get the id of the oldest registered super user.
+    // Get the id of the first registered super user.
     $query->select('MIN(user_id)')
 	  ->from('#__user_usergroup_map')
           ->where('group_id=8');

@@ -71,11 +71,16 @@ class ShopHelper
 
     if($id === null) {
       $id = uniqid();
+      // Creates a one week long cookie.
       $inputCookie->set('ketshop', $id, time() + (7 * 24 * 3600));
     }
     else {
+      // TODO: https://mantis.codalia.fr/view.php?id=4
       // Extends by 1 hour the current cookie duration in case it is about to reach
       // expiration date.
+      // preg_match('#-([0-9:-]+)$#', $id, $matches);
+      // $date = $matches[1];
+      // preg_replace('#^[0-9]{4}-[0-9]{2}-[0-9]{2}(-)#', ' ', $date);
       // https://stackoverflow.com/questions/3290424/set-a-cookie-to-never-expire
       //$inputCookie->set('ketshop', $id, 2147483647);
       //$inputCookie->set('ketshop', $id, time() + (7 * 24 * 3600) + 3600);
@@ -301,27 +306,6 @@ class ShopHelper
     }
 
     return $shippable;
-  }
-
-
-  //Delete all of the session data which has been used during the purchase.
-  public static function clearPurchaseData()
-  {
-    //Store the name of all the variables which should be deleted.
-    $variables = array('cart','cart_amount','settings','utility',
-	               'billing_address_id','locked','end_purchase',
-		       'shippers','location','order_id','submit',
-		       'unavailable', 'shipping_data', 'order_nb', 'coupons');
-
-    $session = JFactory::getSession();
-    foreach($variables as $variable) {
-      //Check if variable exists. If it does we delete it.
-      if($session->has($variable, 'ketshop')) {
-	$session->clear($variable, 'ketshop');
-      }
-    }
-
-    return;
   }
 
 

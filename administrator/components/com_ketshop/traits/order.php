@@ -673,27 +673,6 @@ trait OrderTrait
 
 
   /**
-   * Updates the status of a given order.
-   *
-   * @param   string   $status		The new order status.
-   * @param   object   $order		The order to update.
-   *
-   * @return  void
-   */
-  public function updateOrderStatus($status, $order)
-  {
-    $db = JFactory::getDbo();
-    $query = $db->getQuery(true);
-
-    $query->update('#__ketshop_order')
-	  ->set('status='.$db->Quote($status))
-	  ->where('id='.(int)$order->id);
-    $db->setQuery($query);
-    $db->execute();
-  }
-
-
-  /**
    * Removes all of the products, price rules and detailed amounts from a given order
    * then reset its amounts.
    *
