@@ -645,7 +645,7 @@ trait OrderTrait
 
     $query->update('#__ketshop_order')
 	  ->set($fields)
-	  ->where('cookie_id='.$db->Quote($order->cookie_id));
+	  ->where('id='.(int)$order->id);
     $db->setQuery($query);
     $db->execute();
 

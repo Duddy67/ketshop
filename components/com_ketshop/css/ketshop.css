@@ -278,7 +278,6 @@ div[class^="leading-"] {  /* All divs which wrap a leading article. ie: leading-
 
 .product-row td {
   vertical-align: middle !important;
-  /*border: 1px solid red;*/
 }
 
 .font-bold {
@@ -309,6 +308,10 @@ div[class^="leading-"] {  /* All divs which wrap a leading article. ie: leading-
 
 .odd {
   background-color: #eaeaea;
+}
+
+.delivery-point-address {
+  font-size: 11px;
 }
 
 .ketshop-btn {

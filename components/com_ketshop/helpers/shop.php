@@ -91,6 +91,34 @@ class ShopHelper
 
 
   /**
+   * Returns the customer data of a given user. 
+   *
+   * @param   integer	The id of the user (optional).
+   *
+   * @return  object	A customer object.
+   *
+   */
+  public static function getCustomer($userId = null)
+  {
+    $userId = ($userId !== null) ? $userId : JFactory::getUser()->get('id');
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('c.user_id, c.firstname, c.lastname, c.phone, u.username, u.email, u.registerDate, u.lastvisitDate')
+	  ->from('#__ketshop_customer AS c')
+	  ->join('INNER', '#__users AS u ON u.id=c.user_id')
+	  ->where('c.user_id='.(int)$userId);
+    $db->setQuery($query);
+    $customer = $db->loadObject();
+
+    $customer->addresses = self::getCustomerAddresses($customer->user_id);
+
+    return $customer;
+  }
+
+
+  /**
    * Returns the billing and shipping addresses of a given user. 
    * If no user id is passed, gets the current user's addresses.
    *
@@ -113,7 +141,7 @@ class ShopHelper
       // Gets the last billing or shipping address set by the customer. 
       $query->clear();
       $query->select('a.street, a.postcode, a.city, a.region_code, a.country_code, a.continent_code, a.type,'.
-		     'a.phone, c.lang_var AS country_lang_var, r.lang_var AS region_lang_var')
+		     'a.phone, a.additional, c.lang_var AS country_lang_var, r.lang_var AS region_lang_var')
 	    ->from('#__ketshop_address AS a')
 	    ->join('INNER', '#__ketshop_customer AS cu ON cu.user_id='.(int)$userId)
 	    ->join('LEFT', '#__ketshop_country AS c ON c.alpha_2 = a.country_code')

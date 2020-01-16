@@ -35,6 +35,8 @@ defined('_JEXEC') or die;
     <?php echo JLayoutHelper::render('order.payment', array('payment_modes' => $this->payment_modes, 'settings' => $this->shop_settings)); ?>
     </table>
 
+    <?php echo JLayoutHelper::render('order.delivery_address', array('delivery_address' => $this->delivery_address, 'customer' => $this->customer, 'settings' => $this->shop_settings)); ?>
+
     <span class="btn">
     <a id="proceed" href="<?php echo JRoute::_('index.php?option=com_ketshop&task=payment.proceed&payment_id=0&shipping_id=0', false); ?>" class="btn-link ketshop-btn">
 	<?php echo JText::_('COM_KETSHOP_PAY_NOW'); ?> <span class="icon-shop-credit-card"></span></a>

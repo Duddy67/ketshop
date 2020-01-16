@@ -26,6 +26,8 @@ class KetshopViewCheckout extends JViewLegacy
   protected $detailed_amounts = null;
   protected $shippings = null;
   protected $payment_modes = null;
+  protected $customer = null;
+  protected $delivery_address = null;
   protected $shop_settings = null;
 
 
@@ -70,6 +72,8 @@ class KetshopViewCheckout extends JViewLegacy
     $this->detailed_amounts = $this->order_model->getDetailedAmounts($this->order);
     $this->shippings = $this->getShippingsFromPlugins($this->order);
     $this->payment_modes = $this->get('PaymentModes');
+    $this->customer = ShopHelper::getCustomer($user->id);
+    $this->delivery_address = (isset($this->customer->addresses['shipping'])) ? $this->customer->addresses['shipping'] : $this->customer->addresses['billing'];
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
     $this->shop_settings->can_edit = true;

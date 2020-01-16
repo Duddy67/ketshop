@@ -47,6 +47,7 @@ class KetshopModelOrder extends JModelItem
   {
     // Gets the ketshop current cookie id.
     $cookieId = ShopHelper::getCookieId();
+    $user = JFactory::getUser();
 
     $db = $this->getDbo();
     $query = $db->getQuery(true);
@@ -55,6 +56,13 @@ class KetshopModelOrder extends JModelItem
 	  ->from('#__ketshop_order')
           ->where('cookie_id='.$db->Quote($cookieId))
           ->where('status='.$db->Quote('shopping'));
+
+    // The current user has already logged in.
+    if($user->id) {
+      // The user may have products in his cart from a previous and abandoned checkout.
+      $query->where('(user_id='.(int)$user->id.' OR user_id=0)');
+    }
+
     $db->setQuery($query);
     $currentOrder = $db->loadObject();
 

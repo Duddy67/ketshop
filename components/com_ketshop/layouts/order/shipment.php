@@ -40,9 +40,11 @@ $colspan = ($settings->can_edit) ? 6 : 5;
     <td>
       <span class="product-name"><?php echo $shipping->name; ?></span>
       <?php if($shipping->delivery_type == 'at_delivery_point') : ?>
-	<span class="btn address-btn">
-	    <?php echo JText::_('COM_KETSHOP_ADDRESS'); ?> <span class="icon-shop-location"></span>
-	</span>
+	<span class="icon-shop-location"></span><br />
+        <div class="delivery-point-address">
+             <?php echo $shipping->address->street; ?><br />
+             <?php echo $shipping->address->postcode.' '.$shipping->address->city.' '.$shipping->address->country_code; ?>
+        </div>
       <?php endif; ?>
     </td>
     <?php if(!empty($shipping->price_rules)) : ?>
