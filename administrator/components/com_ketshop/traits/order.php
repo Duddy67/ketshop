@@ -293,7 +293,7 @@ trait OrderTrait
     // Gets the required product data.
     $query->select('p.name,p.id,p.catid,p.type,t.rate AS tax_rate,p.alias,p.nb_variants,p.shippable,'.
 		   'p.weight_unit,p.dimension_unit,pv.var_id,pv.code,pv.base_price,pv.price_with_tax,pv.stock,pv.availability_delay,'.
-		   'pv.name AS var_name,pv.weight,pv.length, pv.width, pv.height, pv.min_quantity, pv.max_quantity')
+		   'pv.name AS var_name,pv.weight,pv.length, pv.width, pv.height, pv.min_quantity, pv.max_quantity, pv.stock_subtract')
 	  ->from('#__ketshop_product AS p')
 	  ->join('INNER', '#__ketshop_product_variant AS pv ON pv.prod_id='.(int)$productId.' AND pv.var_id='.(int)$variantId)
           ->join('LEFT', '#__ketshop_tax AS t ON t.id = p.tax_id')
@@ -411,12 +411,14 @@ trait OrderTrait
     if($db->loadResult() == 0) {
       $columns = array('order_id', 'prod_id', 'var_id', 'name', 'variant_name', 'alias', 'code', 
 		       'base_price', 'price_with_tax', 'final_base_price', 'final_price_with_tax',
-		       'cart_rules_impact', 'quantity', 'min_quantity', 'max_quantity', 'tax_rate', 'catid', 'cat_ids');
+		       'cart_rules_impact', 'quantity', 'min_quantity', 'max_quantity', 'tax_rate',
+		       'stock_subtract', 'catid', 'cat_ids');
 
       $values = array($order->id, $product->id, $product->var_id, $db->Quote($product->name), $db->Quote($product->var_name),
 		      $db->Quote($product->alias), $db->Quote($product->code), $product->base_price, $product->price_with_tax,
 		      $product->final_base_price, $product->final_price_with_tax, 0, 1, $product->min_quantity, 
-		      $product->max_quantity, $product->tax_rate, $product->catid, $db->Quote(implode(',', $product->cat_ids)));
+		      $product->max_quantity, $product->tax_rate, $product->stock_subtract, 
+		      $product->catid, $db->Quote(implode(',', $product->cat_ids)));
 
       $query->clear()
 	    ->insert('#__ketshop_order_prod')

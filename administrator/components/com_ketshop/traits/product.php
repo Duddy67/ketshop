@@ -271,7 +271,6 @@ trait ProductTrait
   public function setProductVariants($productId, $data)
   {
     $varValues = $attribValues = array();
-    $hasVariant = 0;
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -343,7 +342,10 @@ trait ProductTrait
 			','.UtilityHelper::floatFormat($data['variant_weight_'.$varNb]).
 			','.UtilityHelper::floatFormat($data['variant_length_'.$varNb]).
 			','.UtilityHelper::floatFormat($data['variant_width_'.$varNb]).
-			','.UtilityHelper::floatFormat($data['variant_height_'.$varNb]).','.(int)$data['variant_ordering_'.$varNb];
+			','.UtilityHelper::floatFormat($data['variant_height_'.$varNb]).
+			','.(int)$data['variant_ordering_'.$varNb].
+			// Resets the stock_locked flag.
+			',0';
 
 	// Now searches for the attributes linked to this variant.
 	foreach($data as $k => $val) {
@@ -369,18 +371,16 @@ trait ProductTrait
 
     if(!empty($varValues)) {
       // Inserts a new row for each variant linked to the product.
-      $columns = array('prod_id', 'var_id', 'name', 'stock',
-		       'base_price', 'price_with_tax', 'code', 'published', 'availability_delay',
-		       'stock_subtract', 'allow_order', 'min_stock_threshold', 'max_stock_threshold', 
-		       'min_quantity', 'max_quantity', 'weight', 'length', 'width', 'height', 'ordering');
+      $columns = array('prod_id', 'var_id', 'name', 'stock', 'base_price', 'price_with_tax', 'code', 
+		       'published', 'availability_delay', 'stock_subtract', 'allow_order', 'min_stock_threshold', 
+		       'max_stock_threshold', 'min_quantity', 'max_quantity', 'weight', 'length', 'width',
+		       'height', 'ordering', 'stock_locked');
       $query->clear();
       $query->insert('#__ketshop_product_variant')
 	    ->columns($columns)
 	    ->values($varValues);
       $db->setQuery($query);
       $db->execute();
-
-      $hasVariant = 1;
 
       if(!empty($attribValues)) {
 	// Inserts a new row for each attribute linked to the product variants.
@@ -413,7 +413,7 @@ trait ProductTrait
    */
   public function getCategoryIds($productId)
   {
-    $db = $this->getDbo();
+    $db = JFactory::getDbo();
     $query = $db->getQuery(true);
     $query->select('cat_id')
 	  ->from('#__ketshop_product_cat_map')
@@ -421,6 +421,72 @@ trait ProductTrait
     $db->setQuery($query);
 
     return $db->loadColumn();
+  }
+
+
+  /**
+   * Removes the quantity of a given product from the stock.
+   *
+   * @param   object  $product	A product object.
+   *
+   * @return  void
+   */
+  public function removeFromStock($product)
+  {
+    $this->updateStock($product, '-');
+  }
+
+
+  /**
+   * Adds the quantity of a given product to the stock.
+   *
+   * @param   object  $product	A product object.
+   *
+   * @return  void
+   */
+  public function addToStock($product)
+  {
+    $this->updateStock($product, '+');
+  }
+
+
+  /**
+   * Updates the stock of a given product.
+   *
+   * @param   object  $product		A product object.
+   * @param   string  $operator		The operator to apply to the updating.
+   *
+   * @return  void
+   */
+  private function updateStock($product, $operator)
+  {
+    if($product->stock_subtract) {
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+
+      $query->select('checked_out')
+	    ->from('#__ketshop_product')
+	    ->where('id='.(int)$product->id);
+      $db->setQuery($query);
+      $checkedOut = $db->loadResult();
+
+      $fields = array('stock = stock '.$operator.' '.(int)$product->quantity);
+
+      // Someone (in backend) is editing the product.  
+      if($checkedOut != $db->getNullDate()) {
+	// Locks the new stock value to prevent this value to be modified by an admin
+	// when saving in backend.
+	$fields[] = 'stock_locked=1';
+      }
+
+      $query->clear()
+	    ->update('#__ketshop_product_variant')
+	    ->set($fields)
+	    ->where('prod_id='.(int)$product->id)
+	    ->where('var_id='.(int)$product->var_id);
+      $db->setQuery($query);
+      $db->execute();
+    }
   }
 
 

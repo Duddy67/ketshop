@@ -17,7 +17,6 @@ CREATE TABLE `#__ketshop_product` (
   `manufact_id` SMALLINT UNSIGNED NOT NULL ,
   `new_until` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   `nb_variants` TINYINT UNSIGNED NOT NULL DEFAULT 0 ,
-  `stock_locked` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `published` TINYINT NOT NULL DEFAULT 0 ,
   `catid` INT UNSIGNED NOT NULL ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,
@@ -105,7 +104,8 @@ CREATE TABLE `#__ketshop_product_variant` (
   `length` DECIMAL(14,5) UNSIGNED NOT NULL DEFAULT 0 ,
   `width` DECIMAL(14,5) UNSIGNED NOT NULL DEFAULT 0 ,
   `height` DECIMAL(14,5) UNSIGNED NOT NULL DEFAULT 0 ,
-  `stock_subtract` TINYINT(1) NOT NULL ,
+  `stock_subtract` TINYINT(1) UNSIGNED NOT NULL ,
+  `stock_locked` TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 ,
   `allow_order` TINYINT(1) NOT NULL ,
   `min_quantity` SMALLINT UNSIGNED NOT NULL DEFAULT 1 ,
   `max_quantity` SMALLINT UNSIGNED NOT NULL DEFAULT 10 ,
@@ -213,6 +213,7 @@ CREATE TABLE `#__ketshop_order_prod` (
   `min_quantity` SMALLINT UNSIGNED NOT NULL ,
   `max_quantity` SMALLINT UNSIGNED NOT NULL ,
   `tax_rate` DECIMAL(5,2) UNSIGNED NOT NULL ,
+  `stock_subtract` TINYINT(1) NOT NULL ,
   `catid` INT UNSIGNED NOT NULL ,
   `cat_ids` VARCHAR(150) NOT NULL ,
   `history` TINYINT(1) UNSIGNED NOT NULL DEFAULT 1 ,
@@ -291,21 +292,6 @@ CREATE TABLE `#__ketshop_order_transaction` (
   `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' , -- in case of multiple transactions
   INDEX `idx_order_id` (`order_id` ASC) )
 ENGINE=MyISAM DEFAULT CHARSET=utf8;
-
-
--- -----------------------------------------------------
--- Table `#__ketshop_tmp_data
--- -----------------------------------------------------
-DROP TABLE IF EXISTS `#__ketshop_tmp_data`;
-CREATE TABLE `#__ketshop_tmp_data` (
-  `order_id` INT UNSIGNED NOT NULL ,
-  `amounts` MEDIUMTEXT NOT NULL ,
-  `cart` MEDIUMTEXT NOT NULL ,
-  `settings` MEDIUMTEXT NOT NULL ,
-  `utility` MEDIUMTEXT NOT NULL ,
-  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
-  INDEX `idx_order_id` (`order_id` ASC) )
-ENGINE = MyISAM DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
