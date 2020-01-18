@@ -102,7 +102,7 @@ trait ShippingTrait
   public function getShippingsFromPlugins($order)
   {
     // Gets the customer's delivery address.
-    $addresses = ShopHelper::getCustomerAddresses($order->user_id);
+    $addresses = ShopHelper::getCustomerAddresses($order->customer_id);
     $deliveryAddress = (isset($addresses['shipping'])) ? $addresses['shipping'] : $addresses['billing'];
 
     $nbProducts = $this->getNumberOfShippableProducts($order);

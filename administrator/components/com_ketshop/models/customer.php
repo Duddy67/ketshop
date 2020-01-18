@@ -86,5 +86,11 @@ class KetshopModelCustomer extends JModelAdmin
 
     return $item;
   }
+
+
+  public function getPendingOrders($pk = null)
+  {
+    //$pk = (!empty($pk)) ? $pk : (int)$this->getState($this->getName().'.id');
+  }
 }
 

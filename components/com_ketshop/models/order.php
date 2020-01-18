@@ -60,7 +60,7 @@ class KetshopModelOrder extends JModelItem
     // The current user has already logged in.
     if($user->id) {
       // The user may have products in his cart from a previous and abandoned checkout.
-      $query->where('(user_id='.(int)$user->id.' OR user_id=0)');
+      $query->where('(customer_id='.(int)$user->id.' OR customer_id=0)');
     }
 
     $db->setQuery($query);
@@ -124,7 +124,7 @@ class KetshopModelOrder extends JModelItem
     $db->setQuery($query);
     $superUserId = $db->loadResult();
 
-    $item = array('cookie_id' => $cookieId, 'user_id' => $user->get('id'), 'name' => 'xxxxxxxx', 'status' => 'shopping',
+    $item = array('cookie_id' => $cookieId, 'customer_id' => $user->get('id'), 'name' => 'xxxxxxxx', 'status' => 'shopping',
 		  'tax_method' => $settings->tax_method, 'currency_code' => $settings->currency_code,
 		  'rounding_rule' => $settings->rounding_rule, 'digits_precision' => $settings->digits_precision,
 		  'published' => 0, 'created' => $now, 'created_by' => $superUserId);

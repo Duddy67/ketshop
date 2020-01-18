@@ -17,12 +17,12 @@
 			>
 			<option value="">JOPTION_SELECT_PUBLISHED</option>
 		</field>
-		<field
+		<!--<field
 			name="user_id"
 			type="componentuser"
 			onchange="this.form.submit();" >
 			<option value="">COM_KETSHOP_SELECT_CREATOR</option>
-		</field>
+		</field>-->
 	</fields>
 	<fields name="list">
 		<field name="fullordering" type="list"

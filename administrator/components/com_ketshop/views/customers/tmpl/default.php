@@ -53,13 +53,19 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  <?php echo JHtml::_('grid.checkall'); ?>
 	</th>
 	<th width="1%" style="min-width:55px" class="nowrap center">
-	  <?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'c.published', $listDirn, $listOrder); ?>
+	  <?php //echo JHtml::_('searchtools.sort', 'JSTATUS', 'c.published', $listDirn, $listOrder); ?>
 	</th>
 	<th>
-	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_TITLE', 'c.name', $listDirn, $listOrder); ?>
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_LASTNAME', 'c.lastname', $listDirn, $listOrder); ?>
 	</th>
-	<th width="10%" class="nowrap hidden-phone">
-	  <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_CREATED_BY', 'creator', $listDirn, $listOrder); ?>
+	<th>
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_FIRSTNAME', 'c.firstname', $listDirn, $listOrder); ?>
+	</th>
+	<th width="10%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_USERNAME', 'u.username', $listDirn, $listOrder); ?>
+	</th>
+	<th>
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_EMAIL', 'u.email', $listDirn, $listOrder); ?>
 	</th>
 	<th width="5%" class="nowrap hidden-phone">
 	  <?php echo JHtml::_('searchtools.sort', 'JDATE', 'c.created', $listDirn, $listOrder); ?>
@@ -74,7 +80,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
       <?php foreach ($this->items as $i => $item) :
 
       $canEdit = $user->authorise('core.edit','com_ketshop.customer.'.$item->id);
-      $canEditOwn = $user->authorise('core.edit.own', 'com_ketshop.customer.'.$item->id) && $item->created_by == $userId;
+      $canEditOwn = $user->authorise('core.edit.own', 'com_ketshop.customer.'.$item->id) && $item->id == $userId;
       $canCheckin = $user->authorise('core.manage','com_checkin') || $item->checked_out == $userId || $item->checked_out == 0;
       $canChange = ($user->authorise('core.edit.state','com_ketshop.customer.'.$item->id) && $canCheckin) || $canEditOwn; 
       ?>
@@ -95,7 +101,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	      JHtml::_('actionsdropdown.' . $action, 'cb' . $i, 'customers');
 
 	      // Render dropdown list
-	      echo JHtml::_('actionsdropdown.render', $this->escape($item->name));
+	      echo JHtml::_('actionsdropdown.render', $this->escape($item->firstname));
 	      ?>
 	    </div>
 	  </td>
@@ -106,14 +112,20 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	      <?php endif; ?>
 	      <?php if($canEdit || $canEditOwn) : ?>
 		<a href="<?php echo JRoute::_('index.php?option=com_ketshop&task=customer.edit&id='.$item->id);?>" title="<?php echo JText::_('JACTION_EDIT'); ?>">
-			<?php echo $this->escape($item->name); ?></a>
+			<?php echo $this->escape($item->lastname); ?></a>
 	      <?php else : ?>
-		<?php echo $this->escape($item->name); ?>
+		<?php echo $this->escape($item->lastname); ?>
 	      <?php endif; ?>
 	    </div>
 	  </td>
-	  <td class="small hidden-phone">
-	    <?php echo $this->escape($item->creator); ?>
+	  <td class="hidden-phone">
+	    <?php echo $this->escape($item->firstname); ?>
+	  </td>
+	  <td class="hidden-phone">
+	    <?php echo $this->escape($item->username); ?>
+	  </td>
+	  <td class="hidden-phone">
+	    <?php echo $this->escape($item->email); ?>
 	  </td>
 	  <td class="nowrap small hidden-phone">
 	    <?php echo JHtml::_('date', $item->created, JText::_('DATE_FORMAT_LC4')); ?>

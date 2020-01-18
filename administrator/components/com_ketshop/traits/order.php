@@ -776,7 +776,7 @@ trait OrderTrait
 
 
   /**
-   * Links the current user to the current order.
+   * Links the current user/customer to the current order.
    *
    * @param   int      $userId		The id of the current user.
    * @param   object   $order		The current order.
@@ -785,12 +785,12 @@ trait OrderTrait
    */
   public function setUserId($userId, $order)
   {
-    if($order->user_id == 0) {
+    if($order->customer_id == 0) {
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
       $query->update('#__ketshop_order')
-	    ->set('user_id='.(int)$userId)
+	    ->set('customer_id='.(int)$userId)
 	    ->where('id='.(int)$order->id);
       $db->setQuery($query);
       $db->execute();

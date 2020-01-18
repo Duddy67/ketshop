@@ -24,7 +24,8 @@ class KetshopModelCustomers extends JModelList
     if(empty($config['filter_fields'])) {
       $config['filter_fields'] = array(
 	      'id', 'c.id',
-	      'name', 'c.name',
+	      'firstname', 'c.firstname',
+	      'lastname', 'c.lastname',
 	      'created', 'c.created',
 	      'created_by', 'c.created_by',
 	      'published', 'c.published',
@@ -74,7 +75,7 @@ class KetshopModelCustomers extends JModelList
     $this->setState('filter.published', $published);
 
     // List state information.
-    parent::populateState('c.name', 'asc');
+    parent::populateState('c.lastname', 'asc');
   }
 
 
@@ -115,14 +116,13 @@ class KetshopModelCustomers extends JModelList
     $query = $db->getQuery(true);
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 'c.id, c.name, c.created, c.published,'.
-				   'c.created_by, c.checked_out, c.checked_out_time'));
-
+    $query->select($this->getState('list.select', 'c.id, c.firstname, c.lastname, '.
+				   'c.checked_out, c.checked_out_time, c.created'));
     $query->from('#__ketshop_customer AS c');
 
-    // Get the creator name.
-    $query->select('u.name AS creator');
-    $query->join('LEFT', '#__users AS u ON u.id = c.created_by');
+    // Get the user data.
+    $query->select('u.username, u.email, u.lastvisitDate');
+    $query->join('LEFT', '#__users AS u ON u.id = c.id');
 
 
     // Filter by title search.
@@ -133,17 +133,17 @@ class KetshopModelCustomers extends JModelList
       }
       else {
 	$search = $db->Quote('%'.$db->escape($search, true).'%');
-	$query->where('(c.name LIKE '.$search.')');
+	$query->where('(c.lastname LIKE '.$search.')');
       }
     }
 
     // Filter by publication state.
     $published = $this->getState('filter.published');
     if(is_numeric($published)) {
-      $query->where('c.published='.(int)$published);
+      //$query->where('c.published='.(int)$published);
     }
     elseif($published === '') {
-      $query->where('(c.published IN (0, 1))');
+      //$query->where('(c.published IN (0, 1))');
     }
 
     // Join over the users for the checked out user.
@@ -154,11 +154,11 @@ class KetshopModelCustomers extends JModelList
     $userId = $this->getState('filter.user_id');
     if(is_numeric($userId)) {
       $type = $this->getState('filter.user_id.include', true) ? '= ' : '<>';
-      $query->where('c.created_by'.$type.(int) $userId);
+      //$query->where('c.created_by'.$type.(int) $userId);
     }
 
     // Add the list to the sort.
-    $orderCol = $this->state->get('list.ordering', 'c.name');
+    $orderCol = $this->state->get('list.ordering', 'c.lastname');
     $orderDirn = $this->state->get('list.direction'); //asc or desc
 
     $query->order($db->escape($orderCol.' '.$orderDirn));

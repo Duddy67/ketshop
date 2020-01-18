@@ -79,7 +79,7 @@ class KetshopModelOrders extends JModelList
     $query = $db->getQuery(true);
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 'o.id, o.name AS order_nb, o.created, o.published, o.user_id,'.
+    $query->select($this->getState('list.select', 'o.id, o.name AS order_nb, o.created, o.published, o.customer_id,'.
 				   'o.status AS order_status, t.status AS payment_status, s.status AS shipping_status'));
 
     $query->from('#__ketshop_order AS o');
@@ -93,7 +93,7 @@ class KetshopModelOrders extends JModelList
 
     // Display only published orders.
     $query->where('o.published=1');
-    $query->where('o.user_id='.(int)$user->id);
+    $query->where('o.customer_id='.(int)$user->id);
 
     // Filter by title search.
     $search = $this->getState('filter.search');

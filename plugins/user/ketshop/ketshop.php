@@ -85,13 +85,19 @@ class plgUserKetshop extends JPlugin
   {
     if($isNew && $result) {
       $db = JFactory::getDbo();
+      // Changes the auto increment starting number in order to synchronize the 
+      // user ids with the customer ids 
+      $query = 'ALTER TABLE '.$db->quoteName('#__ketshop_customer').' AUTO_INCREMENT='.(int)$data['id'];
+      $db->setQuery($query);
+      $db->execute();
+
+      $columns = array('firstname', 'lastname', 'phone', 'created');
+      $values = $db->Quote($data['firstname']).','.$db->Quote($data['lastname']).','.$db->Quote($data['phone']).','.$db->Quote($data['registerDate']);
+
+      // Add the new Joomla user's data into the ketshop_customer table
       $query = $db->getQuery(true);
-
-      $columns = array('user_id', 'firstname', 'lastname', 'phone');
-      $values = (int)$data['id'].','.$db->Quote($data['firstname']).','.$db->Quote($data['lastname']).','.$db->Quote($data['phone']);
-
-      // Add the new Joomla user into the ketshop_customer table
-      $query->insert($db->quoteName('#__ketshop_customer'))
+      $query->clear()
+	    ->insert($db->quoteName('#__ketshop_customer'))
 	    ->columns($columns)
 	    ->values($values);
       $db->setQuery($query);

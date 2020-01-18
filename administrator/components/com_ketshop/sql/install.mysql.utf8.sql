@@ -149,12 +149,12 @@ ENGINE = MyISAM DEFAULT CHARSET=utf8;
 DROP TABLE IF EXISTS `#__ketshop_customer`;
 CREATE TABLE `#__ketshop_customer` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  `user_id` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `firstname` VARCHAR(80) NULL ,
   `lastname` VARCHAR(80) NULL ,
   `phone` VARCHAR(20) NULL ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
+  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -166,7 +166,7 @@ DROP TABLE IF EXISTS `#__ketshop_order`;
 CREATE TABLE `#__ketshop_order` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(255) NOT NULL , -- as the order number.
-  `user_id` INT UNSIGNED NOT NULL ,
+  `customer_id` INT UNSIGNED NOT NULL ,
   `cookie_id` VARCHAR(20) NOT NULL ,
   `status` VARCHAR(15) NOT NULL ,
   `amount_excl_tax` DECIMAL(14,5) NOT NULL ,

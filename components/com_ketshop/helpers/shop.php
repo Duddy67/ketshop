@@ -105,14 +105,14 @@ class ShopHelper
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $query->select('c.user_id, c.firstname, c.lastname, c.phone, u.username, u.email, u.registerDate, u.lastvisitDate')
+    $query->select('c.id, c.firstname, c.lastname, c.phone, u.username, u.email, u.registerDate, u.lastvisitDate')
 	  ->from('#__ketshop_customer AS c')
-	  ->join('INNER', '#__users AS u ON u.id=c.user_id')
-	  ->where('c.user_id='.(int)$userId);
+	  ->join('INNER', '#__users AS u ON u.id=c.id')
+	  ->where('c.id='.(int)$userId);
     $db->setQuery($query);
     $customer = $db->loadObject();
 
-    $customer->addresses = self::getCustomerAddresses($customer->user_id);
+    $customer->addresses = self::getCustomerAddresses($customer->id);
 
     return $customer;
   }
@@ -143,7 +143,7 @@ class ShopHelper
       $query->select('a.street, a.postcode, a.city, a.region_code, a.country_code, a.continent_code, a.type,'.
 		     'a.phone, a.additional, c.lang_var AS country_lang_var, r.lang_var AS region_lang_var')
 	    ->from('#__ketshop_address AS a')
-	    ->join('INNER', '#__ketshop_customer AS cu ON cu.user_id='.(int)$userId)
+	    ->join('INNER', '#__ketshop_customer AS cu ON cu.id='.(int)$userId)
 	    ->join('LEFT', '#__ketshop_country AS c ON c.alpha_2 = a.country_code')
 	    ->join('LEFT', '#__ketshop_region AS r ON r.code = a.region_code')
 	    ->where('a.item_id = cu.id AND a.item_type = '.$db->Quote('customer'))
