@@ -85,17 +85,7 @@ class KetshopViewCustomer extends JViewLegacy
 	  // We can save the new record
 	  JToolBarHelper::apply('customer.apply', 'JTOOLBAR_APPLY');
 	  JToolBarHelper::save('customer.save', 'JTOOLBAR_SAVE');
-
-	  // We can save this record, but check the create permission to see if we can return to make a new one.
-	  if($canDo->get('core.create') || (count($user->getAuthorisedCategories('com_ketshop', 'core.create'))) > 0) {
-	    JToolBarHelper::custom('customer.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-	  }
 	}
-      }
-
-      // If checked out, we can still save
-      if($canDo->get('core.create')) {
-	JToolBarHelper::save2copy('customer.save2copy');
       }
     }
 

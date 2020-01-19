@@ -81,7 +81,21 @@ class KetshopModelCustomer extends JModelAdmin
    */
   public function getItem($pk = null)
   {
+    $pk = (!empty($pk)) ? $pk : (int)$this->getState($this->getName().'.id');
+
     if($item = parent::getItem($pk)) {
+      $db = $this->getDbo();
+      $query = $db->getQuery(true);
+
+      $query->select('username, email, lastvisitDate')
+	    ->from('#__users')
+	    ->where('id='.(int)$pk);
+      $db->setQuery($query);
+      $user = $db->loadObject();
+
+      $item->username = $user->username;
+      $item->email = $user->email;
+      $item->lastvisitDate = $user->lastvisitDate;
     }
 
     return $item;

@@ -60,16 +60,10 @@ class KetshopViewCustomers extends JViewLegacy
   protected function addToolBar() 
   {
     // Display the view title and the icon.
-    JToolBarHelper::title(JText::_('COM_KETSHOP_CUSTOMERS_TITLE'), 'stack');
+    JToolBarHelper::title(JText::_('COM_KETSHOP_CUSTOMERS_TITLE'), 'users');
 
     // Get the allowed actions list
     $canDo = KetshopHelper::getActions();
-
-    // N.B: We check the user permissions only against the component since 
-    //      the customer items have no categories.
-    if($canDo->get('core.create')) {
-      JToolBarHelper::addNew('customer.add', 'JTOOLBAR_NEW');
-    }
 
     if($canDo->get('core.edit') || $canDo->get('core.edit.own')) {
       JToolBarHelper::editList('customer.edit', 'JTOOLBAR_EDIT');

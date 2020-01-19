@@ -24,7 +24,7 @@ Joomla.submitbutton = function(task)
 <form action="<?php echo JRoute::_('index.php?option=com_ketshop&view=customer&layout=edit&id='.(int) $this->item->id); ?>" 
  method="post" name="adminForm" id="customer-form" enctype="multipart/form-data" class="form-validate">
 
-  <?php echo JLayoutHelper::render('joomla.edit.title_alias', $this); ?>
+  <?php echo JLayoutHelper::render('edit.title_alias', $this); ?>
 
   <div class="form-horizontal">
 
@@ -36,7 +36,11 @@ Joomla.submitbutton = function(task)
 	<div class="span4">
 	  <div class="form-vertical">
 	    <?php
-		  echo $this->form->getControlGroup('description');
+		  echo $this->form->renderField('firstname');
+		  echo $this->form->renderField('phone');
+		  echo $this->form->renderField('username');
+		  echo $this->form->renderField('email');
+		  echo $this->form->renderField('lastvisitDate');
 	      ?>
 	  </div>
 	</div>
@@ -46,6 +50,21 @@ Joomla.submitbutton = function(task)
       </div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
+      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'orders', JText::_('COM_KETSHOP_FIELDSET_ORDERS')); ?>
+      <div class="row-fluid form-horizontal-desktop">
+	<div class="span6">
+	  <?php //echo JLayoutHelper::render('joomla.edit.publishingdata', $this); ?>
+	</div>
+      </div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
+
+      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'addresses', JText::_('COM_KETSHOP_FIELDSET_ADDRESSES')); ?>
+      <div class="row-fluid form-horizontal-desktop">
+	<div class="span6">
+	  <?php //echo JLayoutHelper::render('joomla.edit.publishingdata', $this); ?>
+	</div>
+      </div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
 
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
       <div class="row-fluid form-horizontal-desktop">

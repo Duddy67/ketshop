@@ -3,19 +3,40 @@
 <form addrulepath="/administrator/components/com_ketshop/models/rules">
 
   <fieldset name="details">
-
-	<field name="description" type="textarea"
-		label="COM_KETSHOP_FIELD_DESCRIPTION_LABEL"
-		description="COM_KETSHOP_FIELD_DESCRIPTION_DESC"
-		rows="5" cols="10"
-		default=""></field>
-
 	<!-- layout: title_alias -->
-	<field name="name" type="text"
-		label="COM_KETSHOP_FIELD_NAME_LABEL"
-		description="COM_KETSHOP_FIELD_NAME_DESC"
+	<field name="lastname" type="text"
+		label="COM_KETSHOP_FIELD_LASTNAME_LABEL"
+		description="COM_KETSHOP_FIELD_LASTNAME_DESC"
 		class="input-xxlarge input-large-text"
-		size="25" required="true" />
+		required="true" />
+
+	<field name="firstname" type="text"
+		label="COM_KETSHOP_FIELD_FIRSTNAME_LABEL"
+		description="COM_KETSHOP_FIELD_FIRSTNAME_DESC"
+		class="inputbox" required="true" />
+
+	<field name="phone" type="text"
+		label="COM_KETSHOP_FIELD_PHONE_LABEL"
+		description="COM_KETSHOP_FIELD_PHONE_DESC"
+		class="inputbox" required="true" />
+
+	<field name="username" type="text"
+		label="COM_KETSHOP_FIELD_USERNAME_LABEL"
+		description="COM_KETSHOP_FIELD_USERNAME_DESC"
+		class="readonly" readonly="true" filter="unset" />
+
+	<field name="email" type="text"
+		label="COM_KETSHOP_FIELD_EMAIL_LABEL"
+		description="COM_KETSHOP_FIELD_EMAIL_DESC"
+		class="readonly" readonly="true" filter="unset" />
+
+	<field name="lastvisitDate" type="calendar"
+		label="COM_KETSHOP_FIELD_LASTVISIT_LABEL"
+		description="COM_KETSHOP_FIELD_LASTVISIT_DESC"
+		class="readonly" readonly="true" 
+		translateformat="true"
+		showtime="true"
+		filter="user_utc" />
 
 	<!-- layout: publishingdata -->
 	<field name="id" type="text" default="0" label="JGLOBAL_FIELD_ID_LABEL" 

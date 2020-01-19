@@ -8,6 +8,8 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access'); 
 
+JLoader::register('JHtmlUsers', JPATH_ADMINISTRATOR.'/components/com_users/helpers/html/users.php');
+
 JHtml::_('bootstrap.tooltip');
 JHtml::_('behavior.multiselect');
 JHtml::_('formbehavior.chosen', 'select');
@@ -53,7 +55,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  <?php echo JHtml::_('grid.checkall'); ?>
 	</th>
 	<th width="1%" style="min-width:55px" class="nowrap center">
-	  <?php //echo JHtml::_('searchtools.sort', 'JSTATUS', 'c.published', $listDirn, $listOrder); ?>
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_ENABLED', 'u.block', $listDirn, $listOrder); ?>
 	</th>
 	<th>
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_LASTNAME', 'c.lastname', $listDirn, $listOrder); ?>
@@ -64,11 +66,14 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	<th width="10%">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_USERNAME', 'u.username', $listDirn, $listOrder); ?>
 	</th>
-	<th>
-	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_EMAIL', 'u.email', $listDirn, $listOrder); ?>
+	<th width="20%" class="center">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_PENDING_ORDERS', 'u.lastvisitDate', $listDirn, $listOrder); ?>
 	</th>
 	<th width="5%" class="nowrap hidden-phone">
-	  <?php echo JHtml::_('searchtools.sort', 'JDATE', 'c.created', $listDirn, $listOrder); ?>
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_LAST_VISIT_DATE', 'u.lastvisitDate', $listDirn, $listOrder); ?>
+	</th>
+	<th width="5%" class="nowrap hidden-phone">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_REGISTRATION_DATE', 'c.created', $listDirn, $listOrder); ?>
 	</th>
 	<th width="1%" class="nowrap hidden-phone">
 	  <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_ID', 'c.id', $listDirn, $listOrder); ?>
@@ -91,18 +96,9 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  </td>
 	  <td class="center">
 	    <div class="btn-group">
-	      <?php echo JHtml::_('jgrid.published', $item->published, $i, 'customers.', $canChange, 'cb'); ?>
 	      <?php
-	      // Create dropdown items
-	      $action = $archived ? 'unarchive' : 'archive';
-	      JHtml::_('actionsdropdown.' . $action, 'cb' . $i, 'customers');
-
-	      $action = $trashed ? 'untrash' : 'trash';
-	      JHtml::_('actionsdropdown.' . $action, 'cb' . $i, 'customers');
-
-	      // Render dropdown list
-	      echo JHtml::_('actionsdropdown.render', $this->escape($item->firstname));
-	      ?>
+		    $self = $user->id == $item->id;
+		    echo JHtml::_('jgrid.state', JHtmlUsers::blockStates($self), $item->block, $i, 'customers.', !$self); ?>
 	    </div>
 	  </td>
 	  <td class="has-context">
@@ -124,11 +120,14 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  <td class="hidden-phone">
 	    <?php echo $this->escape($item->username); ?>
 	  </td>
-	  <td class="hidden-phone">
-	    <?php echo $this->escape($item->email); ?>
+	  <td class="nowrap small hidden-phone center">
+	    <?php echo $item->pending_orders; ?>
 	  </td>
 	  <td class="nowrap small hidden-phone">
-	    <?php echo JHtml::_('date', $item->created, JText::_('DATE_FORMAT_LC4')); ?>
+	    <?php echo JHtml::_('date', $item->lastvisitDate, JText::_('DATE_FORMAT_LC6')); ?>
+	  </td>
+	  <td class="nowrap small hidden-phone">
+	    <?php echo JHtml::_('date', $item->created, JText::_('DATE_FORMAT_LC6')); ?>
 	  </td>
 	  <td>
 	    <?php echo $item->id; ?>
@@ -136,7 +135,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 
       <?php endforeach; ?>
       <tr>
-	  <td colspan="6"><?php echo $this->pagination->getListFooter(); ?></td>
+	  <td colspan="9"><?php echo $this->pagination->getListFooter(); ?></td>
       </tr>
       </tbody>
     </table>

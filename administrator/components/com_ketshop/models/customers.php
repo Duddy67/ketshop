@@ -116,12 +116,13 @@ class KetshopModelCustomers extends JModelList
     $query = $db->getQuery(true);
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 'c.id, c.firstname, c.lastname, '.
-				   'c.checked_out, c.checked_out_time, c.created'));
+    $query->select($this->getState('list.select', 'c.id, c.firstname, c.lastname, c.checked_out,'.
+                                   'c.checked_out_time, c.created, c.created_by, '.
+				   '(SELECT COUNT(*) FROM #__ketshop_order WHERE customer_id=c.id AND status="pending") AS pending_orders'));
     $query->from('#__ketshop_customer AS c');
 
-    // Get the user data.
-    $query->select('u.username, u.email, u.lastvisitDate');
+    // Gets some Joomla user data.
+    $query->select('u.username, u.email, u.lastvisitDate, u.block');
     $query->join('LEFT', '#__users AS u ON u.id = c.id');
 
 
@@ -154,7 +155,7 @@ class KetshopModelCustomers extends JModelList
     $userId = $this->getState('filter.user_id');
     if(is_numeric($userId)) {
       $type = $this->getState('filter.user_id.include', true) ? '= ' : '<>';
-      //$query->where('c.created_by'.$type.(int) $userId);
+      $query->where('c.created_by'.$type.(int) $userId);
     }
 
     // Add the list to the sort.
