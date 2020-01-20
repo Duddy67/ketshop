@@ -91,8 +91,8 @@ class plgUserKetshop extends JPlugin
       $db->setQuery($query);
       $db->execute();
 
-      $columns = array('firstname', 'lastname', 'phone', 'created', 'created_by');
-      $values = $db->Quote($data['firstname']).','.$db->Quote($data['lastname']).','.$db->Quote($data['phone']).','.$db->Quote($data['registerDate'].','.$data['id']);
+      $columns = array('firstname', 'lastname', 'phone', 'created', 'created_by', 'shipping_address');
+      $values = $db->Quote($data['firstname']).','.$db->Quote($data['lastname']).','.$db->Quote($data['phone']).','.$db->Quote($data['registerDate'].','.$data['id'].','.$data['shipping_address']);
 
       // Add the new Joomla user's data into the ketshop_customer table
       $query = $db->getQuery(true);

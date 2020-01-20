@@ -8,6 +8,8 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access'); 
 
+JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop.php');
+
 
 class KetshopModelCustomer extends JModelAdmin
 {
@@ -87,6 +89,7 @@ class KetshopModelCustomer extends JModelAdmin
       $db = $this->getDbo();
       $query = $db->getQuery(true);
 
+      // Collects some Joomla user's extra data.
       $query->select('username, email, lastvisitDate')
 	    ->from('#__users')
 	    ->where('id='.(int)$pk);
@@ -96,6 +99,8 @@ class KetshopModelCustomer extends JModelAdmin
       $item->username = $user->username;
       $item->email = $user->email;
       $item->lastvisitDate = $user->lastvisitDate;
+
+      $item->addresses = ShopHelper::getCustomerAddresses($item->id);
     }
 
     return $item;

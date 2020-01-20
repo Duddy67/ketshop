@@ -161,6 +161,14 @@
 		<option value="0">JNO</option>
 	</field>
 
+	<field name="company_shipping"
+		type="text"
+		id="company_shipping"
+		filter="string"
+		label="COM_KETSHOP_FIELD_COMPANY_LABEL"
+		message="COM_KETSHOP_FIELD_COMPANY_MESSAGE"
+		size="30" />
+
 	<field name="street_shipping"
 		type="text"
 		id="street_shipping"

@@ -152,10 +152,13 @@ CREATE TABLE `#__ketshop_customer` (
   `firstname` VARCHAR(80) NULL ,
   `lastname` VARCHAR(80) NULL ,
   `phone` VARCHAR(20) NULL ,
+  `shipping_address` TINYINT(1) UNSIGNED NOT NULL ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `checked_out_time` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
   `created_by` INT UNSIGNED NOT NULL ,
+  `modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' ,
+  `modified_by` INT UNSIGNED NOT NULL ,
   PRIMARY KEY (`id`) )
 ENGINE = MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8;
 
@@ -174,7 +177,6 @@ CREATE TABLE `#__ketshop_order` (
   `amount_incl_tax` DECIMAL(14,5) NOT NULL ,
   `final_amount_excl_tax` DECIMAL(14,5) NOT NULL ,
   `final_amount_incl_tax` DECIMAL(14,5) NOT NULL ,
-  `billing_address_id` INT UNSIGNED NOT NULL , 
   `shippable` TINYINT(1) UNSIGNED NOT NULL ,
   `tax_method` CHAR(8) NOT NULL ,
   `currency_code` CHAR(3) NOT NULL ,
@@ -413,6 +415,7 @@ CREATE TABLE `#__ketshop_address` (
   `item_id` INT UNSIGNED NOT NULL DEFAULT 0 ,
   `item_type` VARCHAR(20) NOT NULL ,
   `type` VARCHAR(20) NOT NULL ,
+  `company` VARCHAR(255) NULL ,
   `street` VARCHAR(255) NULL ,
   `additional` VARCHAR(255) NULL ,
   `city` VARCHAR(255) NULL ,

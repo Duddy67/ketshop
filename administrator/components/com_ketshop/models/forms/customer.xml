@@ -74,7 +74,131 @@
 		translateformat="true"
 		showtime="true"
 		filter="user_utc" />
-
 	</fieldset>
+
+	<fieldset name="billing_address">
+	  <field name="street_billing"
+		  type="text"
+		  id="street_billing"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_STREET_LABEL"
+		  message="COM_KETSHOP_FIELD_STREET_MESSAGE"
+		  size="30"  />
+
+	  <field name="additional_billing"
+		  type="text"
+		  id="additional_billing"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_ADDITIONAL_LABEL"
+		  message="COM_KETSHOP_FIELD_ADDITIONAL_MESSAGE"
+		  size="30" />
+
+	  <field name="city_billing"
+		  type="text"
+		  id="city_billing"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_CITY_LABEL"
+		  message="COM_KETSHOP_FIELD_CITY_MESSAGE"
+		  size="30"  />
+
+	  <field name="postcode_billing"
+		  type="text"
+		  id="postcode_billing"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_POSTCODE_LABEL"
+		  message="COM_KETSHOP_FIELD_POSTCODE_MESSAGE"
+		  size="30"  />
+
+	  <field name="region_code_billing"
+		  type="regionlist"
+		  id="region_code_billing"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_REGION_LABEL"
+		  message="COM_KETSHOP_FIELD_REGION_MESSAGE"
+		  size="30"  />
+
+	  <field name="country_code_billing"
+		  type="countrylist"
+		  id="country_code_billing"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_COUNTRY_LABEL"
+		  class="inputbox"  >
+	  </field>
+
+	  <field name="new_billing_address" type="hidden" filter="unset" />
+	</fieldset>
+
+	<fieldset name="shipping_address">
+	  <field name="shipping_address" type="radio"
+		 class="btn-group btn-group-yesno"
+		 id="shipping_address"
+		 label="COM_KETSHOP_FIELD_SHIPPING_ADDRESS_LABEL"
+		 description="COM_KETSHOP_FIELD_SHIPPING_ADDRESS_DESC"
+		 default="0" >
+		  <option value="1">JYES</option>
+		  <option value="0">JNO</option>
+	  </field>
+
+	  <field name="company_shipping"
+		  type="text"
+		  id="company_shipping"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_COMPANY_LABEL"
+		  message="COM_KETSHOP_FIELD_COMPANY_MESSAGE"
+		  size="30" />
+
+	  <field name="street_shipping"
+		  type="text"
+		  id="street_shipping"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_STREET_LABEL"
+		  message="COM_KETSHOP_FIELD_STREET_MESSAGE"
+		  size="30"  />
+
+	  <field name="additional_shipping"
+		  type="text"
+		  id="additional_shipping"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_ADDITIONAL_LABEL"
+		  message="COM_KETSHOP_FIELD_ADDITIONAL_MESSAGE"
+		  size="30" />
+
+	  <field name="city_shipping"
+		  type="text"
+		  id="city_shipping"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_CITY_LABEL"
+		  message="COM_KETSHOP_FIELD_CITY_MESSAGE"
+		  size="30"  />
+
+	  <field name="postcode_shipping"
+		  type="text"
+		  id="postcode_shipping"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_POSTCODE_LABEL"
+		  message="COM_KETSHOP_FIELD_POSTCODE_MESSAGE"
+		  size="30"  />
+
+	  <field name="region_code_shipping"
+		  type="regionlist"
+		  id="region_code_shipping"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_REGION_LABEL"
+		  message="COM_KETSHOP_FIELD_REGION_MESSAGE"
+		  size="30" />
+
+	  <field name="country_code_shipping"
+		  type="countrylist"
+		  id="country_code_shipping"
+		  label="COM_KETSHOP_FIELD_COUNTRY_LABEL"
+		  class="inputbox"  >
+	  </field>
+
+	  <field name="new_shipping_address" type="hidden" filter="unset" />
+      </fieldset>
 </form>
 

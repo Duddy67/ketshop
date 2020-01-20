@@ -5,6 +5,8 @@
   $(window).load(function() {
     $('input[name="jform[shipping_address]"]').click( function() { $.fn.toggleAddress(); });
     $.fn.toggleAddress();
+    $('#new-billing-address').click( function() { $.fn.resetAddress('billing'); });
+    $('#new-shipping-address').click( function() { $.fn.resetAddress('shipping'); });
   });
 
   $.fn.toggleAddress = function() {
@@ -29,6 +31,10 @@
 	$('#jform_'+fields[i]).removeAttr('required');
       }
     }
+  };
+
+  $.fn.resetAddress = function(type) {
+    alert(type);
   };
 
 })(jQuery);

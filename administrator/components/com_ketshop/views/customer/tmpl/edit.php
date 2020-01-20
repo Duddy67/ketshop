@@ -10,6 +10,7 @@ defined('_JEXEC') or die('Restricted access');
 
 JHtml::_('behavior.formvalidation');
 JHtml::_('formbehavior.chosen', 'select');
+//var_dump($this->address_form);
 ?>
 
 <script type="text/javascript">
@@ -59,9 +60,54 @@ Joomla.submitbutton = function(task)
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'addresses', JText::_('COM_KETSHOP_FIELDSET_ADDRESSES')); ?>
-      <div class="row-fluid form-horizontal-desktop">
-	<div class="span6">
-	  <?php //echo JLayoutHelper::render('joomla.edit.publishingdata', $this); ?>
+      <div class="row-fluid">
+	<div class="span5">
+	<h3><?php echo JText::_('COM_KETSHOP_FIELD_BILLING_ADDRESS_TITLE'); ?></h3>
+        <br />
+	  <?php 
+		$fieldset = $this->form->getFieldset('billing_address');
+
+		foreach($fieldset as $field) {
+		  if($field->name != 'jform[new_billing_address]') {
+		    $name = preg_replace('#^jform\[([a-zA-Z0-9_]+)_billing\]$#', '$1', $field->name);
+		    $field->setValue($this->item->addresses['billing']->$name);
+		  }
+
+		  echo $field->renderField();
+		}
+            ?>
+          <span class="item-space">&nbsp;</span>
+	  <span class="btn btn-success" id="new-billing-address">
+	      <?php echo JText::_('COM_KETSHOP_NEW_ADDRESS'); ?> <span class="icon-shop-home"></span></a>
+	  </span>
+	</div>
+	<div class="span5">
+	  <?php 
+		$fieldset = $this->form->getFieldset('shipping_address');
+
+		echo $fieldset['jform_shipping_address']->renderField();
+
+		echo '<div id="shipping_div">';
+		echo '<h3>'.JText::_('COM_KETSHOP_FIELD_SHIPPING_ADDRESS_TITLE').'</h3>';
+
+		foreach($fieldset as $field) {
+		  if($field->name == 'jform[shipping_address]') {
+		    continue;
+		  }
+
+		  if(isset($this->item->addresses['shipping']) && $field->name != 'jform[new_shipping_address]') {
+		    $name = preg_replace('#^jform\[([a-zA-Z0-9_]+)_shipping\]$#', '$1', $field->name);
+		    $field->setValue($this->item->addresses['shipping']->$name);
+		  }
+
+		  echo $field->renderField();
+		}
+	   ?>
+          <span class="item-space">&nbsp;</span>
+	  <span class="btn btn-success" id="new-shipping-address">
+	      <?php echo JText::_('COM_KETSHOP_NEW_ADDRESS'); ?> <span class="icon-shop-home"></span></a>
+	  </span>
+	  </div>
 	</div>
       </div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
@@ -82,4 +128,8 @@ Joomla.submitbutton = function(task)
   <input type="hidden" name="task" value="" />
   <?php echo JHtml::_('form.token'); ?>
 </form>
+
+<?php
+$doc = JFactory::getDocument();
+$doc->addScript(JURI::root().'components/com_ketshop/js/shipping_address.js');
 

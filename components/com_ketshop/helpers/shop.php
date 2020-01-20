@@ -140,7 +140,10 @@ class ShopHelper
     foreach($types as $type) {
       // Gets the last billing or shipping address set by the customer. 
       $query->clear();
-      $query->select('a.street, a.postcode, a.city, a.region_code, a.country_code, a.continent_code, a.type,'.
+      // Appends the company field to the query for shipping address.
+      $company = ($type == 'shipping') ? 'a.company,' : '';
+
+      $query->select('a.street, a.postcode, a.city, a.region_code, a.country_code, a.continent_code, a.type,'.$company.
 		     'a.phone, a.additional, c.lang_var AS country_lang_var, r.lang_var AS region_lang_var')
 	    ->from('#__ketshop_address AS a')
 	    ->join('INNER', '#__ketshop_customer AS cu ON cu.id='.(int)$userId)
