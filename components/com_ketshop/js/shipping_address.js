@@ -5,6 +5,7 @@
   $(window).load(function() {
     $('input[name="jform[shipping_address]"]').click( function() { $.fn.toggleAddress(); });
     $.fn.toggleAddress();
+
     $('#new-billing-address').click( function() { $.fn.resetAddress('billing'); });
     $('#new-shipping-address').click( function() { $.fn.resetAddress('shipping'); });
   });
@@ -23,7 +24,7 @@
       }
     }
     else {
-      // Hide fields.
+      // Hides fields.
       $('#shipping_div').css({'visibility':'hidden', 'display':'none'});
       // Makes the fields non-binding.
       for(var i = 0; i < fields.length; i++) {
@@ -34,7 +35,18 @@
   };
 
   $.fn.resetAddress = function(type) {
-    alert(type);
+    $('input[id$=_'+type+']').each(function() {
+      // Resets text fields.
+      $(this).val('');
+    });
+
+    // Resets drop down lists.
+    $('#jform_region_code_'+type+' option[selected="selected"]').prop('selected', false);
+    $('#jform_region_code_'+type).trigger('liszt:updated');
+    $('#jform_country_code_'+type+' option[selected="selected"]').prop('selected', false);
+    $('#jform_country_code_'+type).trigger('liszt:updated');
+
+    $('#jform_new_'+type+'_address').val(1);
   };
 
 })(jQuery);

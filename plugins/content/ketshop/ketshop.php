@@ -645,34 +645,33 @@ class plgContentKetshop extends JPlugin
    */
   private function setCustomer($data, $isNew)
   {
-    file_put_contents('debog_file.txt', print_r($this->post['jform'], true));
     // Gets the jform from POST to retrieve the address fields.
     $jform = $this->post['jform'];
 
     if((int)$jform['new_billing_address']) {
-      //UtilityHelper::insertAddress($jform, 'billing', 'customer', $data->id);
+      UtilityHelper::insertAddress($jform, 'billing', 'customer', $data->id);
     }
     else {
-      //UtilityHelper::updateAddress($jform, 'billing', 'customer', $data->id);
+      UtilityHelper::updateAddress($jform, 'billing', 'customer', $data->id);
     }
 
-    $db = JFactory::getDbo();
-    $query = $db->getQuery(true);
-    // Checks first how many shipping addresses this customer has already.
-    $query->select('COUNT(*)')
-	  ->from('#__ketshop_address')
-	  ->where('item_id='.(int)$data->id)
-	  ->where('item_type="customer"')
-	  ->where('type="shipping"');
-    $db->setQuery($query);
-    $shippingAddresses = $db->loadResult();
-
     if((int)$data->shipping_address) {
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+      // Checks first how many shipping addresses this customer has already.
+      $query->select('COUNT(*)')
+	    ->from('#__ketshop_address')
+	    ->where('item_id='.(int)$data->id)
+	    ->where('item_type="customer"')
+	    ->where('type="shipping"');
+      $db->setQuery($query);
+      $shippingAddresses = $db->loadResult();
+
       if((int)$jform['new_shipping_address'] || $shippingAddresses == 0) {
-	//UtilityHelper::insertAddress($jform, 'shipping', 'customer', $data->id);
+	UtilityHelper::insertAddress($jform, 'shipping', 'customer', $data->id);
       }
       else {
-	//UtilityHelper::updateAddress($jform, 'shipping', 'customer', $data->id);
+	UtilityHelper::updateAddress($jform, 'shipping', 'customer', $data->id);
       }
     }
   }

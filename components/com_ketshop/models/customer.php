@@ -13,7 +13,7 @@ require_once JPATH_ADMINISTRATOR.'/components/com_ketshop/models/customer.php';
 
 
 // Inherit the backend version.
-class KetshopModelForm extends KetshopModelCustomer
+class KetshopModelCustomerspace extends KetshopModelCustomer
 {
 }
 

@@ -107,6 +107,37 @@ class KetshopModelCustomer extends JModelAdmin
   }
 
 
+  /**
+   * Method to validate the form data.
+   *
+   * @param   \JForm  $form   The form to validate against.
+   * @param   array   $data   The data to validate.
+   * @param   string  $group  The name of the field group to validate.
+   *
+   * @return  array|boolean  Array of filtered data if valid, false otherwise.
+   *
+   * @see     \JFormRule
+   * @see     \JFilterInput
+   * @since   1.6
+   */
+  public function validate($form, $data, $group = null)
+  {
+    // The shipping address is not required.
+    if(!(int)$data['shipping_address']) {
+      $mandatoryFields = array('street_shipping', 'city_shipping', 'postcode_shipping',
+			       'region_code_shipping', 'country_code_shipping');
+
+      foreach($mandatoryFields as $fieldName) {
+	// Makes the field non-binding to prevent the form to get stuck with warning
+	// messages.
+	$form->setFieldAttribute($fieldName, 'required', 'false');
+      }
+    }
+
+    return parent::validate($form, $data, $group);
+  }
+
+
   public function getPendingOrders($pk = null)
   {
     //$pk = (!empty($pk)) ? $pk : (int)$this->getState($this->getName().'.id');
