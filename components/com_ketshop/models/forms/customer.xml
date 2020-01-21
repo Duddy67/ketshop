@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<form addrulepath="/administrator/components/com_ketshop/models/rules">
+
+  <fieldset name="details" addfieldpath="/administrator/components/com_ketshop/models/fields">
+	<!-- layout: title_alias -->
+	<field name="lastname" type="text"
+		label="COM_KETSHOP_FIELD_LASTNAME_LABEL"
+		description="COM_KETSHOP_FIELD_LASTNAME_DESC"
+		class="inputbox"
+		required="true" />
+
+	<field name="firstname" type="text"
+		label="COM_KETSHOP_FIELD_FIRSTNAME_LABEL"
+		description="COM_KETSHOP_FIELD_FIRSTNAME_DESC"
+		class="inputbox" required="true" />
+
+	<field name="password1"
+		type="password"
+		label="COM_USERS_PROFILE_PASSWORD1_LABEL"
+		description="COM_USERS_DESIRED_PASSWORD"
+		autocomplete="off"
+		class="validate-password"
+		filter="raw"
+		size="30"
+		validate="password" />
+
+	<field name="password2"
+		type="password"
+		label="COM_USERS_PROFILE_PASSWORD2_LABEL"
+		description="COM_USERS_PROFILE_PASSWORD2_DESC"
+		autocomplete="off"
+		class="validate-password"
+		field="password1"
+		filter="raw"
+		message="COM_USERS_PROFILE_PASSWORD1_MESSAGE"
+		size="30"
+		validate="equals" />
+
+	<field name="phone" type="text"
+		label="COM_KETSHOP_FIELD_PHONE_LABEL"
+		description="COM_KETSHOP_FIELD_PHONE_DESC"
+		class="inputbox" required="true" />
+
+	<field name="username" type="text"
+		label="COM_KETSHOP_FIELD_USERNAME_LABEL"
+		description="COM_KETSHOP_FIELD_USERNAME_DESC"
+		class="readonly" readonly="true" filter="unset" />
+
+	<field name="email" type="text"
+		label="COM_KETSHOP_FIELD_EMAIL_LABEL"
+		description="COM_KETSHOP_FIELD_EMAIL_DESC"
+		class="readonly" readonly="true" filter="unset" />
+
+	<field name="lastvisitDate" type="calendar"
+		label="COM_KETSHOP_FIELD_LASTVISIT_LABEL"
+		description="COM_KETSHOP_FIELD_LASTVISIT_DESC"
+		class="readonly" readonly="true" 
+		translateformat="true"
+		showtime="true"
+		filter="user_utc" />
+
+	<!-- layout: publishingdata -->
+	<field name="id" type="text" default="0" label="JGLOBAL_FIELD_ID_LABEL" 
+	       description="JGLOBAL_FIELD_ID_DESC"
+	       readonly="true" class="readonly" />
+
+	<field name="created" type="calendar"
+		label="COM_KETSHOP_FIELD_CREATED_DATE_LABEL" description="COM_KETSHOP_FIELD_CREATED_DATE_DESC"
+		class="readonly" readonly="true" 
+		translateformat="true"
+		showtime="true"
+		size="22"
+		filter="user_utc" />
+
+	<field name="modified" type="calendar" class="readonly"
+		label="JGLOBAL_FIELD_MODIFIED_LABEL" description="COM_KETSHOP_FIELD_MODIFIED_DESC"
+		size="22" readonly="true"
+		translateformat="true"
+		showtime="true"
+		filter="user_utc" />
+	</fieldset>
+
+	<fieldset name="billing_address">
+	  <field name="street_billing"
+		  type="text"
+		  id="street_billing"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_STREET_LABEL"
+		  message="COM_KETSHOP_FIELD_STREET_MESSAGE"
+		  size="30"  />
+
+	  <field name="additional_billing"
+		  type="text"
+		  id="additional_billing"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_ADDITIONAL_LABEL"
+		  message="COM_KETSHOP_FIELD_ADDITIONAL_MESSAGE"
+		  size="30" />
+
+	  <field name="city_billing"
+		  type="text"
+		  id="city_billing"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_CITY_LABEL"
+		  message="COM_KETSHOP_FIELD_CITY_MESSAGE"
+		  size="30"  />
+
+	  <field name="postcode_billing"
+		  type="text"
+		  id="postcode_billing"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_POSTCODE_LABEL"
+		  message="COM_KETSHOP_FIELD_POSTCODE_MESSAGE"
+		  size="30"  />
+
+	  <field name="region_code_billing"
+		  type="regionlist"
+		  id="region_code_billing"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_REGION_LABEL"
+		  message="COM_KETSHOP_FIELD_REGION_MESSAGE"
+		  size="30"  />
+
+	  <field name="country_code_billing"
+		  type="countrylist"
+		  id="country_code_billing"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_COUNTRY_LABEL"
+		  class="inputbox"  >
+	  </field>
+
+	  <field name="new_billing_address" type="hidden" filter="unset" />
+	</fieldset>
+
+	<fieldset name="shipping_address">
+	  <field name="shipping_address" type="radio"
+		 class="btn-group btn-group-yesno"
+		 id="shipping_address"
+		 label="COM_KETSHOP_FIELD_SHIPPING_ADDRESS_LABEL"
+		 description="COM_KETSHOP_FIELD_SHIPPING_ADDRESS_DESC"
+		 default="0" >
+		  <option value="1">JYES</option>
+		  <option value="0">JNO</option>
+	  </field>
+
+	  <field name="company_shipping"
+		  type="text"
+		  id="company_shipping"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_COMPANY_LABEL"
+		  message="COM_KETSHOP_FIELD_COMPANY_MESSAGE"
+		  size="30" />
+
+	  <field name="street_shipping"
+		  type="text"
+		  id="street_shipping"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_STREET_LABEL"
+		  message="COM_KETSHOP_FIELD_STREET_MESSAGE"
+		  size="30"  />
+
+	  <field name="additional_shipping"
+		  type="text"
+		  id="additional_shipping"
+		  filter="string"
+		  label="COM_KETSHOP_FIELD_ADDITIONAL_LABEL"
+		  message="COM_KETSHOP_FIELD_ADDITIONAL_MESSAGE"
+		  size="30" />
+
+	  <field name="city_shipping"
+		  type="text"
+		  id="city_shipping"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_CITY_LABEL"
+		  message="COM_KETSHOP_FIELD_CITY_MESSAGE"
+		  size="30"  />
+
+	  <field name="postcode_shipping"
+		  type="text"
+		  id="postcode_shipping"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_POSTCODE_LABEL"
+		  message="COM_KETSHOP_FIELD_POSTCODE_MESSAGE"
+		  size="30"  />
+
+	  <field name="region_code_shipping"
+		  type="regionlist"
+		  id="region_code_shipping"
+		  filter="string"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_REGION_LABEL"
+		  message="COM_KETSHOP_FIELD_REGION_MESSAGE"
+		  size="30" />
+
+	  <field name="country_code_shipping"
+		  type="countrylist"
+		  id="country_code_shipping"
+		  required="true"
+		  label="COM_KETSHOP_FIELD_COUNTRY_LABEL"
+		  class="inputbox"  >
+	  </field>
+
+	  <field name="new_shipping_address" type="hidden" filter="unset" />
+      </fieldset>
+</form>
+

@@ -86,7 +86,7 @@ class KetshopModelCustomer extends JModelAdmin
     $pk = (!empty($pk)) ? $pk : (int)$this->getState($this->getName().'.id');
 
     if($item = parent::getItem($pk)) {
-      $db = $this->getDbo();
+      $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
       // Collects some Joomla user's extra data.

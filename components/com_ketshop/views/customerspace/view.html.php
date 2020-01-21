@@ -10,22 +10,23 @@ defined('_JEXEC') or die;
 
 
 
-class KetshopViewCustomer extends JViewLegacy
+class KetshopViewCustomerspace extends JViewLegacy
 {
-  protected $shop_settings = null;
-  protected $payment_mode = null;
-  protected $payment_form= null;
+  protected $item;
+  protected $form;
+  protected $state;
 
 
   function display($tpl = null)
   {
-    // Initialise variables
-    $user = JFactory::getUser();
-    $this->payment_mode = $this->get('PaymentMode');
-    $this->payment_form = $this->get('PaymentForm');
-    $this->shop_settings = UtilityHelper::getShopSettings($user->id);
+    $this->item = $this->get('Item');
+    $this->form = $this->get('Form');
+    $this->state = $this->get('State');
 
-    JavascriptHelper::loadFieldLabels();
+    // Check for errors.
+    if(count($errors = $this->get('Errors'))) {
+      throw new Exception(implode("\n", $errors), 500);
+    }
 
     $this->setDocument();
 

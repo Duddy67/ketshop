@@ -60,7 +60,7 @@ class KetshopController extends JControllerLegacy
 			    'Itemid' => 'INT');
 
     // Ensures that the no logged-in users cannot access those views.
-    $unauthorizedViews = array('checkout', 'payment', 'orders', 'order');
+    $unauthorizedViews = array('checkout', 'payment', 'orders', 'order', 'customerspace');
     $user = JFactory::getUser();
 
     if($user->get('guest') == 1 && in_array($vName, $unauthorizedViews)) {
