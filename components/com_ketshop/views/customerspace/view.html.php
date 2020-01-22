@@ -10,7 +10,7 @@ defined('_JEXEC') or die;
 
 
 
-class KetshopViewCustomerspace extends JViewLegacy
+class KetshopViewProfile extends JViewLegacy
 {
   protected $item = null;
   protected $form = null;

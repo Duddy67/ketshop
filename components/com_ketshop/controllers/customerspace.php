@@ -13,7 +13,7 @@ defined('_JEXEC') or die('Restricted access');
  * @package     KetShop
  * @subpackage  com_ketshop
  */
-class KetshopControllerCustomerspace extends JControllerForm
+class KetshopControllerProfile extends JControllerForm
 {
   /**
    * Method to check out a user for editing and redirect to the edit form.
@@ -26,7 +26,7 @@ class KetshopControllerCustomerspace extends JControllerForm
   {
 
     // Redirect to the edit screen.
-    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=customerspace&layout=edit', false));
+    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=profile&layout=edit', false));
 
     return true;
   }

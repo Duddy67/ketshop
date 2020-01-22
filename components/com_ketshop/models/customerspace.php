@@ -13,7 +13,7 @@ require_once JPATH_ADMINISTRATOR.'/components/com_ketshop/models/customer.php';
 
 
 // Inherit the backend version.
-class KetshopModelCustomerspace extends KetshopModelCustomer
+class KetshopModelProfile extends KetshopModelCustomer
 {
   /**
    * Method to auto-populate the model state.
@@ -30,7 +30,7 @@ class KetshopModelCustomerspace extends KetshopModelCustomer
 
     // Load state from the request.
     $user = JFactory::getUser();
-    $this->setState('customerspace.id', $user->id);
+    $this->setState('profile.id', $user->id);
 
     // Load the global parameters of the component.
     $params = $app->getParams();
