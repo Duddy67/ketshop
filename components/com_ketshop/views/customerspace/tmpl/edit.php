@@ -22,7 +22,7 @@ Joomla.submitbutton = function(task)
 }
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_ketshop&view=customer&layout=edit&id='.(int) $this->item->id); ?>" 
+<form action="<?php echo JRoute::_('index.php?option=com_ketshop&task=customerspace.save'.(int) $this->item->id); ?>" 
  method="post" name="adminForm" id="customer-form" enctype="multipart/form-data" class="form-validate">
 
   <div class="form-horizontal">
@@ -55,7 +55,7 @@ Joomla.submitbutton = function(task)
 
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'addresses', JText::_('COM_KETSHOP_FIELDSET_ADDRESSES')); ?>
       <div class="row-fluid">
-	<div class="span5">
+	<div class="form-vertical span5">
 	<h3><?php echo JText::_('COM_KETSHOP_FIELD_BILLING_ADDRESS_TITLE'); ?></h3>
         <br />
 	  <?php 
@@ -75,7 +75,7 @@ Joomla.submitbutton = function(task)
 	      <?php echo JText::_('COM_KETSHOP_NEW_ADDRESS'); ?> <span class="icon-shop-home"></span></a>
 	  </span>
 	</div>
-	<div class="span5">
+	<div class="form-vertical span5">
 	  <?php 
 		$fieldset = $this->form->getFieldset('shipping_address');
 
@@ -105,10 +105,21 @@ Joomla.submitbutton = function(task)
 	</div>
       </div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
-
   </div>
 
-  <input type="hidden" name="task" value="" />
+  <div class="control-group">
+    <div class="controls">
+      <button type="submit" class="btn btn-primary validate">
+	      <?php echo JText::_('JSUBMIT'); ?>
+      </button>
+      <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ketshop&view=customerspace'); ?>" title="<?php echo JText::_('JCANCEL'); ?>">
+	      <?php echo JText::_('JCANCEL'); ?>
+      </a>
+      <input type="hidden" name="option" value="com_ketshop" />
+      <input type="hidden" name="task" value="customerspace.save" />
+    </div>
+  </div>
+
   <?php echo JHtml::_('form.token'); ?>
 </form>
 

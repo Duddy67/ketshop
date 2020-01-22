@@ -12,9 +12,11 @@ defined('_JEXEC') or die;
 
 class KetshopViewCustomerspace extends JViewLegacy
 {
-  protected $item;
-  protected $form;
-  protected $state;
+  protected $item = null;
+  protected $form = null;
+  protected $state = null;
+  protected $params = null;
+  protected $db = null;
 
 
   function display($tpl = null)
@@ -22,6 +24,8 @@ class KetshopViewCustomerspace extends JViewLegacy
     $this->item = $this->get('Item');
     $this->form = $this->get('Form');
     $this->state = $this->get('State');
+    $this->params = $this->state->get('params');
+    $this->db = JFactory::getDbo();
 
     // Check for errors.
     if(count($errors = $this->get('Errors'))) {
