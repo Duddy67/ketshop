@@ -20,7 +20,7 @@ defined('_JEXEC') or die('Restricted access');
 <?php if (JFactory::getUser()->id == $this->item->id) : ?>
 	<ul class="btn-toolbar pull-right">
 	  <li class="btn-group">
-	    <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ketshop&task=customerspace.edit&c_id='.(int) $this->item->id); ?>">
+	    <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ketshop&task=profile.edit&c_id='.(int) $this->item->id); ?>">
 	  <span class="icon-user"></span>
 	  <?php echo JText::_('COM_KETSHOP_EDIT_CUSTOMER_DATA'); ?>
 	  </a>

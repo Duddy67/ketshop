@@ -26,17 +26,83 @@ class KetshopModelProfile extends KetshopModelCustomer
    */
   protected function populateState()
   {
-    $app = JFactory::getApplication('site');
+    // Get the application object.
+    $params = JFactory::getApplication()->getParams('com_ketshop');
 
-    // Load state from the request.
-    $user = JFactory::getUser();
-    $this->setState('profile.id', $user->id);
+    // Get the customer id.
+    $customerId = JFactory::getApplication()->getUserState('com_ketshop.edit.customer.id');
+    $customerId = !empty($customerId) ? $customerId : (int) JFactory::getUser()->get('id');
 
-    // Load the global parameters of the component.
-    $params = $app->getParams();
+    // Set the customer id.
+    $this->setState('customer.id', $customerId);
+
+    // Load the parameters.
     $this->setState('params', $params);
+  }
 
-    $this->setState('filter.language', JLanguageMultilang::isEnabled());
+
+  /**
+   * Method to check in (unlock) a customer.
+   *
+   * @param   integer  $customerId  The id of the row to check in.
+   *
+   * @return  boolean  True on success, false on failure.
+   *
+   * @since   1.6
+   */
+  public function checkin($customerId = null)
+  {
+    // Get the customer id.
+    $customerId = (!empty($customerId)) ? $customerId : (int) $this->getState('customer.id');
+
+    if($customerId) {
+      // Initialise the table with JUser.
+      //$table = JTable::getInstance('User');
+      $table = JTable::getInstance('Customer', 'KetshopTable');
+
+      // Attempt to check the row in.
+      if(!$table->checkin($customerId)) {
+	$this->setError($table->getError());
+
+	return false;
+      }
+    }
+
+    return true;
+  }
+
+
+  /**
+   * Method to check out (lock) a customer for editing.
+   *
+   * @param   integer  $customerId  The id of the row to check out.
+   *
+   * @return  boolean  True on success, false on failure.
+   *
+   * @since   1.6
+   */
+  public function checkout($customerId = null)
+  {
+    // Get the customer id.
+    $customerId = (!empty($customerId)) ? $customerId : (int) $this->getState('customer.id');
+
+    if($customerId) {
+      // Initialise the table with JUser.
+      //$table = JTable::getInstance('User');
+      $table = JTable::getInstance('Customer', 'KetshopTable');
+
+      // Get the current user object.
+      $user = JFactory::getUser();
+
+      // Attempt to check the row out.
+      if(!$table->checkout($user->get('id'), $customerId)) {
+	$this->setError($table->getError());
+
+	return false;
+      }
+    }
+
+    return true;
   }
 }
 

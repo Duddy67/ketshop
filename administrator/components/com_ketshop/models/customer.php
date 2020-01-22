@@ -83,7 +83,10 @@ class KetshopModelCustomer extends JModelAdmin
    */
   public function getItem($pk = null)
   {
-    $pk = (!empty($pk)) ? $pk : (int)$this->getState($this->getName().'.id');
+    // N.B: Do not use the getName() method to set the item id as the child class (ie:
+    // Profile) in frontend would be forced to set its item id as profile.id which is not
+    // appropriate.
+    $pk = (!empty($pk)) ? $pk : (int)$this->getState('customer.id');
 
     if($item = parent::getItem($pk)) {
       $db = JFactory::getDbo();

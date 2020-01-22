@@ -16,14 +16,14 @@ JHtml::_('formbehavior.chosen', 'select');
 <script type="text/javascript">
 Joomla.submitbutton = function(task)
 {
-  if(task == 'customer.cancel' || document.formvalidator.isValid(document.getElementById('customer-form'))) {
-    Joomla.submitform(task, document.getElementById('customer-form'));
+  if(task == 'profile.cancel' || document.formvalidator.isValid(document.getElementById('profile-form'))) {
+    Joomla.submitform(task, document.getElementById('profile-form'));
   }
 }
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_ketshop&task=customerspace.save'.(int) $this->item->id); ?>" 
- method="post" name="adminForm" id="customer-form" enctype="multipart/form-data" class="form-validate">
+<form action="<?php echo JRoute::_('index.php?option=com_ketshop&task=profile.save'.(int) $this->item->id); ?>" 
+ method="post" name="adminForm" id="profile-form" enctype="multipart/form-data" class="form-validate">
 
   <div class="form-horizontal">
 
@@ -112,11 +112,11 @@ Joomla.submitbutton = function(task)
       <button type="submit" class="btn btn-primary validate">
 	      <?php echo JText::_('JSUBMIT'); ?>
       </button>
-      <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ketshop&view=customerspace'); ?>" title="<?php echo JText::_('JCANCEL'); ?>">
+      <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ketshop&view=profile'); ?>" title="<?php echo JText::_('JCANCEL'); ?>">
 	      <?php echo JText::_('JCANCEL'); ?>
       </a>
       <input type="hidden" name="option" value="com_ketshop" />
-      <input type="hidden" name="task" value="customerspace.save" />
+      <input type="hidden" name="task" value="profile.save" />
     </div>
   </div>
 
