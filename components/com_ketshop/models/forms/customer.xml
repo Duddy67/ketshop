@@ -45,12 +45,12 @@
 	<field name="username" type="text"
 		label="COM_KETSHOP_FIELD_USERNAME_LABEL"
 		description="COM_KETSHOP_FIELD_USERNAME_DESC"
-		class="readonly" readonly="true" filter="unset" />
+		class="readonly" readonly="true" />
 
 	<field name="email" type="text"
 		label="COM_KETSHOP_FIELD_EMAIL_LABEL"
 		description="COM_KETSHOP_FIELD_EMAIL_DESC"
-		class="readonly" readonly="true" filter="unset" />
+		class="readonly" readonly="true" />
 
 	<field name="lastvisitDate" type="calendar"
 		label="COM_KETSHOP_FIELD_LASTVISIT_LABEL"

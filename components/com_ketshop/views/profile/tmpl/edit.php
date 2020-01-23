@@ -22,7 +22,7 @@ Joomla.submitbutton = function(task)
 }
 </script>
 
-<form action="<?php echo JRoute::_('index.php?option=com_ketshop&task=profile.save'.(int) $this->item->id); ?>" 
+<form action="<?php echo JRoute::_('index.php?option=com_ketshop&task=profile.save', false); ?>" 
  method="post" name="adminForm" id="profile-form" enctype="multipart/form-data" class="form-validate">
 
   <div class="form-horizontal">
@@ -112,7 +112,7 @@ Joomla.submitbutton = function(task)
       <button type="submit" class="btn btn-primary validate">
 	      <?php echo JText::_('JSUBMIT'); ?>
       </button>
-      <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ketshop&view=profile'); ?>" title="<?php echo JText::_('JCANCEL'); ?>">
+      <a class="btn" href="<?php echo JRoute::_('index.php?option=com_ketshop&task=profile.cancel'); ?>" title="<?php echo JText::_('JCANCEL'); ?>">
 	      <?php echo JText::_('JCANCEL'); ?>
       </a>
       <input type="hidden" name="option" value="com_ketshop" />

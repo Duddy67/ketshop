@@ -111,7 +111,7 @@ class plgContentKetshop extends JPlugin
     elseif($context == 'com_ketshop.shipping') {
       $this->setShipping($data, $isNew);
     }
-    elseif($context == 'com_ketshop.customer') {
+    elseif($context == 'com_ketshop.customer' || $context == 'com_ketshop.profile') {
       $this->setCustomer($data, $isNew);
     }
   }
