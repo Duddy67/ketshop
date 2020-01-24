@@ -85,8 +85,8 @@ class KetshopModelOrders extends JModelList
     $query->from('#__ketshop_order AS o');
 
     // Join over shipping and transaction tables.
-    $query->join('LEFT', '#__ketshop_order_shipping AS s ON o.id=s.order_id');
-    $query->join('LEFT', '#__ketshop_order_transaction AS t ON o.id=t.order_id');
+    $query->join('LEFT', '#__ketshop_order_shipping AS s ON o.id=s.order_id')
+	  ->join('LEFT', '#__ketshop_order_transaction AS t ON o.id=t.order_id');
 
     //Get the user.
     $user = JFactory::getUser();

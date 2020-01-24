@@ -675,8 +675,8 @@ trait OrderTrait
 
 
   /**
-   * Removes all of the products, price rules and detailed amounts from a given order
-   * then reset its amounts.
+   * Removes all of the products, price rules, detailed amounts and shipping 
+   * from a given order then reset its amounts.
    *
    * @param   object   $order		The order to reset.
    *
@@ -703,6 +703,8 @@ trait OrderTrait
 	  ->where('order_id='.(int)$order->id);
     $db->setQuery($query);
     $db->execute();
+
+    $this->deleteShipping($order);
 
     $query->clear();
     $fields = array('amount_excl_tax=0', 'amount_incl_tax=0', 

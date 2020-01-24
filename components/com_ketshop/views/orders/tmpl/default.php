@@ -18,7 +18,7 @@ $userId = $user->get('id');
 $listOrder = $this->escape($this->state->get('list.ordering'));
 $listDirn = $this->escape($this->state->get('list.direction'));
 
-//Build a status array.
+// Build a status array.
 $status = array();
 $status['completed'] = 'COM_KETSHOP_OPTION_COMPLETED_STATUS';
 $status['pending'] = 'COM_KETSHOP_OPTION_PENDING_STATUS';

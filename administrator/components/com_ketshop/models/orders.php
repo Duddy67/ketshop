@@ -29,6 +29,8 @@ class KetshopModelOrders extends JModelList
 	      'created_by', 'o.created_by',
 	      'published', 'o.published',
 	      'creator', 'user_id',
+	      'order_nb', 'order_status', 
+	      'payment_status', 'shipping_status',
       );
     }
 
@@ -73,6 +75,15 @@ class KetshopModelOrders extends JModelList
     $published = $this->getUserStateFromRequest($this->context.'.filter.published', 'filter_published', '');
     $this->setState('filter.published', $published);
 
+    $orderStatus = $app->getUserStateFromRequest($this->context.'.filter.order_status', 'filter_order_status');
+    $this->setState('filter.order_status', $orderStatus);
+
+    $paymentStatus = $app->getUserStateFromRequest($this->context.'.filter.payment_status', 'filter_payment_status');
+    $this->setState('filter.payment_status', $paymentStatus);
+
+    $shippingStatus = $app->getUserStateFromRequest($this->context.'.filter.shipping_status', 'filter_shipping_status');
+    $this->setState('filter.shipping_status', $shippingStatus);
+
     // List state information.
     parent::populateState('o.name', 'asc');
   }
@@ -115,15 +126,23 @@ class KetshopModelOrders extends JModelList
     $query = $db->getQuery(true);
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 'o.id, o.name, o.created, o.published,'.
-				   'o.created_by, o.checked_out, o.checked_out_time'));
+    $query->select($this->getState('list.select', 'o.id, o.name AS order_nb, o.created, o.published, o.created_by, o.checked_out,'.
+				   'o.checked_out_time, o.status AS order_status, IFNULL(t.status, "no_payment") AS payment_status,'.
+				   'IFNULL(s.status, "no_shipping") AS shipping_status, o.customer_id'));
 
     $query->from('#__ketshop_order AS o');
 
+    // Join over shipping and transaction tables.
+    $query->join('LEFT', '#__ketshop_order_shipping AS s ON o.id=s.order_id')
+	  ->join('LEFT', '#__ketshop_order_transaction AS t ON o.id=t.order_id');
+
     // Get the creator name.
-    $query->select('u.name AS creator');
+    $query->select('u.name AS creator, u.username');
     $query->join('LEFT', '#__users AS u ON u.id = o.created_by');
 
+    // Get the customer name.
+    $query->select('c.firstname, c.lastname');
+    $query->join('LEFT', '#__ketshop_customer AS c ON c.id = o.customer_id');
 
     // Filter by title search.
     $search = $this->getState('filter.search');

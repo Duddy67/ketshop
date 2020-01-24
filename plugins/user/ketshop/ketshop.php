@@ -9,10 +9,16 @@
 defined('_JEXEC') or die('Restricted access');
 
 JLoader::register('UtilityHelper', JPATH_ADMINISTRATOR.'/components/com_ketshop/helpers/utility.php');
+JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop.php');
+JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
+JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/pricerule.php');
+
 
 
 class plgUserKetshop extends JPlugin
 {
+  use OrderTrait, PriceruleTrait;
+
   protected $post;
 
   /**
@@ -61,6 +67,24 @@ class plgUserKetshop extends JPlugin
 
   public function onUserAfterLogin($options)
   {
+    // Gets the ketshop current cookie id.
+    $cookieId = ShopHelper::getCookieId();
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    // Checks whether a shopping order linked to the user already exists.
+    $query->select('id')
+	  ->from('#__ketshop_order')
+          ->where('cookie_id='.$db->Quote($cookieId))
+          ->where('status='.$db->Quote('shopping'))
+          ->where('customer_id='.(int)$options['user']->id);
+    $db->setQuery($query);
+    $order = $db->loadObject();
+
+    if($order) {
+      $this->updateCurrentOrder($cookieId, $order, $options['user']);
+    }
+
     return true;
   }
 
@@ -120,6 +144,57 @@ class plgUserKetshop extends JPlugin
 
   public function onUserAfterDelete($user, $success, $msg)
   {
+  }
+
+
+  private function updateCurrentOrder($cookieId, $oldOrder, $user)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+    // Checks whether a "blank" order does exist (ie: an order not yet linked to any customer).
+    $query->select('id')
+	  ->from('#__ketshop_order')
+          ->where('cookie_id='.$db->Quote($cookieId))
+          ->where('status='.$db->Quote('shopping'))
+          ->where('customer_id=0');
+    $db->setQuery($query);
+    $order = $db->loadObject();
+
+    if($order) {
+
+      $query->clear()
+	    ->select('op.prod_id, op.var_id')
+	    ->from('#__ketshop_order_prod AS op')
+	    ->join('INNER', '#__ketshop_order AS o ON o.id=op.order_id')
+	    ->where('o.cookie_id='.$db->Quote($cookieId))
+	    ->where('o.status='.$db->Quote('shopping'))
+	    ->where('o.customer_id='.(int)$user->id);
+      $db->setQuery($query);
+      $results = $db->loadObjectList();
+
+      $session = JFactory::getSession();
+      $coupons = $session->get('coupons', array(), 'ketshop'); 
+
+      foreach($results as $result) {
+	$product = $this->getProduct($result->prod_id, $result->var_id, $user, $coupons);
+	$this->storeProduct($product, $order);
+	// Updates the cart amounts.
+	$cartPriceRules = $this->getCartPriceRules($user, $coupons);
+	$this->setAmounts($order, $cartPriceRules);
+      }
+
+      // Deletes all of the elements linked to the order (products, shipping etc...).
+      $this->resetOrder($oldOrder);
+      // Then deletes the order itself.
+      $query->clear();
+      $query->delete('#__ketshop_order')
+	    ->where('id='.(int)$oldOrder->id);
+      $db->setQuery($query);
+      $db->execute();
+    }
+
+    file_put_contents('debog_file.txt', print_r($user->id.' '.$cookieId.' '.$orderId, true));
+    return true;
   }
 }
 

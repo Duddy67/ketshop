@@ -21,6 +21,19 @@ $archived = $this->state->get('filter.published') == 2 ? true : false;
 $trashed = $this->state->get('filter.published') == -2 ? true : false;
 // Check only against component permission as order items have no categories.
 $canOrder = $user->authorise('core.edit.state', 'com_ketshop');
+
+// Build a status array.
+$status = array();
+$status['completed'] = 'COM_KETSHOP_OPTION_COMPLETED_STATUS';
+$status['pending'] = 'COM_KETSHOP_OPTION_PENDING_STATUS';
+$status['other'] = 'COM_KETSHOP_OPTION_OTHER_STATUS';
+$status['cancelled'] = 'COM_KETSHOP_OPTION_CANCELLED_STATUS';
+$status['error'] = 'COM_KETSHOP_OPTION_ERROR_STATUS';
+$status['no_shipping'] = 'COM_KETSHOP_OPTION_NO_SHIPPING_STATUS';
+$status['no_payment'] = 'COM_KETSHOP_OPTION_NO_PAYMENT_STATUS';
+$status['unfinished'] = 'COM_KETSHOP_OPTION_UNFINISHED_STATUS';
+$status['undefined'] = 'COM_KETSHOP_OPTION_UNDEFINED_STATUS';
+$status['shopping'] = 'COM_KETSHOP_OPTION_SHOPPING_STATUS';
 ?>
 
 
@@ -55,11 +68,23 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	<th width="1%" style="min-width:55px" class="nowrap center">
 	  <?php echo JHtml::_('searchtools.sort', 'JSTATUS', 'o.published', $listDirn, $listOrder); ?>
 	</th>
-	<th>
-	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_TITLE', 'o.name', $listDirn, $listOrder); ?>
+	<th width="15%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_ORDER_NUMBER', 'order_nb', $listDirn, $listOrder); ?>
 	</th>
 	<th width="10%" class="nowrap hidden-phone">
-	  <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_CREATED_BY', 'creator', $listDirn, $listOrder); ?>
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_CUSTOMER', 'lastname', $listDirn, $listOrder); ?>
+	</th>
+	<th width="10%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_ORDER_STATUS', 'order_status', $listDirn, $listOrder); ?>
+	</th>
+	<th width="15%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_PAYMENT_STATUS', 'payment_status', $listDirn, $listOrder); ?>
+	</th>
+	<th width="15%">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_SHIPPING_STATUS', 'shipping_status', $listDirn, $listOrder); ?>
+	</th>
+	<th width="20%">
+	  <?php echo JText::_('COM_KETSHOP_HEADING_PRODUCTS'); ?>
 	</th>
 	<th width="5%" class="nowrap hidden-phone">
 	  <?php echo JHtml::_('searchtools.sort', 'JDATE', 'o.created', $listDirn, $listOrder); ?>
@@ -95,7 +120,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	      JHtml::_('actionsdropdown.' . $action, 'cb' . $i, 'orders');
 
 	      // Render dropdown list
-	      echo JHtml::_('actionsdropdown.render', $this->escape($item->name));
+	      echo JHtml::_('actionsdropdown.render', $this->escape($item->order_nb));
 	      ?>
 	    </div>
 	  </td>
@@ -106,14 +131,32 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	      <?php endif; ?>
 	      <?php if($canEdit || $canEditOwn) : ?>
 		<a href="<?php echo JRoute::_('index.php?option=com_ketshop&task=order.edit&id='.$item->id);?>" title="<?php echo JText::_('JACTION_EDIT'); ?>">
-			<?php echo $this->escape($item->name); ?></a>
+			<?php echo $this->escape($item->order_nb); ?></a>
 	      <?php else : ?>
-		<?php echo $this->escape($item->name); ?>
+		<?php echo $this->escape($item->order_nb); ?>
 	      <?php endif; ?>
 	    </div>
 	  </td>
-	  <td class="small hidden-phone">
-	    <?php echo $this->escape($item->creator); ?>
+	  <td class="hidden-phone">
+	    <?php if ($item->customer_id) : ?>
+	      <?php echo $this->escape($item->lastname); ?>
+	      <div class="small">
+		<?php echo $this->escape($item->firstname); ?>
+	      </div>
+	    <?php else : ?>
+	      <?php echo JText::_('COM_KETSHOP_VISITOR_CUSTOMER'); ?>
+	    <?php endif; ?>
+	  </td>
+	  <td class="hidden-phone">
+	    <?php echo JText::_($status[$item->order_status]); ?>
+	  </td>
+	  <td class="hidden-phone">
+	    <?php echo JText::_($status[$item->payment_status]); ?>
+	  </td>
+	  <td class="hidden-phone">
+	    <?php echo JText::_($status[$item->shipping_status]); ?>
+	  </td>
+	  <td class="hidden-phone">
 	  </td>
 	  <td class="nowrap small hidden-phone">
 	    <?php echo JHtml::_('date', $item->created, JText::_('DATE_FORMAT_LC4')); ?>
@@ -124,7 +167,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 
       <?php endforeach; ?>
       <tr>
-	  <td colspan="6"><?php echo $this->pagination->getListFooter(); ?></td>
+	  <td colspan="10"><?php echo $this->pagination->getListFooter(); ?></td>
       </tr>
       </tbody>
     </table>

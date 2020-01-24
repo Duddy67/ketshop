@@ -140,6 +140,8 @@ class plgContentKetshop extends JPlugin
       $db->setQuery($query);
       $db->execute();
     }
+    elseif($context == 'com_ketshop.order') {
+    }
     elseif($context == 'com_categories.category') {
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);

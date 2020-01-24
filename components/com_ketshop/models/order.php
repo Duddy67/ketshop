@@ -60,7 +60,12 @@ class KetshopModelOrder extends JModelItem
     // The current user has already logged in.
     if($user->id) {
       // The user may have products in his cart from a previous and abandoned checkout.
-      $query->where('(customer_id='.(int)$user->id.' OR customer_id=0)');
+      $query->where('(customer_id='.(int)$user->id.' OR customer_id=0)')
+      // Prevents to retrieve as well the zero customer_id order in case of a previous shopping. 
+	    ->setLimit(1);
+    }
+    else {
+      $query->where('customer_id=0');
     }
 
     $db->setQuery($query);

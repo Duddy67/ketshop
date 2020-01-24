@@ -68,7 +68,7 @@ class KetshopViewOrders extends JViewLegacy
     // N.B: We check the user permissions only against the component since 
     //      the order items have no categories.
     if($canDo->get('core.create')) {
-      JToolBarHelper::addNew('order.add', 'JTOOLBAR_NEW');
+      //JToolBarHelper::addNew('order.add', 'JTOOLBAR_NEW');
     }
 
     if($canDo->get('core.edit') || $canDo->get('core.edit.own')) {
