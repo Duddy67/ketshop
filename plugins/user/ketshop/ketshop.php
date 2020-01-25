@@ -11,13 +11,12 @@ defined('_JEXEC') or die('Restricted access');
 JLoader::register('UtilityHelper', JPATH_ADMINISTRATOR.'/components/com_ketshop/helpers/utility.php');
 JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop.php');
 JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
-JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/pricerule.php');
 
 
 
 class plgUserKetshop extends JPlugin
 {
-  use OrderTrait, PriceruleTrait;
+  use OrderTrait;
 
   protected $post;
 
@@ -65,6 +64,13 @@ class plgUserKetshop extends JPlugin
   }
 
 
+  /**
+   * This event is triggered whenever a user is successfully logged in.
+   *
+   * @param   array    $options    The logged in user data.
+   *
+   * @return  boolean
+   */
   public function onUserAfterLogin($options)
   {
     // Gets the ketshop current cookie id.
@@ -72,17 +78,17 @@ class plgUserKetshop extends JPlugin
 
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    // Checks whether a shopping order linked to the user already exists.
+    // Checks whether a previous shopping order linked to the user already exists.
     $query->select('id')
 	  ->from('#__ketshop_order')
           ->where('cookie_id='.$db->Quote($cookieId))
           ->where('status='.$db->Quote('shopping'))
           ->where('customer_id='.(int)$options['user']->id);
     $db->setQuery($query);
-    $order = $db->loadObject();
+    $previousOrder = $db->loadObject();
 
-    if($order) {
-      $this->updateCurrentOrder($cookieId, $order, $options['user']);
+    if($previousOrder) {
+      $this->updateCurrentOrder($cookieId, $previousOrder, $options['user']);
     }
 
     return true;
@@ -147,12 +153,22 @@ class plgUserKetshop extends JPlugin
   }
 
 
-  private function updateCurrentOrder($cookieId, $oldOrder, $user)
+  /**
+   * Switches the products from the previous order to the current order (if any).
+   *
+   * @param   string   $cookieId	The id of the current cookie.
+   * @param   object   $previousOrder	The previous user's order.
+   * @param   object   $user		The logged in user.
+   *
+   * @return  void
+   */
+  private function updateCurrentOrder($cookieId, $previousOrder, $user)
   {
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    // Checks whether a "blank" order does exist (ie: an order not yet linked to any customer).
-    $query->select('id')
+    // Checks whether a current "blank" order does exist (ie: an order not yet linked to any customer).
+    // If it does it means that the current user has added some products in the cart before logging in.
+    $query->select('id, customer_id')
 	  ->from('#__ketshop_order')
           ->where('cookie_id='.$db->Quote($cookieId))
           ->where('status='.$db->Quote('shopping'))
@@ -161,20 +177,19 @@ class plgUserKetshop extends JPlugin
     $order = $db->loadObject();
 
     if($order) {
-
+      // Retrieves products from the previous user's order.
       $query->clear()
 	    ->select('op.prod_id, op.var_id')
 	    ->from('#__ketshop_order_prod AS op')
 	    ->join('INNER', '#__ketshop_order AS o ON o.id=op.order_id')
-	    ->where('o.cookie_id='.$db->Quote($cookieId))
-	    ->where('o.status='.$db->Quote('shopping'))
-	    ->where('o.customer_id='.(int)$user->id);
+	    ->where('o.id='.(int)$previousOrder->id);
       $db->setQuery($query);
       $results = $db->loadObjectList();
 
       $session = JFactory::getSession();
       $coupons = $session->get('coupons', array(), 'ketshop'); 
 
+      // Switches products (if any) from the previous order to the current order.
       foreach($results as $result) {
 	$product = $this->getProduct($result->prod_id, $result->var_id, $user, $coupons);
 	$this->storeProduct($product, $order);
@@ -183,18 +198,18 @@ class plgUserKetshop extends JPlugin
 	$this->setAmounts($order, $cartPriceRules);
       }
 
-      // Deletes all of the elements linked to the order (products, shipping etc...).
-      $this->resetOrder($oldOrder);
-      // Then deletes the order itself.
-      $query->clear();
-      $query->delete('#__ketshop_order')
-	    ->where('id='.(int)$oldOrder->id);
+      // Deletes all of the elements linked to the previous order (products, shipping etc...).
+      $this->resetOrder($previousOrder);
+      // Then deletes the previous order.
+      $query->clear()
+	    ->delete('#__ketshop_order')
+	    ->where('id='.(int)$previousOrder->id);
       $db->setQuery($query);
       $db->execute();
-    }
 
-    file_put_contents('debog_file.txt', print_r($user->id.' '.$cookieId.' '.$orderId, true));
-    return true;
+      // Finally binds the updated current order to the user.
+      $this->setUserId($user->id, $order);
+    }
   }
 }
 
