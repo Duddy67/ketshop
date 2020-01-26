@@ -36,16 +36,22 @@ Joomla.submitbutton = function(task)
 	<div class="span4">
 	  <div class="form-vertical">
 	    <?php
-		  echo $this->form->getControlGroup('description');
+		  echo $this->form->renderField('status');
 	      ?>
 	  </div>
 	</div>
 	<div class="span3">
-	  <?php echo JLayoutHelper::render('joomla.edit.global', $this); ?>
+	  <?php //echo JLayoutHelper::render('joomla.edit.global', $this); ?>
 	</div>
       </div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
+     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'transaction', JText::_('COM_KETSHOP_FIELDSET_TRANSACTION_DETAIL', true)); ?>
+      <?php 
+            $this->form->setValue('payment_status', null, $this->item->transactions[0]->status);
+	    echo $this->form->renderField('payment_status');
+      ?>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
 
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
       <div class="row-fluid form-horizontal-desktop">
@@ -53,7 +59,7 @@ Joomla.submitbutton = function(task)
 	  <?php echo JLayoutHelper::render('joomla.edit.publishingdata', $this); ?>
 	</div>
 	<div class="span6">
-	  <?php echo JLayoutHelper::render('joomla.edit.metadata', $this); ?>
+	  <?php echo JLayoutHelper::render('joomla.edit.global', $this); ?>
 	</div>
       </div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>

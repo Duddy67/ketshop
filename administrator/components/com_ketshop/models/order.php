@@ -8,9 +8,13 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access'); 
 
+JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
+
 
 class KetshopModelOrder extends JModelAdmin
 {
+  use OrderTrait;
+
   // Prefix used with the controller messages.
   protected $text_prefix = 'COM_KETSHOP';
 
@@ -69,6 +73,36 @@ class KetshopModelOrder extends JModelAdmin
     }
 
     return $data;
+  }
+
+
+  /**
+   * Method to get a single record.
+   *
+   * @param   integer  $pk  The id of the primary key.
+   *
+   * @return  \JObject|boolean  Object on success, false on failure.
+   *
+   * @since   1.6
+   */
+  public function getItem($pk = null)
+  {
+    if($item = parent::getItem($pk)) {
+      $db = JFactory::getDbo();
+      $query = $db->getQuery(true);
+
+      $query->select('MAX(status) AS payment_status')
+	    ->from('#__ketshop_order_transaction')
+	    ->where('order_id='.(int)$item->id);
+      $db->setQuery($query);
+      $statuses = $db->loadResult();
+      $item->payment_status = $this->getTransaction($item)->status;
+      $item->transactions = $this->getTransactions($item);
+      $item->shipping_status = $this->getShipping($item)->status;
+      //var_dump($transaction);
+    }
+
+    return $item;
   }
 }
 

@@ -801,7 +801,7 @@ trait OrderTrait
 
 
   /**
-   * Returns the transaction data from a given order.
+   * Returns the latest transaction data row of a given order.
    *
    * @param   object   $order	An order object.
    *
@@ -814,7 +814,7 @@ trait OrderTrait
 
     $query->select('*')
 	  ->from('#__ketshop_order_transaction')
-	  ->where('order_id='.(int)$order->id);
+	  ->where('created = (SELECT MAX(created) FROM #__ketshop_order_transaction WHERE order_id='.(int)$order->id.')');
     $db->setQuery($query);
 
     return $db->loadObject();
@@ -822,7 +822,29 @@ trait OrderTrait
 
 
   /**
-   * Returns the shipping data from a given order.
+   * Returns all the transaction data rows of a given order.
+   *
+   * @param   object   $order	An order object.
+   *
+   * @return  array	 	The transaction data rows.
+   */
+  public function getTransactions($order)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('*')
+	  ->from('#__ketshop_order_transaction')
+	  ->where('order_id='.(int)$order->id)
+          ->order('created DESC');
+    $db->setQuery($query);
+
+    return $db->loadObjectList();
+  }
+
+
+  /**
+   * Returns the shipping data of a given order.
    *
    * @param   object   $order	An order object.
    *

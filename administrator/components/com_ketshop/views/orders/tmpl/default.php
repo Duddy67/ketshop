@@ -72,7 +72,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_ORDER_NUMBER', 'order_nb', $listDirn, $listOrder); ?>
 	</th>
 	<th width="10%" class="nowrap hidden-phone">
-	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_CUSTOMER', 'lastname', $listDirn, $listOrder); ?>
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_CUSTOMER', 'c.lastname', $listDirn, $listOrder); ?>
 	</th>
 	<th width="10%">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_ORDER_STATUS', 'order_status', $listDirn, $listOrder); ?>
@@ -156,7 +156,21 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  <td class="hidden-phone">
 	    <?php echo JText::_($status[$item->shipping_status]); ?>
 	  </td>
-	  <td class="hidden-phone">
+	  <td class="hidden-phone small">
+	  <?php 
+		 $maxProducts = 3;
+		 foreach($item->products as $i => $product) {
+		   echo $product->name;
+
+		   if($i + 1 == $maxProducts) {
+		     echo ' ...';
+		     break;
+		   }
+		   else {
+		     echo '<br />';
+		   }
+		 }
+	   ?>
 	  </td>
 	  <td class="nowrap small hidden-phone">
 	    <?php echo JHtml::_('date', $item->created, JText::_('DATE_FORMAT_LC4')); ?>

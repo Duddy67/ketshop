@@ -14,6 +14,7 @@ class KetshopViewOrders extends JViewLegacy
   protected $items;
   protected $state;
   protected $pagination;
+  protected $order_model;
 
 
   /**
@@ -33,10 +34,16 @@ class KetshopViewOrders extends JViewLegacy
     $this->pagination = $this->get('Pagination');
     $this->filterForm = $this->get('FilterForm');
     $this->activeFilters = $this->get('ActiveFilters');
+    $this->order_model = JModelLegacy::getInstance('Order', 'KetshopModel');
 
     // Check for errors.
     if(count($errors = $this->get('Errors'))) {
       throw new Exception(implode("\n", $errors), 500);
+    }
+
+    // Adds products linked to each order.
+    foreach($this->items as $i => $item) {
+      $this->items[$i]->products = $this->order_model->getProducts($item);
     }
 
     // Display the tool bar.

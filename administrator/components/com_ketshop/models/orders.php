@@ -31,6 +31,7 @@ class KetshopModelOrders extends JModelList
 	      'creator', 'user_id',
 	      'order_nb', 'order_status', 
 	      'payment_status', 'shipping_status',
+	      'c.lastname',
       );
     }
 
@@ -148,11 +149,11 @@ class KetshopModelOrders extends JModelList
     $search = $this->getState('filter.search');
     if(!empty($search)) {
       if(stripos($search, 'id:') === 0) {
-	$query->where('o.id = '.(int) substr($search, 3));
+	$query->where('o.name= '.(int) substr($search, 3));
       }
       else {
 	$search = $db->Quote('%'.$db->escape($search, true).'%');
-	$query->where('(o.name LIKE '.$search.')');
+	$query->where('(c.lastname LIKE '.$search.')');
       }
     }
 
@@ -174,6 +175,24 @@ class KetshopModelOrders extends JModelList
     if(is_numeric($userId)) {
       $type = $this->getState('filter.user_id.include', true) ? '= ' : '<>';
       $query->where('o.created_by'.$type.(int) $userId);
+    }
+
+    // Filter by order status.
+    $orderStatus = $this->getState('filter.order_status');
+    if(!empty($orderStatus)) {
+      $query->where('o.status='.$db->Quote($orderStatus));
+    }
+
+    //Filter by payment status.
+    $paymentStatus = $this->getState('filter.payment_status');
+    if(!empty($paymentStatus)) {
+      $query->where('t.status='.$db->Quote($paymentStatus));
+    }
+
+    //Filter by shipping status.
+    $shippingStatus = $this->getState('filter.shipping_status');
+    if(!empty($shippingStatus)) {
+      $query->where('s.status='.$db->Quote($shippingStatus));
     }
 
     // Add the list to the sort.
