@@ -34,10 +34,12 @@
 			type="list"
 			onchange="this.form.submit();" >
 			<option value="">COM_KETSHOP_SELECT_SHIPPING_STATUS</option>
-			<option value="completed">COM_KETSHOP_OPTION_COMPLETED_STATUS</option>
+			<option value="delivered">COM_KETSHOP_OPTION_DELIVERED_STATUS</option>
 			<option value="pending">COM_KETSHOP_OPTION_PENDING_STATUS</option>
+			<option value="in_transit">COM_KETSHOP_OPTION_IN_TRANSIT_STATUS</option>
 			<option value="cancelled">COM_KETSHOP_OPTION_CANCELLED_STATUS</option>
 			<option value="no_shipping">COM_KETSHOP_OPTION_NO_SHIPPING_STATUS</option>
+			<option value="other">COM_KETSHOP_OPTION_OTHER_STATUS</option>
 		</field>
 	</fields>
 	<fields name="list">

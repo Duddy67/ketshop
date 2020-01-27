@@ -8,12 +8,20 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access'); 
 
+JLoader::register('KetshopHelperRoute', JPATH_SITE.'/components/com_ketshop/helpers/route.php');
+
 
 class KetshopViewOrder extends JViewLegacy
 {
   protected $item;
   protected $form;
   protected $state;
+  protected $params = null;
+  protected $shop_settings = null;
+  protected $products = null;
+  protected $amounts = null;
+  protected $detailed_amounts = null;
+  protected $layout_path = null;
 
 
   /**
@@ -31,11 +39,34 @@ class KetshopViewOrder extends JViewLegacy
     $this->item = $this->get('Item');
     $this->form = $this->get('Form');
     $this->state = $this->get('State');
+    $this->shop_settings = UtilityHelper::getShopSettings($this->item->customer_id);
+    $this->products = $this->getModel()->getProducts($this->item);
+    $this->amounts = $this->getModel()->getAmounts($this->item);
+    $this->amounts->price_rules = $this->getModel()->getCartAmountPriceRules($this->item);
+    $this->detailed_amounts = $this->getModel()->getDetailedAmounts($this->item);
+    $this->params = $this->state->get('params');
 
     // Check for errors.
     if(count($errors = $this->get('Errors'))) {
       throw new Exception(implode("\n", $errors), 500);
     }
+
+    // Sets the editing status.
+    $this->shop_settings->can_edit = false;
+    $this->shop_settings->view_name = 'order';
+    $this->shop_settings->price_display = $this->shop_settings->tax_method;
+
+    // Adds the shipping cost to get the total amount.
+    $this->amounts->total_amount =  $this->amounts->final_incl_tax + $this->item->shipping->final_shipping_cost;
+    $this->layout_path = JPATH_SITE.'/components/com_ketshop/layouts/';
+
+    // Ensures prices are displayed.
+    $this->params->set('show_price', 1);
+    // Don't display price rule names in the price columns.
+    $this->params->set('show_rule_name', 0);
+    // Flag used to display prices either by unit or quantity.
+    $this->params->def('product_price', '');
+    $this->params->def('display_type', 'cart');
 
     // Display the toolbar.
     $this->addToolBar();
@@ -107,6 +138,7 @@ class KetshopViewOrder extends JViewLegacy
   {
     $doc = JFactory::getDocument();
     $doc->addStyleSheet(JURI::base().'components/com_ketshop/ketshop.css');
+    $doc->addStyleSheet(JURI::root().'components/com_ketshop/css/ketshop.css');
   }
 }
 

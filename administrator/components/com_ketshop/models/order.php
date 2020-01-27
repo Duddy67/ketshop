@@ -9,6 +9,7 @@
 defined('_JEXEC') or die('Restricted access'); 
 
 JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
+JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop.php');
 
 
 class KetshopModelOrder extends JModelAdmin
@@ -91,14 +92,17 @@ class KetshopModelOrder extends JModelAdmin
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
-      $query->select('MAX(status) AS payment_status')
-	    ->from('#__ketshop_order_transaction')
-	    ->where('order_id='.(int)$item->id);
+      $query->select('lastname, firstname')
+	    ->from('#__ketshop_customer')
+	    ->where('id='.(int)$item->customer_id);
       $db->setQuery($query);
-      $statuses = $db->loadResult();
-      $item->payment_status = $this->getTransaction($item)->status;
+      $names = $db->loadObject();
+
+      $item->firstname = $names->firstname;
+      $item->lastname = $names->lastname;
       $item->transactions = $this->getTransactions($item);
-      $item->shipping_status = $this->getShipping($item)->status;
+      $item->shipping = $this->getShipping($item);
+      $item->addresses = ShopHelper::getCustomerAddresses($item->customer_id);
       //var_dump($transaction);
     }
 

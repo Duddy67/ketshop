@@ -16,7 +16,11 @@ $settings = $displayData['settings'];
 ?>
 <h4><?php echo JText::_('COM_KETSHOP_DELIVERY_ADDRESS_TITLE'); ?></h4>
 <table class="table table-condensed">
-  <tr><td><?php echo $customer->firstname.' '.$customer->lastname; ?></td></tr>
+  <?php if(isset($address->company) && !empty($address->company)) : ?>
+    <tr><td><?php echo $address->company; ?></td></tr>
+  <?php else : ?>
+    <tr><td><?php echo $customer->firstname.' '.$customer->lastname; ?></td></tr>
+  <?php endif; ?>
   <tr><td><?php echo $address->street; ?></td></tr>
   <?php if(!empty($address->additional)) : ?>
     <tr><td><?php echo $address->additional; ?></td></tr>

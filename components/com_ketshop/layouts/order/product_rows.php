@@ -12,6 +12,8 @@ JHtml::_('behavior.framework');
 $products = $displayData['products'];
 $settings = $displayData['settings'];
 $params = $displayData['params'];
+// Needed when loading orders from backend.
+$layoutPath = JPATH_SITE.'/components/com_ketshop/layouts/';
 ?>
 
 <?php foreach($products as $key => $product) : // Loops throught the products. 
@@ -38,7 +40,7 @@ $params = $displayData['params'];
       </td><td class="cart-prices">
 	<?php
 	      $params->set('product_price', 'by_unit');
-	      echo JLayoutHelper::render('product.price', array('variant' => $product, 'params' => $params, 'shop_settings' => $settings)); ?>
+	      echo JLayoutHelper::render('product.price', array('variant' => $product, 'params' => $params, 'shop_settings' => $settings), $layoutPath); ?>
       </td><td class="quantity-column">
        <?php if(isset($settings->can_edit) && $settings->can_edit) : ?>
 	   <input class="quantity" type="text" name="quantity_<?php echo $product->prod_id; ?>_<?php echo $product->var_id; ?>"
@@ -50,7 +52,7 @@ $params = $displayData['params'];
       </td><td class="cart-prices">
 	<?php
 	      $params->set('product_price', 'by_quantity');
-	      echo JLayoutHelper::render('product.price', array('variant' => $product, 'params' => $params, 'shop_settings' => $settings)); ?>
+	      echo JLayoutHelper::render('product.price', array('variant' => $product, 'params' => $params, 'shop_settings' => $settings), $layoutPath); ?>
       </td><td class="small center">
         <?php echo $product->tax_rate.' %'; ?>
       </td>

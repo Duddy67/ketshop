@@ -33,24 +33,52 @@ Joomla.submitbutton = function(task)
     <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'details', JText::_('COM_KETSHOP_TAB_DETAILS')); ?>
 
       <div class="row-fluid">
-	<div class="span4">
+	<div class="span2">
 	  <div class="form-vertical">
 	    <?php
 		  echo $this->form->renderField('status');
+		  $this->form->setValue('shipping_status', null, $this->item->shipping->status);
+		  echo $this->form->renderField('shipping_status');
+		  $this->form->setValue('firstname', null, $this->item->firstname);
+		  echo $this->form->renderField('firstname');
+		  $this->form->setValue('lastname', null, $this->item->lastname);
+		  echo $this->form->renderField('lastname');
+
+		  $deliveryAddress = (isset($this->item->addresses['shipping'])) ? $this->item->addresses['shipping'] : $this->item->addresses['billing'];
+		  echo JLayoutHelper::render('order.delivery_address', array('delivery_address' => $deliveryAddress, 'customer' => $this->item, 'settings' => $this->shop_settings), $this->layout_path); 
 	      ?>
 	  </div>
 	</div>
-	<div class="span3">
-	  <?php //echo JLayoutHelper::render('joomla.edit.global', $this); ?>
+	<div class="span10">
+	  <?php echo $this->loadTemplate('details'); ?>
 	</div>
       </div>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'transaction', JText::_('COM_KETSHOP_FIELDSET_TRANSACTION_DETAIL', true)); ?>
       <?php 
+	    // N.B: The first transaction row is the newest.
             $this->form->setValue('payment_status', null, $this->item->transactions[0]->status);
 	    echo $this->form->renderField('payment_status');
       ?>
+	<table class="table product-row end-table">
+	  <thead>
+	    <th class="center" width="25%"><?php echo JText::_('COM_KETSHOP_HEADING_PAYMENT_MODE'); ?></th>
+	    <th class="center" width="15%"><?php echo JText::_('COM_KETSHOP_HEADING_AMOUNT'); ?></th>
+	    <th class="center" width="15%"><?php echo JText::_('COM_KETSHOP_HEADING_RESULT'); ?></th>
+	    <th class="center" width="25%"><?php echo JText::_('COM_KETSHOP_HEADING_DETAIL'); ?></th>
+	    <th class="center" width="15%"><?php echo JText::_('JDATE'); ?></th>
+          </thead>
+          <?php foreach($this->item->transactions as $transaction) : ?>
+	  <tr>
+            <td class="center"><?php echo $transaction->payment_mode; ?></td>
+            <td class="center"><?php echo UtilityHelper::floatFormat($transaction->amount).' '.UtilityHelper::getCurrency($this->item->currency_code); ?></td>
+            <td class="center"><?php echo $transaction->result; ?></td>
+            <td class="center"><?php echo $transaction->detail; ?></td>
+            <td class="center"><?php echo JHtml::_('date', $transaction->created, JText::_('DATE_FORMAT_LC6')); ?></td>
+          </tr>
+	  <?php endforeach; ?>
+        </table>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
       <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'publishing', JText::_('JGLOBAL_FIELDSET_PUBLISHING', true)); ?>
