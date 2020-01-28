@@ -212,7 +212,7 @@ class plgUserKetshop extends JPlugin
       $db->execute();
 
       // Finally binds the updated current order to the user.
-      $this->setUserId($user->id, $order);
+      $this->setCustomerId($user->id, $order);
     }
   }
 }

@@ -21,13 +21,7 @@ class KetshopViewOrder extends JViewLegacy
   protected $order_model = null;
   protected $order = null;
   protected $params = null;
-  protected $products = null;
-  protected $amounts = null;
-  protected $detailed_amounts = null;
-  protected $shipping = null;
-  protected $transaction = null;
   protected $shop_settings = null;
-
 
   /**
    * Constructor
@@ -55,13 +49,7 @@ class KetshopViewOrder extends JViewLegacy
   {
     // Initialise variables
     $this->state = $this->get('State');
-    $this->order = $this->order_model->getOrder($this->state->get('order.id'));
-    $this->products = $this->order_model->getProducts($this->order);
-    $this->amounts = $this->order_model->getAmounts($this->order);
-    $this->amounts->price_rules = $this->order_model->getCartAmountPriceRules($this->order);
-    $this->detailed_amounts = $this->order_model->getDetailedAmounts($this->order);
-    $this->shipping = $this->order_model->getShipping($this->order);
-    $this->transaction = $this->order_model->getTransaction($this->order);
+    $this->order = $this->order_model->getOrder($this->state->get('order.id'), true);
     $user = JFactory::getUser();
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
@@ -74,9 +62,6 @@ class KetshopViewOrder extends JViewLegacy
       JError::raiseWarning(500, implode("\n", $errors));
       return false;
     }
-
-    // Adds the shipping cost to get the total amount.
-    $this->amounts->total_amount =  $this->amounts->final_incl_tax + $this->shipping->final_shipping_cost;
 
     $this->params = $this->state->get('params');
     // Ensures prices are displayed.

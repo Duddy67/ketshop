@@ -106,6 +106,13 @@ class KetshopModelOrder extends JModelItem
   }
 
 
+  public function sendOrderConfirmation($order)
+  {
+    $customer = ShopHelper::getCustomer($order->customer_id);
+
+  }
+
+
   /**
    * Creates a new order from the current cookie id.
    *

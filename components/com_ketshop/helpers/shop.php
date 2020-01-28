@@ -105,7 +105,7 @@ class ShopHelper
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $query->select('c.id, c.firstname, c.lastname, c.phone, u.username, u.email, u.registerDate, u.lastvisitDate')
+    $query->select('c.id, c.firstname, c.lastname, c.customer_number, c.phone, u.username, u.email, u.registerDate, u.lastvisitDate')
 	  ->from('#__ketshop_customer AS c')
 	  ->join('INNER', '#__users AS u ON u.id=c.id')
 	  ->where('c.id='.(int)$userId);

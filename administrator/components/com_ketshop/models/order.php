@@ -104,6 +104,8 @@ class KetshopModelOrder extends JModelAdmin
       $item->transactions = $this->getTransactions($item);
       $item->shipping = $this->getShipping($item);
       $item->addresses = ShopHelper::getCustomerAddresses($item->customer_id);
+
+      //$item = $this->getCompleteOrder($item);
       //var_dump($transaction);
     }
 

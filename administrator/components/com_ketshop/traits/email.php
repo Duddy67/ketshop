@@ -29,8 +29,12 @@ trait EmailTrait
   }
 
 
-  public function setOrderConfirmationEmail($user, $order)
+  public function setOrderConfirmationEmail($customer, $order)
   {
+    $message = array('subject' => '', 'body' => '');
+    $params = JComponentHelper::getParams('com_ketshop');
+
+    $message['subject'] = JText::sprintf('COM_KETSHOP_EMAIL_SUBJECT_ORDER_CONFIRMATION', $params->shop_name, $customer->customer_number);
   }
 
 

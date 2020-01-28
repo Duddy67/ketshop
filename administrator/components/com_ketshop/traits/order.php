@@ -27,7 +27,7 @@ trait OrderTrait
    *
    * @return  object	 		An order object.
    */
-  public function getOrder($orderId)
+  public function getOrder($orderId, $complete = false)
   {
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -36,8 +36,59 @@ trait OrderTrait
 	  ->from('#__ketshop_order')
 	  ->where('id='.(int)$orderId);
     $db->setQuery($query);
+    $order = $db->loadObject();
 
-    return $db->loadObject();
+    if($complete) {
+      return $this->getCompleteOrder($order);
+    }
+
+    return $order;
+  }
+
+
+  /**
+   * Gets then adds all the data relating to an order (such as products, shipping etc...) to 
+   * the given order object.
+   *
+   * @param   object   $order		An order object.
+   *
+   * @return  object	 		The complete order.
+   */
+  public function getCompleteOrder($order)
+  {
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('o.shippable, o.status, c.lastname, c.firstname, c.customer_number')
+	  ->from('#__ketshop_order AS o')
+	  ->join('INNER', '#__ketshop_customer AS c ON c.id=o.customer_id')
+	  ->where('o.id='.(int)$order->id);
+    $db->setQuery($query);
+    $results = $db->loadObject();
+
+    $order->firstname = $results->firstname;
+    $order->lastname = $results->lastname;
+    $order->customer_number = $results->customer_number;
+    $order->products = $this->getProducts($order);
+    $order->amounts = $this->getAmounts($order);
+    $order->amounts->price_rules = $this->getCartAmountPriceRules($order);
+    $order->detailed_amounts = $this->getDetailedAmounts($order);
+    $shipping = $this->getShipping($order);
+
+    if($shipping) {
+      $order->shipping = $shipping;
+      // Adds the shipping cost to get the total amount.
+      $order->amounts->total_amount = $order->amounts->final_incl_tax + $order->shipping->final_shipping_cost;
+    }
+    else {
+      $order->amounts->total_amount = $order->amounts->final_incl_tax;
+    }
+
+    if($results->status != 'shopping') {
+      $order->transactions = $this->getTransactions($order);
+    }
+
+    return $order;
   }
 
 
@@ -785,7 +836,7 @@ trait OrderTrait
    *
    * @return  void
    */
-  public function setUserId($userId, $order)
+  public function setCustomerId($userId, $order)
   {
     if($order->customer_id == 0) {
       $db = JFactory::getDbo();
@@ -797,6 +848,32 @@ trait OrderTrait
       $db->setQuery($query);
       $db->execute();
     }
+  }
+
+
+  /**
+   * Defines whether shipping is needed for the current order.
+   *
+   * @param   object   $order		The current order.
+   *
+   * @return  void
+   */
+  public function setShippableStatus($order)
+  {
+    $isShippable = 0;
+
+    if($this->getNumberOfProducts($order)) {
+      $isShippable = 1;
+    }
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    $query->update('#__ketshop_order')
+	  ->set('shippable='.(int)$isShippable)
+	  ->where('id='.(int)$order->id);
+    $db->setQuery($query);
+    $db->execute();
   }
 
 

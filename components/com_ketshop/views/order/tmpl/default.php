@@ -22,10 +22,16 @@ defined('_JEXEC') or die;
     </div>
     <table class="table product-row end-table">
     <?php echo JLayoutHelper::render('order.product_header', $this->shop_settings); ?>
-    <?php echo JLayoutHelper::render('order.product_rows', array('products' => $this->products, 'settings' => $this->shop_settings, 'params' => $this->params)); ?>
-    <?php echo JLayoutHelper::render('order.amounts', array('amounts' => $this->amounts, 'detailed_amounts' => $this->detailed_amounts, 'settings' => $this->shop_settings, 'params' => $this->params)); ?>
-    <?php echo JLayoutHelper::render('order.shipment', array('shippings' => $this->shipping, 'settings' => $this->shop_settings)); ?>
-    <?php echo JLayoutHelper::render('order.total_amount', array('amounts' => $this->amounts, 'settings' => $this->shop_settings)); ?>
+    <?php echo JLayoutHelper::render('order.product_rows', array('products' => $this->order->products, 'settings' => $this->shop_settings, 'params' => $this->params)); ?>
+    <?php echo JLayoutHelper::render('order.amounts', array('amounts' => $this->order->amounts, 'detailed_amounts' => $this->order->detailed_amounts, 'settings' => $this->shop_settings, 'params' => $this->params)); ?>
+
+    <?php 
+      if($this->order->shippable) {
+	echo JLayoutHelper::render('order.shipment', array('shippings' => $this->order->shipping, 'settings' => $this->shop_settings)); 
+      }
+    ?>
+
+    <?php echo JLayoutHelper::render('order.total_amount', array('amounts' => $this->order->amounts, 'settings' => $this->shop_settings)); ?>
 
     <?php //echo JLayoutHelper::render('order.payment', array('payment_modes' => $this->payment_modes, 'settings' => $this->shop_settings)); ?>
     </table>
