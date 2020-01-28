@@ -39,6 +39,7 @@ Joomla.submitbutton = function(task)
 	    <?php
 		  echo $this->form->renderField('firstname');
 		  echo $this->form->renderField('phone');
+		  echo $this->form->renderField('customer_number');
 		  echo $this->form->renderField('username');
 		  echo $this->form->renderField('email');
 		  echo $this->form->renderField('lastvisitDate');

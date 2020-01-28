@@ -64,7 +64,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_FIRSTNAME', 'c.firstname', $listDirn, $listOrder); ?>
 	</th>
 	<th width="10%">
-	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_USERNAME', 'u.username', $listDirn, $listOrder); ?>
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_CUSTOMER_NUMBER', 'c.customer_number', $listDirn, $listOrder); ?>
 	</th>
 	<th width="20%" class="center">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_PENDING_ORDERS', 'u.lastvisitDate', $listDirn, $listOrder); ?>
@@ -118,7 +118,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	    <?php echo $this->escape($item->firstname); ?>
 	  </td>
 	  <td class="hidden-phone">
-	    <?php echo $this->escape($item->username); ?>
+	    <?php echo $this->escape($item->customer_number); ?>
 	  </td>
 	  <td class="nowrap small hidden-phone center">
 	    <?php echo $item->pending_orders; ?>

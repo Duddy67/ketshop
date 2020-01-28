@@ -43,6 +43,8 @@ Joomla.submitbutton = function(task)
 		  echo $this->form->renderField('firstname');
 		  $this->form->setValue('lastname', null, $this->item->lastname);
 		  echo $this->form->renderField('lastname');
+		  $this->form->setValue('customer_number', null, $this->item->customer_number);
+		  echo $this->form->renderField('customer_number');
 
 		  $deliveryAddress = (isset($this->item->addresses['shipping'])) ? $this->item->addresses['shipping'] : $this->item->addresses['billing'];
 		  echo JLayoutHelper::render('order.delivery_address', array('delivery_address' => $deliveryAddress, 'customer' => $this->item, 'settings' => $this->shop_settings), $this->layout_path); 

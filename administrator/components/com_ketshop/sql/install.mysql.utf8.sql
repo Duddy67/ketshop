@@ -151,6 +151,7 @@ CREATE TABLE `#__ketshop_customer` (
   `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
   `firstname` VARCHAR(80) NULL ,
   `lastname` VARCHAR(80) NULL ,
+  `customer_number` VARCHAR(255) NULL ,
   `phone` VARCHAR(20) NULL ,
   `shipping_address` TINYINT(1) UNSIGNED NOT NULL ,
   `checked_out` INT UNSIGNED NOT NULL DEFAULT 0 ,

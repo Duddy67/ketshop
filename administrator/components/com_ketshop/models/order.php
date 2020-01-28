@@ -92,14 +92,15 @@ class KetshopModelOrder extends JModelAdmin
       $db = JFactory::getDbo();
       $query = $db->getQuery(true);
 
-      $query->select('lastname, firstname')
+      $query->select('lastname, firstname, customer_number')
 	    ->from('#__ketshop_customer')
 	    ->where('id='.(int)$item->customer_id);
       $db->setQuery($query);
-      $names = $db->loadObject();
+      $results = $db->loadObject();
 
-      $item->firstname = $names->firstname;
-      $item->lastname = $names->lastname;
+      $item->firstname = $results->firstname;
+      $item->lastname = $results->lastname;
+      $item->customer_number = $results->customer_number;
       $item->transactions = $this->getTransactions($item);
       $item->shipping = $this->getShipping($item);
       $item->addresses = ShopHelper::getCustomerAddresses($item->customer_id);

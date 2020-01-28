@@ -26,6 +26,7 @@ class KetshopModelCustomers extends JModelList
 	      'id', 'c.id',
 	      'firstname', 'c.firstname',
 	      'lastname', 'c.lastname',
+	      'customer_number', 'c.customer_number',
 	      'created', 'c.created',
 	      'created_by', 'c.created_by',
 	      'published', 'c.published',
@@ -116,8 +117,8 @@ class KetshopModelCustomers extends JModelList
     $query = $db->getQuery(true);
 
     // Select the required fields from the table.
-    $query->select($this->getState('list.select', 'c.id, c.firstname, c.lastname, c.checked_out,'.
-                                   'c.checked_out_time, c.created, c.created_by, '.
+    $query->select($this->getState('list.select', 'c.id, c.firstname, c.lastname, c.customer_number,'.
+                                   'c.checked_out, c.checked_out_time, c.created, c.created_by,'.
 				   '(SELECT COUNT(*) FROM #__ketshop_order WHERE customer_id=c.id AND status="pending") AS pending_orders'));
     $query->from('#__ketshop_customer AS c');
 
@@ -130,7 +131,7 @@ class KetshopModelCustomers extends JModelList
     $search = $this->getState('filter.search');
     if(!empty($search)) {
       if(stripos($search, 'id:') === 0) {
-	$query->where('c.id = '.(int) substr($search, 3));
+	$query->where('c.customer_number= '.$db->escape(substr($search, 3)));
       }
       else {
 	$search = $db->Quote('%'.$db->escape($search, true).'%');

@@ -29,6 +29,8 @@ $status['pending'] = 'COM_KETSHOP_OPTION_PENDING_STATUS';
 $status['other'] = 'COM_KETSHOP_OPTION_OTHER_STATUS';
 $status['cancelled'] = 'COM_KETSHOP_OPTION_CANCELLED_STATUS';
 $status['error'] = 'COM_KETSHOP_OPTION_ERROR_STATUS';
+$status['in_transit'] = 'COM_KETSHOP_OPTION_IN_TRANSIT_STATUS';
+$status['delivered'] = 'COM_KETSHOP_OPTION_DELIVERED_STATUS';
 $status['no_shipping'] = 'COM_KETSHOP_OPTION_NO_SHIPPING_STATUS';
 $status['no_payment'] = 'COM_KETSHOP_OPTION_NO_PAYMENT_STATUS';
 $status['unfinished'] = 'COM_KETSHOP_OPTION_UNFINISHED_STATUS';
@@ -73,6 +75,9 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	</th>
 	<th width="10%" class="nowrap hidden-phone">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_CUSTOMER', 'c.lastname', $listDirn, $listOrder); ?>
+	</th>
+	<th width="10%" class="nowrap hidden-phone">
+	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_CUSTOMER_NUMBER', 'c.customer_number', $listDirn, $listOrder); ?>
 	</th>
 	<th width="10%">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_ORDER_STATUS', 'order_status', $listDirn, $listOrder); ?>
@@ -148,6 +153,9 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	    <?php endif; ?>
 	  </td>
 	  <td class="hidden-phone">
+	    <?php echo $this->escape($item->customer_number); ?>
+	  </td>
+	  <td class="hidden-phone">
 	    <?php echo JText::_($status[$item->order_status]); ?>
 	  </td>
 	  <td class="hidden-phone">
@@ -181,7 +189,7 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 
       <?php endforeach; ?>
       <tr>
-	  <td colspan="10"><?php echo $this->pagination->getListFooter(); ?></td>
+	  <td colspan="11"><?php echo $this->pagination->getListFooter(); ?></td>
       </tr>
       </tbody>
     </table>

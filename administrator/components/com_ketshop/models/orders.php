@@ -31,7 +31,7 @@ class KetshopModelOrders extends JModelList
 	      'creator', 'user_id',
 	      'order_nb', 'order_status', 
 	      'payment_status', 'shipping_status',
-	      'c.lastname',
+	      'c.lastname', 'c.customer_number'
       );
     }
 
@@ -141,8 +141,8 @@ class KetshopModelOrders extends JModelList
     $query->select('u.name AS creator, u.username');
     $query->join('LEFT', '#__users AS u ON u.id = o.created_by');
 
-    // Get the customer name.
-    $query->select('c.firstname, c.lastname');
+    // Get the customer name and number.
+    $query->select('c.firstname, c.lastname, c.customer_number');
     $query->join('LEFT', '#__ketshop_customer AS c ON c.id = o.customer_id');
 
     // Filter by title search.
