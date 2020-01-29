@@ -620,7 +620,8 @@ class plgContentKetshop extends JPlugin
       $jform = $this->post['jform'];
 
       // Stores the address data.
-      $address = array('street_shipping' => trim($jform['street']),
+      $address = array('company_shipping' => trim($data->name),
+	               'street_shipping' => trim($jform['street']),
 		       'city_shipping' => trim($jform['city']),
 		       'region_code_shipping' => $jform['region_code'],
 		       'postcode_shipping' => trim($jform['postcode']),

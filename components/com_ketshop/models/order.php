@@ -108,7 +108,8 @@ class KetshopModelOrder extends JModelItem
 
   public function sendOrderConfirmation($order)
   {
-    $customer = ShopHelper::getCustomer($order->customer_id);
+    $customer_model = JModelLegacy::getInstance('Customer', 'KetshopModel');
+    $customer = $customer_model->getItem($order->customer_id);
 
   }
 

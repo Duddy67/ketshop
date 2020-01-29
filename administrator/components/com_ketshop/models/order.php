@@ -9,7 +9,6 @@
 defined('_JEXEC') or die('Restricted access'); 
 
 JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
-JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop.php');
 
 
 class KetshopModelOrder extends JModelAdmin
@@ -89,24 +88,7 @@ class KetshopModelOrder extends JModelAdmin
   public function getItem($pk = null)
   {
     if($item = parent::getItem($pk)) {
-      $db = JFactory::getDbo();
-      $query = $db->getQuery(true);
-
-      $query->select('lastname, firstname, customer_number')
-	    ->from('#__ketshop_customer')
-	    ->where('id='.(int)$item->customer_id);
-      $db->setQuery($query);
-      $results = $db->loadObject();
-
-      $item->firstname = $results->firstname;
-      $item->lastname = $results->lastname;
-      $item->customer_number = $results->customer_number;
-      $item->transactions = $this->getTransactions($item);
-      $item->shipping = $this->getShipping($item);
-      $item->addresses = ShopHelper::getCustomerAddresses($item->customer_id);
-
-      //$item = $this->getCompleteOrder($item);
-      //var_dump($transaction);
+      $item = $this->getCompleteOrder($item);
     }
 
     return $item;

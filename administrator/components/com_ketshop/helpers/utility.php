@@ -506,7 +506,13 @@ class UtilityHelper
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $query->select('street, additional, city, postcode, region_code, country_code, continent_code, phone')
+    $company = '';
+    if($type == 'shipping') {
+      // Appends the company field to the query.
+      $company = ',company';
+    }
+
+    $query->select('street, additional, city, postcode, region_code, country_code, continent_code, phone'.$company)
 	  ->from('#__ketshop_address')
 	  ->where('type='.$db->Quote($type))
 	  ->where('item_type='.$db->Quote($itemType))

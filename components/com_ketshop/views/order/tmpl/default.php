@@ -32,9 +32,10 @@ defined('_JEXEC') or die;
     ?>
 
     <?php echo JLayoutHelper::render('order.total_amount', array('amounts' => $this->order->amounts, 'settings' => $this->shop_settings)); ?>
-
     <?php //echo JLayoutHelper::render('order.payment', array('payment_modes' => $this->payment_modes, 'settings' => $this->shop_settings)); ?>
     </table>
+
+    <?php echo JLayoutHelper::render('order.addresses', array('order' => $this->order, 'settings' => $this->shop_settings)); ?>
 
     <span class="btn" onclick="document.getElementById('ketshop_order').submit();">
 	<?php echo JText::_('COM_KETSHOP_RETURN'); ?> <span class="icon-shop-loop2"></span></a>

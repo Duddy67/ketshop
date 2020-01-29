@@ -8,8 +8,6 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access'); 
 
-JLoader::register('ShopHelper', JPATH_SITE.'/components/com_ketshop/helpers/shop.php');
-
 
 class KetshopModelCustomer extends JModelAdmin
 {
@@ -103,10 +101,57 @@ class KetshopModelCustomer extends JModelAdmin
       $item->email = $user->email;
       $item->lastvisitDate = $user->lastvisitDate;
 
-      $item->addresses = ShopHelper::getCustomerAddresses($item->id);
+      $item->addresses = $this->getAddresses($item->id);
     }
 
     return $item;
+  }
+
+
+  /**
+   * Returns the billing and shipping addresses of a given user. 
+   *
+   * @param   integer	The id of the user (optional).
+   *
+   * @return  array	A list of billing and shipping address objects.
+   *
+   */
+  public function getAddresses($pk = null)
+  {
+    $pk = (!empty($pk)) ? $pk : (int)$this->getState('customer.id');
+
+    $addresses = array();
+    $types = array('billing', 'shipping');
+
+    $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
+    foreach($types as $type) {
+      // Gets the last billing or shipping address set by the customer. 
+      $query->clear();
+      // Appends the company field to the query for shipping address.
+      $company = ($type == 'shipping') ? 'a.company,' : '';
+
+      $query->select('a.street, a.postcode, a.city, a.region_code, a.country_code, a.continent_code, a.type,'.$company.
+		     'a.phone, a.additional, c.lang_var AS country_lang_var, r.lang_var AS region_lang_var')
+	    ->from('#__ketshop_address AS a')
+	    ->join('INNER', '#__ketshop_customer AS cu ON cu.id='.(int)$pk)
+	    ->join('LEFT', '#__ketshop_country AS c ON c.alpha_2 = a.country_code')
+	    ->join('LEFT', '#__ketshop_region AS r ON r.code = a.region_code')
+	    ->where('a.item_id = cu.id AND a.item_type = '.$db->Quote('customer'))
+	    ->where('a.type='.$db->Quote($type))
+	    // Gets the latest inserted address in case of history.
+	    ->order('a.created DESC')
+	    ->setLimit(1);
+      $db->setQuery($query);
+      $address = $db->loadObject();
+
+      if($address !== null) {
+	$addresses[$type] = $address; 
+      }
+    }
+
+    return $addresses;
   }
 
 

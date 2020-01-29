@@ -10,6 +10,7 @@ defined('_JEXEC') or die;
 
 JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/pricerule.php');
 JLoader::register('ProductTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/product.php');
+JLoader::register('KetshopModelCustomer', JPATH_ADMINISTRATOR.'/components/com_ketshop/models/customer.php');
 
 
 trait OrderTrait
@@ -73,12 +74,20 @@ trait OrderTrait
     $order->amounts = $this->getAmounts($order);
     $order->amounts->price_rules = $this->getCartAmountPriceRules($order);
     $order->detailed_amounts = $this->getDetailedAmounts($order);
+    $customerModel = JModelLegacy::getInstance('Customer', 'KetshopModel');
+    $order->addresses = $customerModel->getAddresses($order->customer_id);
     $shipping = $this->getShipping($order);
 
     if($shipping) {
       $order->shipping = $shipping;
       // Adds the shipping cost to get the total amount.
       $order->amounts->total_amount = $order->amounts->final_incl_tax + $order->shipping->final_shipping_cost;
+
+      if($shipping->delivery_type == 'at_delivery_point') {
+	$shippingAddress = UtilityHelper::getAddress('shipping', 'delivery_point', $shipping->shipping_id);
+	$order->addresses['shipping'] = $shippingAddress;
+	$shipping->address = $shippingAddress;
+      }
     }
     else {
       $order->amounts->total_amount = $order->amounts->final_incl_tax;
@@ -874,27 +883,6 @@ trait OrderTrait
 	  ->where('id='.(int)$order->id);
     $db->setQuery($query);
     $db->execute();
-  }
-
-
-  /**
-   * Returns the latest transaction data row of a given order.
-   *
-   * @param   object   $order	An order object.
-   *
-   * @return  object	 	The transaction data.
-   */
-  public function getTransaction($order)
-  {
-    $db = JFactory::getDbo();
-    $query = $db->getQuery(true);
-
-    $query->select('*')
-	  ->from('#__ketshop_order_transaction')
-	  ->where('created = (SELECT MAX(created) FROM #__ketshop_order_transaction WHERE order_id='.(int)$order->id.')');
-    $db->setQuery($query);
-
-    return $db->loadObject();
   }
 
 

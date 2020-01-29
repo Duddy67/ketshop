@@ -21,13 +21,9 @@ class KetshopViewCheckout extends JViewLegacy
   protected $order_model = null;
   protected $order = null;
   protected $params = null;
-  protected $products = null;
-  protected $amounts = null;
-  protected $detailed_amounts = null;
   protected $shippings = null;
   protected $payment_modes = null;
   protected $customer = null;
-  protected $delivery_address = null;
   protected $shop_settings = null;
 
 
@@ -56,25 +52,22 @@ class KetshopViewCheckout extends JViewLegacy
 
   function display($tpl = null)
   {
+    // Sets the current order.
     $user = JFactory::getUser();
     // Binds the order to the current user.
     $this->order_model->setCustomerId($user->id, $this->order);
-    // Refreshes the order data (in case of the very first user id setting).
-    $this->order = $this->order_model->getCurrentOrder();
     // In case the customer is back from the payment page.
     $this->order_model->deleteShipping($this->order);
+    // Gets the complete order (ie: with products, shipping etc...). 
+    $this->order = $this->order_model->getOrder($this->order->id, true);
     $this->order_model->setShippableStatus($this->order);
 
     // Initialise variables
     $this->state = $this->get('State');
-    $this->products = $this->order_model->getProducts($this->order);
-    $this->amounts = $this->order_model->getAmounts($this->order);
-    $this->amounts->price_rules = $this->order_model->getCartAmountPriceRules($this->order);
-    $this->detailed_amounts = $this->order_model->getDetailedAmounts($this->order);
     $this->shippings = $this->getShippingsFromPlugins($this->order);
     $this->payment_modes = $this->get('PaymentModes');
-    $this->customer = ShopHelper::getCustomer($user->id);
-    $this->delivery_address = (isset($this->customer->addresses['shipping'])) ? $this->customer->addresses['shipping'] : $this->customer->addresses['billing'];
+    $customerModel = JModelLegacy::getInstance('Customer', 'KetshopModel');
+    $this->customer = $customerModel->getItem($user->id);
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
     $this->shop_settings->can_edit = true;
@@ -88,14 +81,10 @@ class KetshopViewCheckout extends JViewLegacy
     }
 
     // Redirect registered users to the cart page.
-    if(empty($this->products)) {
+    if(empty($this->order->products)) {
       $app = JFactory::getApplication();
       $app->redirect(JRoute::_('index.php?option=com_ketshop&view=cart', false));
     }
-
-    // The shipping cost is not known yet, so for now the total amount is the final amount
-    // of the products.
-    $this->amounts->total_amount =  $this->amounts->final_incl_tax;
 
     $this->params = $this->state->get('params');
     // Ensures prices are displayed.
