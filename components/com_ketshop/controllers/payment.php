@@ -125,6 +125,8 @@ class KetshopControllerPayment extends JControllerForm
     JFactory::getApplication()->enqueueMessage(JText::_('COM_KETSHOP_MESSAGE_'.strtoupper($result)), 'message');
 
     $this->order_model->finalizeOrder($status, $this->order);
+    $this->order_model->sendOrderConfirmation($this->order);
+
     $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=order&o_id='.(int)$this->order->id, false));
   }
 }

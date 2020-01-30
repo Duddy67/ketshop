@@ -9,11 +9,12 @@
 defined('_JEXEC') or die('Restricted access'); 
 
 JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
+JLoader::register('EmailTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/email.php');
 
 
 class KetshopModelOrder extends JModelItem
 {
-  use OrderTrait;
+  use OrderTrait, EmailTrait;
 
 
   /**
@@ -106,11 +107,21 @@ class KetshopModelOrder extends JModelItem
   }
 
 
+  /**
+   * Sends an order confirmation to the customer.
+   *
+   * @param   object   $order		The order to confirm.
+   *
+   * @return  void
+   */
   public function sendOrderConfirmation($order)
   {
-    $customer_model = JModelLegacy::getInstance('Customer', 'KetshopModel');
-    $customer = $customer_model->getItem($order->customer_id);
+    $customerModel = JModelLegacy::getInstance('Customer', 'KetshopModel');
+    $customer = $customerModel->getItem($order->customer_id);
+    $order = $this->getCompleteOrder($order);
 
+    $message = $this->setOrderConfirmationEmail($customer, $order);
+    $this->sendEmail($customer, $message);
   }
 
 

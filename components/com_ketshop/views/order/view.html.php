@@ -51,6 +51,14 @@ class KetshopViewOrder extends JViewLegacy
     $this->state = $this->get('State');
     $this->order = $this->order_model->getOrder($this->state->get('order.id'), true);
     $user = JFactory::getUser();
+
+    // Ensures the current user owns the order. 
+    if($this->order->customer_id != $user->id) {
+      $app = JFactory::getApplication();
+      $app->redirect(JRoute::_('index.php?option=com_ketshop&view=orders', false)); 
+      return true;
+    }
+
     $this->shop_settings = UtilityHelper::getShopSettings($user->id);
     // Sets the editing status.
     $this->shop_settings->can_edit = false;
