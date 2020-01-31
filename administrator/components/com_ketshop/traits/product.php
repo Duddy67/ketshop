@@ -452,6 +452,7 @@ trait ProductTrait
 
   /**
    * Updates the stock of a given product.
+   * A locking system is applied if meanwhile the product is edited on backend.
    *
    * @param   object  $product		A product object.
    * @param   string  $operator		The operator to apply to the updating.

@@ -461,4 +461,8 @@ div[class^="leading-"] {  /* All divs which wrap a leading article. ie: leading-
 .icon-shop-move-up:before {
 	content: "\e91a";
 }
+.icon-shop-spinner11:before {
+  content: "\e984";
+}
+
 

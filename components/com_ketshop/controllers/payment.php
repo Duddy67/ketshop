@@ -122,7 +122,7 @@ class KetshopControllerPayment extends JControllerForm
     $result = $this->input->get('result', '', 'string');
     // Sets the order status.
     $status = ($result == 'success') ? 'pending' : $result;
-    JFactory::getApplication()->enqueueMessage(JText::_('COM_KETSHOP_MESSAGE_'.strtoupper($result)), 'message');
+    JFactory::getApplication()->enqueueMessage(JText::_('COM_KETSHOP_ORDERING_CONFIRMATION_'.strtoupper($result)), 'message');
 
     $this->order_model->finalizeOrder($status, $this->order);
     $this->order_model->sendOrderConfirmation($this->order);

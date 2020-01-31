@@ -86,16 +86,20 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 		  <?php echo JText::_($status[$item->shipping_status]); ?>
 		</td>
 		<td class="small">
-                  <?php 
-                         $maxProducts = 3;
-                         foreach($item->products as $i => $product) {
-			   if($i >= $maxProducts) {
-			     break;
-			   }
+		<?php 
+		       $maxProducts = 3;
+		       foreach($item->products as $i => $product) {
+			 echo $product->name;
 
-			   echo $product->name;
+			 if($i + 1 == $maxProducts) {
+			   echo ' ...';
+			   break;
 			 }
-                   ?>
+			 else {
+			   echo '<br />';
+			 }
+		       }
+		 ?>
 		</td>
 		<td class="small">
 		  <?php echo JHTML::_('date',$item->created, JText::_('COM_KETSHOP_DATE_FORMAT')); ?>

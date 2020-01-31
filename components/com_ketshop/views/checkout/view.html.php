@@ -58,9 +58,9 @@ class KetshopViewCheckout extends JViewLegacy
     $this->order_model->setCustomerId($user->id, $this->order);
     // In case the customer is back from the payment page.
     $this->order_model->deleteShipping($this->order);
-    // Gets the complete order (ie: with products, shipping etc...). 
-    $this->order = $this->order_model->getOrder($this->order->id, true);
     $this->order_model->setShippableStatus($this->order);
+    // Gets (and refreshes) the complete order (ie: with products, shipping etc...). 
+    $this->order = $this->order_model->getOrder($this->order->id, true);
 
     // Initialise variables
     $this->state = $this->get('State');

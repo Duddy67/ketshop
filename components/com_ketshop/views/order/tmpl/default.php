@@ -7,13 +7,13 @@
 
 // no direct access
 defined('_JEXEC') or die;
-
-    //echo '<pre>';
-    //var_dump($this->shippings);
-    //echo '</pre>';
 ?>
 
 <div class="blog">
+
+<span style="float:right;" class="btn" onclick="document.getElementById('ketshop_order').submit();">
+    <?php echo JText::_('COM_KETSHOP_BACK_BUTTON'); ?> <span class="icon-shop-spinner11"></span></a>
+</span>
 
 <form action="<?php echo JRoute::_('index.php?option=com_ketshop&view=orders', false); ?>" method="post" id="ketshop_order">
     <div class="order-status">
@@ -38,7 +38,7 @@ defined('_JEXEC') or die;
     <?php echo JLayoutHelper::render('order.addresses', array('order' => $this->order, 'settings' => $this->shop_settings)); ?>
 
     <span class="btn" onclick="document.getElementById('ketshop_order').submit();">
-	<?php echo JText::_('COM_KETSHOP_RETURN'); ?> <span class="icon-shop-loop2"></span></a>
+	<?php echo JText::_('COM_KETSHOP_BACK_BUTTON'); ?> <span class="icon-shop-spinner11"></span></a>
     </span>
   </form>
 </div>
