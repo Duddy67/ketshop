@@ -30,7 +30,7 @@ class KetshopController extends JControllerLegacy
     KetshopHelper::addSubmenu($this->input->get('view', 'products'));
 
     // Sets the default view.
-    $this->input->set('view', $this->input->get('view', 'products'));
+    $this->input->set('view', $this->input->get('view', 'ketshop'));
 
     // Displays the view.
     parent::display();

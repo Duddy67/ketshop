@@ -67,7 +67,7 @@ class KetshopViewOrders extends JViewLegacy
   protected function addToolBar() 
   {
     // Display the view title and the icon.
-    JToolBarHelper::title(JText::_('COM_KETSHOP_ORDERS_TITLE'), 'stack');
+    JToolBarHelper::title(JText::_('COM_KETSHOP_ORDERS_TITLE'), 'shop-paste');
 
     // Get the allowed actions list
     $canDo = KetshopHelper::getActions();

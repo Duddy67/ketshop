@@ -1235,7 +1235,10 @@ div[class$='-even'] {
 .icon-shop-move-up:before {
     content: "\ea46";
 }
-
-
-
+.icon-shop-wrench:before {
+    content: "\e991";
+}
+.icon-shop-paste:before {
+    content: "\e92d";
+}
 

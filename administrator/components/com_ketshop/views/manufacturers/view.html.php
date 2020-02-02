@@ -60,7 +60,7 @@ class KetshopViewManufacturers extends JViewLegacy
   protected function addToolBar() 
   {
     // Display the view title and the icon.
-    JToolBarHelper::title(JText::_('COM_KETSHOP_MANUFACTURERS_TITLE'), 'wrench');
+    JToolBarHelper::title(JText::_('COM_KETSHOP_MANUFACTURERS_TITLE'), 'shop-wrench');
 
     // Get the allowed actions list
     $canDo = KetshopHelper::getActions();

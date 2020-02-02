@@ -60,15 +60,7 @@
     <administration>
 	    <!-- Administration Menu Section -->
 	    <menu>COM_KETSHOP_MENU</menu>
-	    <submenu>
 
-	      <menu link="option=com_ketshop" view="products"
-	      alt="Ketshop/Products">COM_KETSHOP_SUBMENU_PRODUCTS</menu>
-
-	      <menu link="option=com_categories&amp;extension=com_ketshop" view="categories"
-		    alt="Ketshop/Categories">COM_KETSHOP_SUBMENU_CATEGORIES</menu>
-
-	    </submenu>
 	    <!-- Regarding the folder attribute: This attribute describes the folder
 		    to copy FROM in the package to install therefore files copied
 		    in this section are copied from /admin/ in the package -->
