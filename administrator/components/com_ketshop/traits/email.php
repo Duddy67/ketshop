@@ -106,7 +106,7 @@ trait EmailTrait
       $shippingMode = JText::_('COM_KETSHOP_AT_DELIVERY_POINT').': '.$shippingMode;
     }
 
-    $paymentMode = $order->transactions[0]->payment_mode;
+    $paymentMode = $order->transactions[0]->payment_name;
     $orderDate = JHtml::_('date', $order->created, JText::_('DATE_FORMAT_LC4')); 
 
     $message['body'] .= JText::sprintf('COM_KETSHOP_EMAIL_BODY_ORDER_DETAIL', $customer->customer_number, $order->name, UtilityHelper::floatFormat($order->amounts->total_amount).' '.$order->currency_code, $paymentMode, $shippingMode, $orderDate);

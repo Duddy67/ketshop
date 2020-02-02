@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension version="3.0" type="plugin" group="ketshoppayment" method="upgrade">
+    <name>PLG_KETSHOPPAYMENT_PLUGIN_NAME</name>
+    <author>Lucas Sanner</author>
+    <creationDate>February 2020</creationDate>
+    <copyright> Copyright (C) 2020 - 2020 Lucas Sanner. All rights reserved.</copyright>
+    <license>GNU General Public License version 2 or later http://www.gnu.org/licenses/gpl.html</license>
+    <authorEmail>lucas.sanner@gmail.com</authorEmail>
+    <version>1.0</version>
+    <description>PLG_KETSHOPPAYMENT_BANK_TRANSFER_XML_DESCRIPTION</description>
+	<files>
+	    <filename plugin="banktransfer">banktransfer.php</filename>
+	    <filename>index.html</filename>
+	    <folder>language</folder>
+	</files>
+
+</extension>

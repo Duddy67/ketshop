@@ -10,8 +10,6 @@ defined('_JEXEC') or die;
 JFormHelper::loadFieldClass('list');
 
 
-//Script which build the select html tag containing the shipment plugin names and element.
-
 class JFormFieldPluginList extends JFormFieldList
 {
   protected $type = 'pluginlist';
@@ -30,7 +28,7 @@ class JFormFieldPluginList extends JFormFieldList
     //Get the payment plugins.
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
-    $query->select('name,element')
+    $query->select('name, element, folder')
 	  ->from('#__extensions')
 	  ->where('type="plugin" AND folder="ketshop'.$pluginType.'" AND enabled=1')
 	  ->order('ordering');
@@ -39,6 +37,7 @@ class JFormFieldPluginList extends JFormFieldList
 
     // Get all the view level of the user.
     $user = JFactory::getUser();
+    UtilityHelper::translatePlugin($plugins);
 
     // Build the first option.
     $options[] = JHtml::_('select.option', '', JText::_('COM_KETSHOP_OPTION_SELECT_PLUGIN'));
@@ -54,5 +53,4 @@ class JFormFieldPluginList extends JFormFieldList
     return $options;
   }
 }
-
 

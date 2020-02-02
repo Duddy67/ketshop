@@ -525,6 +525,30 @@ class UtilityHelper
   }
 
 
+  /**
+   * Translates a list of plugin objects.
+   *
+   * @param   array  &$items  The array of plugin objects.
+   * @param   string $key     The key name (optional).
+   *
+   * @return  array The array of translated objects.
+   */
+  public static function translatePlugin(&$items, $key = 'name')
+  {
+    $lang = JFactory::getLanguage();
+
+    foreach($items as &$item) {
+      $source = JPATH_PLUGINS.'/'.$item->folder.'/'.$item->element;
+      $extension = 'plg_'.$item->folder.'_'.$item->element;
+
+      $lang->load($extension.'.sys', JPATH_ADMINISTRATOR, null, false, true)
+	      || $lang->load($extension.'.sys', $source, null, false, true);
+
+      $item->$key = JText::_($item->$key);
+    }
+  }
+
+
   public static function formatPriceRule($operation, $value, $currencyId = 0)
   {
     $value = UtilityHelper::floatFormat($value);

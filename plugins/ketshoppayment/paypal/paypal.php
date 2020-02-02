@@ -29,11 +29,10 @@ class plgKetshoppaymentPaypal extends JPlugin
     $query->select('id, name, plugin_element, description')
 	  ->from('#__ketshop_payment_mode')
 	  ->where('plugin_element='.$db->Quote('paypal'))
-	  ->where('published=1')
-	  ->order('ordering');
+	  ->where('published=1');
     $db->setQuery($query);
 
-    return $db->loadObjectList();
+    return $db->loadObject();
   }
 
 

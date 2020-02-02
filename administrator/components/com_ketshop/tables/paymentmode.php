@@ -58,6 +58,14 @@ class KetshopTablePaymentmode extends JTable
       }   
     }   
 
+    // Verify that the chosen plugin is not already used by another payment mode. 
+    $table = JTable::getInstance('Paymentmode', 'KetshopTable', array('dbo', $this->getDbo()));
+
+    if($table->load(array('plugin_element' => $this->plugin_element)) && ($table->id != $this->id || $this->id == 0)) {
+      $this->setError(JText::_('COM_KETSHOP_ERROR_PLUGIN_ALREADY_USED'));
+      return false;
+    }
+
     return parent::store($updateNulls);
   }
 }

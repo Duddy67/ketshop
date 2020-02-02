@@ -898,10 +898,11 @@ trait OrderTrait
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 
-    $query->select('*')
-	  ->from('#__ketshop_order_transaction')
-	  ->where('order_id='.(int)$order->id)
-          ->order('created DESC');
+    $query->select('t.*, p.name AS payment_name')
+	  ->from('#__ketshop_order_transaction AS t')
+	  ->join('LEFT', '#__ketshop_payment_mode AS p ON p.plugin_element=t.payment_mode')
+	  ->where('t.order_id='.(int)$order->id)
+          ->order('t.created DESC');
     $db->setQuery($query);
 
     return $db->loadObjectList();

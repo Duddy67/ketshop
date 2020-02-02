@@ -74,9 +74,7 @@ class KetshopModelCheckout extends JModelItem
 
     // Loops through the results returned by the plugins.
     foreach($results as $result) {
-      foreach($result as $paymentMode) {
-	$paymentModes[] = $paymentMode;
-      }
+      $paymentModes[] = $result;
     }
 
     return $paymentModes;

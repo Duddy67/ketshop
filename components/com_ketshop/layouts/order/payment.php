@@ -41,7 +41,7 @@ $colspan = ($settings->can_edit) ? 6 : 5;
 	  <span class="product-name"><?php echo $paymentMode->name; ?></span>
 	</td>
 	<td>
-	 <?php echo $paymentMode->description; ?>
+	  <?php echo $paymentMode->description; ?>
 	</td>
       </tr>
     <?php endforeach; ?>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension version="3.0" type="plugin" group="ketshoppayment" method="upgrade">
-    <name>PLG_KETSHOPPAYMENT_PAYPAL_PLUGIN_NAME</name>
+    <name>PLG_KETSHOPPAYMENT_PLUGIN_NAME</name>
     <author>Lucas Sanner</author>
     <creationDate>January 2020</creationDate>
     <copyright> Copyright (C) 2020 - 2020 Lucas Sanner. All rights reserved.</copyright>

@@ -67,13 +67,13 @@ echo JLayoutHelper::render('joomla.searchtools.default', array('view' => $this))
 	<th>
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_NAME', 'pm.name', $listDirn, $listOrder); ?>
 	</th>
-	<th width="10%">
+	<th width="40%">
 	  <?php echo JHtml::_('searchtools.sort', 'COM_KETSHOP_HEADING_PLUGIN_NAME', 'plugin_name', $listDirn, $listOrder); ?>
 	</th>
 	<th width="10%" class="nowrap hidden-phone">
 	  <?php echo JHtml::_('searchtools.sort', 'JGRID_HEADING_CREATED_BY', 'creator', $listDirn, $listOrder); ?>
 	</th>
-	<th width="5%" class="nowrap hidden-phone">
+	<th width="10%" class="nowrap hidden-phone">
 	  <?php echo JHtml::_('searchtools.sort', 'JDATE', 'pm.created', $listDirn, $listOrder); ?>
 	</th>
 	<th width="1%" class="nowrap hidden-phone">

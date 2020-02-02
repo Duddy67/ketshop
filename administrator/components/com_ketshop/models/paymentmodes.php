@@ -128,7 +128,7 @@ class KetshopModelPaymentmodes extends JModelList
     $query->join('LEFT', '#__users AS u ON u.id = pm.created_by');
 
     // Gets the plugin name.
-    $query->select('e.name AS plugin_name');
+    $query->select('e.name AS plugin_name, e.folder, e.element');
     $query->join('LEFT', '#__extensions AS e ON e.element=pm.plugin_element AND e.folder="ketshoppayment"');
 
     // Filter by title search.
@@ -171,6 +171,26 @@ class KetshopModelPaymentmodes extends JModelList
 
     return $query;
   }
-}
 
+
+  /**
+   * Gets an array of objects from the results of database query.
+   *
+   * @param   string   $query       The query.
+   * @param   integer  $limitstart  Offset.
+   * @param   integer  $limit       The number of records.
+   *
+   * @return  object[]  An array of results.
+   *
+   * @since   3.0
+   * @throws  \RuntimeException
+   */
+  protected function _getList($query, $limitstart = 0, $limit = 0)
+  {
+    $result = parent::_getList($query, $limitstart, $limit);
+    UtilityHelper::translatePlugin($result, 'plugin_name');
+
+    return $result;
+  }
+}
 
