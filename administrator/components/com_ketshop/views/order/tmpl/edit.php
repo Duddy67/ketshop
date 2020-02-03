@@ -37,8 +37,6 @@ Joomla.submitbutton = function(task)
 	  <div class="form-vertical">
 	    <?php
 		  echo $this->form->renderField('status');
-		  $this->form->setValue('shipping_status', null, $this->item->shipping->status);
-		  echo $this->form->renderField('shipping_status');
 		  $this->form->setValue('firstname', null, $this->item->firstname);
 		  echo $this->form->renderField('firstname');
 		  $this->form->setValue('lastname', null, $this->item->lastname);
@@ -53,6 +51,13 @@ Joomla.submitbutton = function(task)
 	  <?php echo $this->loadTemplate('details'); ?>
 	</div>
       </div>
+      <?php echo JHtml::_('bootstrap.endTab'); ?>
+
+      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'shipping', JText::_('COM_KETSHOP_FIELDSET_SHIPPING_DETAIL', true)); ?>
+      <?php
+	    $this->form->setValue('shipping_status', null, $this->item->shipping->status);
+	    echo $this->form->renderField('shipping_status');
+       ?>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'transaction', JText::_('COM_KETSHOP_FIELDSET_TRANSACTION_DETAIL', true)); ?>
@@ -71,7 +76,7 @@ Joomla.submitbutton = function(task)
           </thead>
           <?php foreach($this->item->transactions as $transaction) : ?>
 	  <tr>
-            <td class="center"><?php echo $transaction->payment_mode; ?></td>
+            <td class="center"><?php echo $transaction->payment_name; ?></td>
             <td class="center"><?php echo UtilityHelper::floatFormat($transaction->amount).' '.UtilityHelper::getCurrency($this->item->currency_code); ?></td>
             <td class="center"><?php echo $transaction->result; ?></td>
             <td class="center"><?php echo $transaction->detail; ?></td>

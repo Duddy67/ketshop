@@ -551,8 +551,8 @@ class UtilityHelper
 
   public static function formatPriceRule($operation, $value, $currencyId = 0)
   {
-    $value = UtilityHelper::floatFormat($value);
-    $currency = UtilityHelper::getCurrency($currencyId);
+    $value = self::floatFormat($value);
+    $currency = self::getCurrency($currencyId);
 
     switch($operation) {
       case 'add_percentage': 
@@ -632,121 +632,6 @@ class UtilityHelper
     }
 
     return $currency->alpha;
-  }
-
-
-  //Compare 2 strings by taking account the encoding.
-  public static function mbStrcasecmp($str1, $str2, $encoding = null)
-  {
-    if(is_null($encoding)) {
-      $encoding = mb_internal_encoding();
-    }
-
-    //Take advantage of a multibyte string function to use encoding.
-    return strcmp(mb_strtoupper($str1, $encoding), mb_strtoupper($str2, $encoding));
-  }
-
-
-  //Create and return a INSERT or UPDATE query according to the given arguments.
-  //The choice of the query to use allows to manage an address history.
-  public static function getAddressQuery($data, $type, $itemType, $itemId)
-  {
-    //A suffix might be used.
-    $suffix = '';
-
-    //A suffix is needed when we deal with a customer address.
-    if($itemType == 'customer') {
-      //Create the proper suffix according to the type.
-      $suffix = '_sh';
-      if($type == 'billing') {
-	$suffix = '_bi';
-      }
-    }
-
-    //Remove possible spaces.
-    foreach($data as $key => $value) {
-      //Replace all contiguous space characters with one space character.
-      $value = preg_replace('#\s{2,}#', ' ', $value);
-      //Remove space characters before and after the string.
-      $data[$key] = trim($value);
-    }
-
-    //Get the last address set by the customer. 
-    $db = JFactory::getDbo();
-    $query = $db->getQuery(true);
-    $query->select('id, street, city, postcode, region_code, country_code')
-	  ->from('#__ketshop_address')
-	  ->where('type='.$db->Quote($type).' AND item_type='.$db->Quote($itemType).' AND item_id='.$itemId)
-	  ->order('created DESC')
-	  ->setLimit(1);
-    $db->setQuery($query);
-    $address = $db->loadAssoc();
-
-    //Get the database encoding.
-    //TODO: Figure out how to set this query with the JDatabaseQuery class.
-    $db->setQuery('SHOW VARIABLES LIKE "character_set_database"');
-    $result = $db->loadObject();
-    $encoding = $result->Value;
-
-    //Get the continent code for the shipping address according to the chosen country.
-    if(!empty($data['country_code'.$suffix])) {
-      $query->clear();
-      $query->select('continent_code')
-	    ->from('#__ketshop_country')
-	    ->where('alpha_2='.$db->Quote($data['country_code'.$suffix]));
-      $db->setQuery($query);
-      $continentCode = $db->loadResult();
-    }
-
-    //Run the test.
-
-    //One or more address rows have been previouly stored.
-    if(!is_null($address)) {
-      //If street, city, postcode region and country fields are equal to
-      //their equivalent in database, we assume that the customer has still the same address.
-      //So we just update data. 
-      if(!UtilityHelper::mbStrcasecmp($address['street'], $data['street'.$suffix], $encoding) &&
-	 !UtilityHelper::mbStrcasecmp($address['city'], $data['city'.$suffix], $encoding) &&
-	 !UtilityHelper::mbStrcasecmp($address['postcode'], $data['postcode'.$suffix], $encoding) && 
-	 $address['region_code'] === $data['region_code'.$suffix] && 
-	 $address['country_code'] === $data['country_code'.$suffix])
-      {
-	$fields = array('street='.$db->Quote($data['street'.$suffix]),
-			'city='.$db->Quote($data['city'.$suffix]),
-			'postcode='.$db->Quote($data['postcode'.$suffix]),
-			'region_code='.$db->Quote($data['region_code'.$suffix]),
-			'country_code='.$db->Quote($data['country_code'.$suffix]),
-			'continent_code='.$db->Quote($continentCode),
-			'note='.$db->Quote($data['note'.$suffix]),
-			'phone='.$db->Quote($data['phone'.$suffix]));
-
-	$query->clear();
-	$query->update('#__ketshop_address')
-	      ->set($fields)
-	      ->where('id='.(int)$address['id']);
-
-	return $query;
-      }
-    }
-
-    //In all other cases a new address row must be inserted.
-
-    //Gets the current date and time (UTC).
-    //A date stamp allows to keep an address history.
-    $now = JFactory::getDate()->toSql();
-
-    $columns = array('item_id','street','city','region_code','postcode',
-		     'phone','country_code','continent_code','type',
-		     'item_type','created','note');
-    $query->clear();
-    $query->insert('#__ketshop_address')
-	  ->columns($columns)
-	  ->values($itemId.','.$db->Quote($data['street'.$suffix]).','.$db->Quote($data['city'.$suffix]).','.
-		   $db->Quote($data['region_code'.$suffix]).','.$db->Quote($data['postcode'.$suffix]).','.
-		   $db->Quote($data['phone'.$suffix]).','.$db->Quote($data['country_code'.$suffix]).','.$db->Quote($continentCode).','.
-		   $db->Quote($type).','.$db->Quote($itemType).','.$db->Quote($now).','.$db->Quote($data['note'.$suffix]));
-
-    return $query;
   }
 }
 

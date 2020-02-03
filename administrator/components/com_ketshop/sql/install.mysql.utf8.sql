@@ -277,6 +277,7 @@ CREATE TABLE `#__ketshop_order_shipping` (
   `status` VARCHAR(15) NOT NULL ,
   `shipping_cost` DECIMAL(14,5) NOT NULL ,
   `final_shipping_cost` DECIMAL(14,5) NOT NULL ,
+  `tracking_number` VARCHAR(80) NOT NULL ,
   INDEX `idx_order_id` (`order_id` ASC) )
 ENGINE = MyISAM DEFAULT CHARSET=utf8;
 
@@ -293,7 +294,7 @@ CREATE TABLE `#__ketshop_order_transaction` (
   `result` CHAR(15) NOT NULL ,
   `detail` TEXT NULL,
   `transaction_id` MEDIUMTEXT NULL,
-  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' , -- in case of multiple transactions
+  `created` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' , 
   INDEX `idx_order_id` (`order_id` ASC) )
 ENGINE=MyISAM DEFAULT CHARSET=utf8;
 

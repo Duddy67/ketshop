@@ -22,13 +22,15 @@
                 label="COM_KETSHOP_FIELD_ORDER_STATUS_LABEL"
                 description="COM_KETSHOP_FIELD_ORDER_STATUS_DESC"
                 class="inputbox" size="1">
-                <option value="completed">COM_KETSHOP_OPTION_COMPLETED_STATUS</option>
                 <option value="pending">COM_KETSHOP_OPTION_PENDING_STATUS</option>
-                <option value="error">COM_KETSHOP_OPTION_ERROR_STATUS</option>
+                <option value="pending_payment">COM_KETSHOP_OPTION_PENDING_PAYMENT_STATUS</option>
+                <option value="payment_accepted">COM_KETSHOP_OPTION_PAYMENT_ACCEPTED_STATUS</option>
+                <option value="delivered">COM_KETSHOP_OPTION_DELIVERED_STATUS</option>
+                <option value="shipped">COM_KETSHOP_OPTION_SHIPPED_STATUS</option>
+                <option value="payment_error">COM_KETSHOP_OPTION_PAYMENT_ERROR_STATUS</option>
                 <option value="cancelled">COM_KETSHOP_OPTION_CANCELLED_STATUS</option>
                 <option value="refunded">COM_KETSHOP_OPTION_REFUNDED_STATUS</option>
                 <option value="shopping">COM_KETSHOP_OPTION_SHOPPING_STATUS</option>
-                <option value="shipped">COM_KETSHOP_OPTION_SHIPPED_STATUS</option>
         </field>
 
         <field name="payment_status" type="list"
@@ -39,8 +41,6 @@
                 <option value="pending">COM_KETSHOP_OPTION_PENDING_STATUS</option>
                 <option value="error">COM_KETSHOP_OPTION_ERROR_STATUS</option>
                 <option value="cancelled">COM_KETSHOP_OPTION_CANCELLED_STATUS</option>
-                <option value="unfinished">COM_KETSHOP_OPTION_UNFINISHED_STATUS</option>
-                <option value="other">COM_KETSHOP_OPTION_OTHER_STATUS</option>
         </field>
 
         <field name="shipping_status" type="list"
