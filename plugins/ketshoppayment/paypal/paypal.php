@@ -41,8 +41,9 @@ class plgKetshoppaymentPaypal extends JPlugin
     $data = new stdClass();
     $data->api_url = $this->params->get('api_url');
     $data->paypal_id = $this->params->get('paypal_id');
+    $data->notify_url = $this->params->get('notify_url');
     $data->return_url = $this->params->get('return_url');
-    $data->cancel_url = $this->params->get('cancel_return');
+    $data->cancel_url = $this->params->get('cancel_url');
     $data->products = $this->getProducts($order);
     $data->currency_code = $settings->currency_code;
 
@@ -58,7 +59,6 @@ class plgKetshoppaymentPaypal extends JPlugin
     // Set this to 0 once you go live or don't require logging.
     define("DEBUG", 1);
     // Set to 0 once you're ready to go live
-    define("USE_SANDBOX", 1);
     define("LOG_FILE", "ipn.log");
 
     // Read POST data
@@ -75,6 +75,7 @@ class plgKetshoppaymentPaypal extends JPlugin
 	$myPost[$keyval[0]] = urldecode($keyval[1]);
       }
     }
+error_log(date('[Y-m-d H:i e] '). "raw_post_data: $raw_post_data" . PHP_EOL, 3, LOG_FILE);
 
     // read the post from PayPal system and add 'cmd'
     $req = 'cmd=_notify-validate';
@@ -96,12 +97,8 @@ class plgKetshoppaymentPaypal extends JPlugin
 
     // Post IPN data back to PayPal to validate the IPN data is genuine
     // Without this step anyone can fake IPN data
-    if(USE_SANDBOX == true) {
-      $paypal_url = "https://www.sandbox.paypal.com/cgi-bin/webscr";
-    }
-    else {
-      $paypal_url = "https://www.paypal.com/cgi-bin/webscr";
-    }
+
+    $paypal_url = $this->params->get('api_url');
 
     $ch = curl_init($paypal_url);
 
@@ -134,8 +131,9 @@ class plgKetshoppaymentPaypal extends JPlugin
     // This is mandatory for some environments.
     //$cert = __DIR__ . "./cacert.pem";
     //curl_setopt($ch, CURLOPT_CAINFO, $cert);
-    $res = curl_exec($ch);
+    $result = curl_exec($ch);
 
+file_put_contents('debog_file_result.txt', print_r($result, true));
     if(curl_errno($ch) != 0) { // cURL error
       if(DEBUG == true) {
 	error_log(date('[Y-m-d H:i e] '). "Can't connect to PayPal to validate IPN message: " . curl_error($ch) . PHP_EOL, 3, LOG_FILE);
@@ -149,7 +147,7 @@ class plgKetshoppaymentPaypal extends JPlugin
       // Log the entire HTTP response if debug is switched on.
       if(DEBUG == true) {
 	error_log(date('[Y-m-d H:i e] '). "HTTP request of validation request:". curl_getinfo($ch, CURLINFO_HEADER_OUT) ." for IPN payload: $req" . PHP_EOL, 3, LOG_FILE);
-	error_log(date('[Y-m-d H:i e] '). "HTTP response of validation request: $res" . PHP_EOL, 3, LOG_FILE);
+	error_log(date('[Y-m-d H:i e] '). "HTTP response of validation request: $result" . PHP_EOL, 3, LOG_FILE);
       }
 
       curl_close($ch);
@@ -157,10 +155,10 @@ class plgKetshoppaymentPaypal extends JPlugin
 
     // Inspect IPN validation result and act accordingly
     // Split response headers and payload, a better way for strcmp
-    $tokens = explode("\r\n\r\n", trim($res));
-    $res = trim(end($tokens));
+    $tokens = explode("\r\n\r\n", trim($result));
+    $result = trim(end($tokens));
 
-    if(strcmp ($res, "VERIFIED") == 0) {
+    if(strcmp ($result, "VERIFIED") == 0) {
       // assign posted variables to local variables
       $item_name = $_POST['item_name'];
       $item_number = $_POST['item_number'];
@@ -171,33 +169,48 @@ class plgKetshoppaymentPaypal extends JPlugin
       $receiver_email = $_POST['receiver_email'];
       $payer_email = $_POST['payer_email'];
 
-      include("DBController.php");
-      $db = new DBController();
+      //include("DBController.php");
+      //$db = new DBController();
 
       // check whether the payment_status is Completed
       $isPaymentCompleted = false;
-
+file_put_contents('debog_file_verified.txt', print_r($_POST, true));
       if($payment_status == "Completed") {
 	$isPaymentCompleted = true;
       }
 
       // check that txn_id has not been previously processed
       $isUniqueTxnId = false;
-      $param_type="s";
-      $param_value_array = array($txn_id);
+      //$param_type="s";
+      //$param_value_array = array($txn_id);
 
-      $result = $db->runQuery("SELECT * FROM payment WHERE txn_id = ?",$param_type,$param_value_array);
+      //$result = $db->runQuery("SELECT * FROM payment WHERE txn_id = ?",$param_type,$param_value_array);
 
-      if(empty($result)) {
+      /*if(empty($result)) {
 	$isUniqueTxnId = true;
-      }
+      }*/
 
       // check that receiver_email is your PayPal email
       // check that payment_amount/payment_currency are correct
       if($isPaymentCompleted) {
-	$param_type = "sssdss";
-	$param_value_array = array($item_number, $item_name, $payment_status, $payment_amount, $payment_currency, $txn_id);
-	$payment_id = $db->insert("INSERT INTO payment(item_number, item_name, payment_status, payment_amount, payment_currency, txn_id) VALUES(?, ?, ?, ?, ?, ?)", $param_type, $param_value_array);
+	$db = JFactory::getDbo();
+	$query = $db->getQuery(true);
+	// Gets the current date and time (UTC).
+	$now = JFactory::getDate()->toSql();
+	$columns = array('order_id', 'payment_mode', 'status', 'amount', 'result', 'transaction_id', 'created');
+	$values = array($order->id, $db->Quote('paypal'), $db->Quote('pending'), $payment_amount, $db->Quote('success'),
+			$db->Quote($txn_id), $db->Quote($now));
+
+	$query->clear()
+	      ->insert('#__ketshop_order_transaction')
+	      ->columns($columns)
+	      ->values(implode(',', $values));
+	$db->setQuery($query);
+	$db->execute();
+
+	//$param_type = "sssdss";
+	//$param_value_array = array($item_number, $item_name, $payment_status, $payment_amount, $payment_currency, $txn_id);
+	//$payment_id = $db->insert("INSERT INTO payment(item_number, item_name, payment_status, payment_amount, payment_currency, txn_id) VALUES(?, ?, ?, ?, ?, ?)", $param_type, $param_value_array);
       }
 
       // process payment and mark item as paid.
@@ -206,7 +219,7 @@ class plgKetshoppaymentPaypal extends JPlugin
 	error_log(date('[Y-m-d H:i e] '). "Verified IPN: $req ". PHP_EOL, 3, LOG_FILE);
       }
     }
-    else if(strcmp ($res, "INVALID") == 0) {
+    else if(strcmp ($result, "INVALID") == 0) {
       // log for manual investigation
       // Add business logic here which deals with invalid IPN messages
       if(DEBUG == true) {
@@ -216,8 +229,15 @@ class plgKetshoppaymentPaypal extends JPlugin
   }
 
 
-  public function onKetshopPaymentPaypalCancel($context, &$data, &$params, $limitstart)
+  /**
+   * Cancels the payment process from the payment gateway.
+   *
+   * @return  void
+   */
+  public function onKetshopPaymentPaypalCancel($order, $settings)
   {
+    // Goes back to the checkout page.
+    return JRoute::_('index.php?option=com_ketshop&view=checkout', false);
   }
 
 
@@ -242,7 +262,6 @@ class plgKetshoppaymentPaypal extends JPlugin
     $html = '<form action="'.$data->api_url.'" method="post">';
     $html .= '<input type="hidden" name="business" value="'.$data->paypal_id.'">';
     $html .= '<input type="hidden" name="cmd" value="_xclick">';
-    $html .= '<input type="hidden" name="notify_url" value="">';
 
     foreach($data->products as $i => $product) {
       $name = (!empty($product->variant_name)) ? $product->name.' '.$product->variant_name : $product->name;
@@ -253,6 +272,7 @@ class plgKetshoppaymentPaypal extends JPlugin
       $html .= '<input type="hidden" name="currency_code'.$i.'" value="'.$data->currency_code.'">';
     }
 
+    $html .= '<input type="hidden" name="notify_url" value="'.$data->notify_url.'">';
     $html .= '<input type="hidden" name="return" value="'.$data->return_url.'">';
     $html .= '<input type="hidden" name="cancel_return" value="'.$data->cancel_url.'">';
     $html .= '<span class="btn">';

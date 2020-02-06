@@ -14,7 +14,7 @@ class KetshopViewPayment extends JViewLegacy
 {
   protected $shop_settings = null;
   protected $payment_mode = null;
-  protected $payment_form= null;
+  protected $payment_form = null;
 
 
   function display($tpl = null)

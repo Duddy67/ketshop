@@ -8,7 +8,7 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-//JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/pricerule.php');
+// N.B: Contains OrderTrait.
 JLoader::register('ShippingTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/shipping.php');
 
 
@@ -99,15 +99,26 @@ class KetshopControllerPayment extends JControllerForm
   {
     $suffix = $this->input->get('suffix', '', 'string');
     $paymentMode = $this->input->get('payment_mode', '', 'string');
+    $extraData = $this->input->get('extra_data', null, 'string');
     $settings = UtilityHelper::getShopSettings($this->user->get('id'));
+    $order = $this->getCompleteOrder($this->order);
 
     $event = 'onKetshopPayment'.ucfirst($paymentMode).ucfirst($suffix);
     JPluginHelper::importPlugin('ketshoppayment');
     $dispatcher = JDispatcher::getInstance();
 
-    $results = $dispatcher->trigger($event, array($this->order, $settings));
+    $results = $dispatcher->trigger($event, array($order, $settings));
 
     $this->setRedirect($results[0], false);
+  }
+
+
+  public function async()
+  {
+    $suffix = $this->input->get('suffix', '', 'string');
+    $paymentMode = $this->input->get('payment_mode', '', 'string');
+    $orderId = $this->input->get('order_id', 0, 'int');
+    $extraData = $this->input->get('extra_data', null, 'string');
   }
 
 
@@ -120,6 +131,7 @@ class KetshopControllerPayment extends JControllerForm
   {
     // Gets the result sent from the payment plugin.
     $result = $this->input->get('result', '', 'string');
+    $paymentMode = $this->input->get('payment_mode', '', 'string');
     // Sets the order status.
     $status = ($result == 'success') ? 'pending' : $result;
     JFactory::getApplication()->enqueueMessage(JText::_('COM_KETSHOP_ORDERING_CONFIRMATION_'.strtoupper($result)), 'message');

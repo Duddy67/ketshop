@@ -300,6 +300,19 @@ ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 
 -- -----------------------------------------------------
+-- Table `#__ketshop_order_history`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `#__ketshop_order_history`;
+CREATE TABLE `#__ketshop_order_history` (
+  `order_id` INT UNSIGNED NOT NULL ,
+  `status` VARCHAR(15) NOT NULL ,
+  `modified` DATETIME NOT NULL DEFAULT '0000-00-00 00:00:00' , 
+  `modified_by` INT UNSIGNED NOT NULL ,
+  INDEX `idx_order_id` (`order_id` ASC) )
+ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+
+-- -----------------------------------------------------
 -- Table `#__ketshop_tax`
 -- -----------------------------------------------------
 DROP TABLE IF EXISTS `#__ketshop_tax`;

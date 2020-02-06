@@ -13,6 +13,8 @@ JLoader::register('UtilityHelper', JPATH_ADMINISTRATOR.'/components/com_ketshop/
 
 class plgKetshoppaymentChequepayment extends JPlugin
 {
+  protected $autoloadLanguage = true;
+
 
   /**
    * Collects and returns the payment mode object linked to the plugin.
@@ -46,6 +48,9 @@ class plgKetshoppaymentChequepayment extends JPlugin
   public function onKetshopPaymentChequepayment($order, $settings)
   {
     $html = '<form action="'.JRoute::_('index.php?option=com_ketshop&task=payment.trigger&suffix=transaction&payment_mode=chequepayment', false).'" method="post" id="ketshop_cheque_payment">';
+    $html .= '<div class="amount-to-be-paid">';
+    $html .= JText::sprintf('PLG_KETSHOPPAYMENT_CHEQUE_PAYMENT_AMOUNT_TO_BE_PAID', $order->amounts->total_amount, $order->currency_code);
+    $html .= '</div>';
     $html .= '<span class="btn">';
     $html .= '<a href="'.JRoute::_('index.php?option=com_ketshop&view=checkout', false).'" class="btn-link ketshop-btn">';
     $html .= JText::_('COM_KETSHOP_CANCEL').' <span class="icon-remove"></span></a></span>';
@@ -98,7 +103,7 @@ class plgKetshoppaymentChequepayment extends JPlugin
     $db->execute();
 
     // Tells the payment controller that the transaction is done. 
-    $url = UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success', false);
+    $url = UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success&payment_mode=chequepayment', false);
 
     return $url;
   }

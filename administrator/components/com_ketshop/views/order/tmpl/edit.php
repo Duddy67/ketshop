@@ -58,6 +58,22 @@ Joomla.submitbutton = function(task)
 	    $this->form->setValue('shipping_status', null, $this->item->shipping->status);
 	    echo $this->form->renderField('shipping_status');
        ?>
+	<table class="table product-row end-table">
+	  <thead>
+	    <th class="center" width="25%"><?php echo JText::_('COM_KETSHOP_HEADING_NAME'); ?></th>
+	    <th class="center" width="25%"><?php echo JText::_('COM_KETSHOP_HEADING_TYPE'); ?></th>
+	    <th class="center" width="15%"><?php echo JText::_('COM_KETSHOP_HEADING_AMOUNT'); ?></th>
+	    <th class="center" width="15%"><?php echo JText::_('COM_KETSHOP_HEADING_TRACKING_NUMBER'); ?></th>
+          </thead>
+	  <tr>
+            <td class="center"><?php echo $this->item->shipping->name; ?></td>
+            <td class="center"><?php echo JText::_('COM_KETSHOP_OPTION_'.strtoupper($this->item->shipping->delivery_type)); ?></td>
+            <td class="center"><?php echo UtilityHelper::floatFormat($this->item->shipping->final_shipping_cost).' '.UtilityHelper::getCurrency($this->item->currency_code); ?></td>
+	    <td class="center">
+              <input type="text" name="shipping_tracking_number" value="<?php echo $this->item->shipping->tracking_number; ?>" />
+            </td>
+          </tr>
+        </table>
       <?php echo JHtml::_('bootstrap.endTab'); ?>
 
      <?php echo JHtml::_('bootstrap.addTab', 'myTab', 'transaction', JText::_('COM_KETSHOP_FIELDSET_TRANSACTION_DETAIL', true)); ?>

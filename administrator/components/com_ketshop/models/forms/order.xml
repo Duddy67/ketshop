@@ -25,8 +25,8 @@
                 <option value="pending">COM_KETSHOP_OPTION_PENDING_STATUS</option>
                 <option value="pending_payment">COM_KETSHOP_OPTION_PENDING_PAYMENT_STATUS</option>
                 <option value="payment_accepted">COM_KETSHOP_OPTION_PAYMENT_ACCEPTED_STATUS</option>
-                <option value="delivered">COM_KETSHOP_OPTION_DELIVERED_STATUS</option>
                 <option value="shipped">COM_KETSHOP_OPTION_SHIPPED_STATUS</option>
+                <option value="delivered">COM_KETSHOP_OPTION_DELIVERED_STATUS</option>
                 <option value="payment_error">COM_KETSHOP_OPTION_PAYMENT_ERROR_STATUS</option>
                 <option value="cancelled">COM_KETSHOP_OPTION_CANCELLED_STATUS</option>
                 <option value="refunded">COM_KETSHOP_OPTION_REFUNDED_STATUS</option>

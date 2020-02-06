@@ -8,12 +8,12 @@
 // No direct access to this file.
 defined('_JEXEC') or die('Restricted access'); 
 
-JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/pricerule.php');
+JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
 
 
 class KetshopModelPayment extends JModelItem
 {
-  //use PriceruleTrait;
+  use OrderTrait;
 
   protected $order_model = null;
   protected $order = null;
@@ -83,11 +83,12 @@ class KetshopModelPayment extends JModelItem
   {
     $paymentMode = $this->getPaymentMode();
     $settings = UtilityHelper::getShopSettings();
+    $order = $this->getCompleteOrder($this->order);
 
     $event = 'onKetshopPayment'.ucfirst($paymentMode->plugin_element);
     JPluginHelper::importPlugin('ketshoppayment');
     $dispatcher = JDispatcher::getInstance();
-    $results = $dispatcher->trigger($event, array($this->order, $settings));
+    $results = $dispatcher->trigger($event, array($order, $settings));
 
     return $results[0];
   }

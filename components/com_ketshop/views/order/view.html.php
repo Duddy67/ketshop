@@ -49,7 +49,7 @@ class KetshopViewOrder extends JViewLegacy
   {
     // Initialise variables
     $this->state = $this->get('State');
-    $this->order = $this->order_model->getOrder($this->state->get('order.id'), true);
+    $this->order = $this->order_model->getCompleteOrder($this->state->get('order.id'));
     $user = JFactory::getUser();
 
     // Ensures the current user owns the order. 

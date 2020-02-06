@@ -28,7 +28,7 @@ trait OrderTrait
    *
    * @return  object	 		An order object.
    */
-  public function getOrder($orderId, $complete = false)
+  public function getOrder($orderId)
   {
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
@@ -38,10 +38,6 @@ trait OrderTrait
 	  ->where('id='.(int)$orderId);
     $db->setQuery($query);
     $order = $db->loadObject();
-
-    if($complete) {
-      return $this->getCompleteOrder($order);
-    }
 
     return $order;
   }
@@ -57,6 +53,10 @@ trait OrderTrait
    */
   public function getCompleteOrder($order)
   {
+    if(is_int($order) || ctype_digit($order)) {
+      $order = $this->getOrder((int)$order);
+    }
+
     $db = JFactory::getDbo();
     $query = $db->getQuery(true);
 

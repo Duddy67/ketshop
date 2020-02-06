@@ -60,7 +60,7 @@ class KetshopViewCheckout extends JViewLegacy
     $this->order_model->deleteShipping($this->order);
     $this->order_model->setShippableStatus($this->order);
     // Gets (and refreshes) the complete order (ie: with products, shipping etc...). 
-    $this->order = $this->order_model->getOrder($this->order->id, true);
+    $this->order = $this->order_model->getCompleteOrder($this->order->id);
 
     // Initialise variables
     $this->state = $this->get('State');

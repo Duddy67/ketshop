@@ -13,6 +13,8 @@ JLoader::register('UtilityHelper', JPATH_ADMINISTRATOR.'/components/com_ketshop/
 
 class plgKetshoppaymentBanktransfer extends JPlugin
 {
+  protected $autoloadLanguage = true;
+
 
   /**
    * Collects and returns the payment mode object linked to the plugin.
@@ -46,6 +48,9 @@ class plgKetshoppaymentBanktransfer extends JPlugin
   public function onKetshopPaymentBanktransfer($order, $settings)
   {
     $html = '<form action="'.JRoute::_('index.php?option=com_ketshop&task=payment.trigger&suffix=transaction&payment_mode=banktransfer', false).'" method="post" id="ketshop_cheque_payment">';
+    $html .= '<div class="amount-to-be-paid">';
+    $html .= JText::sprintf('PLG_KETSHOPPAYMENT_BANK_TRANSFER_AMOUNT_TO_BE_PAID', $order->amounts->total_amount, $order->currency_code);
+    $html .= '</div>';
     $html .= '<span class="btn">';
     $html .= '<a href="'.JRoute::_('index.php?option=com_ketshop&view=checkout', false).'" class="btn-link ketshop-btn">';
     $html .= JText::_('COM_KETSHOP_CANCEL').' <span class="icon-remove"></span></a></span>';
@@ -68,15 +73,6 @@ class plgKetshoppaymentBanktransfer extends JPlugin
   public function onKetshopPaymentBanktransferTransaction($order, $settings)
   {
     $db = JFactory::getDbo();
-    $query = $db->getQuery(true);
-
-    $query->select('final_shipping_cost')
-	  ->from('#__ketshop_order_shipping')
-	  ->where('order_id='.(int)$order->id);
-    $db->setQuery($query);
-    $shippingCost = $db->loadResult();
-
-    $totalAmount = $order->final_amount_incl_tax + $shippingCost;
     $transactionId = uniqid();
     // Gets the current date and time (UTC).
     $now = JFactory::getDate()->toSql();
@@ -87,7 +83,7 @@ class plgKetshoppaymentBanktransfer extends JPlugin
     //      no web procedure to pass through.
 
     $columns = array('order_id', 'payment_mode', 'status', 'amount', 'result', 'transaction_id', 'created');
-    $values = array($order->id, $db->Quote('banktransfer'), $db->Quote('pending'), $totalAmount, $db->Quote('success'),
+    $values = array($order->id, $db->Quote('banktransfer'), $db->Quote('pending'), $order->amounts->total_amount, $db->Quote('success'),
 		    $db->Quote($transactionId), $db->Quote($now));
 
     $query->clear()
