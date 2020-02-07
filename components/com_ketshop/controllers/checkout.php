@@ -9,6 +9,7 @@
 defined('_JEXEC') or die('Restricted access');
 
 JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/pricerule.php');
+JLoader::register('ShippingTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/shipping.php');
 
 
 /**
@@ -17,7 +18,7 @@ JLoader::register('PriceruleTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop
  */
 class KetshopControllerCheckout extends JControllerForm
 {
-  use PriceruleTrait;
+  use ShippingTrait;
 
 
   /**
@@ -128,6 +129,33 @@ class KetshopControllerCheckout extends JControllerForm
     $app = JFactory::getApplication();
     $app->enqueueMessage(JText::sprintf('COM_KETSHOP_PRODUCT_REMOVED_FROM_CART'));
     $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=checkout', false));
+  }
+
+
+  /**
+   * Stores the shipping data in the current order then redirect to the payment view.
+   *
+   * @return  void
+   */
+  public function proceed()
+  {
+    // Gets the needed ids from GET.
+    $shippingId = $this->input->get('shipping_id', 0, 'uint');
+    $paymentId = $this->input->get('payment_id', 0, 'uint');
+
+    $shippings = $this->getShippingsFromPlugins($this->order);
+
+    // Searches for the shipping selected by the customer.
+    foreach($shippings as $shipping) {
+      if($shipping->id == $shippingId) {
+	$shipping->status = 'pending';
+	$this->order_model->setShipping($shipping, $this->order);
+	break;
+      }
+    }
+
+    // Redirects to the payment view in order to displays the payment form.
+    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=payment&payment_id='.(int)$paymentId, false));
   }
 }
 

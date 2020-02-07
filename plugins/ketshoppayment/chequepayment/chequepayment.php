@@ -47,7 +47,7 @@ class plgKetshoppaymentChequepayment extends JPlugin
    */
   public function onKetshopPaymentChequepayment($order, $settings)
   {
-    $html = '<form action="'.JRoute::_('index.php?option=com_ketshop&task=payment.trigger&suffix=transaction&payment_mode=chequepayment', false).'" method="post" id="ketshop_cheque_payment">';
+    $html = '<form action="'.JRoute::_('index.php?option=com_ketshop&task=payment.trigger&suffix=transaction&payment_mode=chequepayment&order_id='.$order->id, false).'" method="post" id="ketshop_cheque_payment">';
     $html .= '<div class="amount-to-be-paid">';
     $html .= JText::sprintf('PLG_KETSHOPPAYMENT_CHEQUE_PAYMENT_AMOUNT_TO_BE_PAID', $order->amounts->total_amount, $order->currency_code);
     $html .= '</div>';
@@ -68,31 +68,21 @@ class plgKetshoppaymentChequepayment extends JPlugin
    * @param   object   $order		The current order object.
    * @param   object   $settings	The shop settings.
    *
-   * @return  string			A return url.
+   * @return  null|string		A return url or null.
    */
-  public function onKetshopPaymentChequepaymentTransaction($order, $settings)
+  public function onKetshopPaymentChequepaymentTransaction($order, $settings): ?string
   {
     $db = JFactory::getDbo();
-    $query = $db->getQuery(true);
-
-    $query->select('final_shipping_cost')
-	  ->from('#__ketshop_order_shipping')
-	  ->where('order_id='.(int)$order->id);
-    $db->setQuery($query);
-    $shippingCost = $db->loadResult();
-
-    $totalAmount = $order->final_amount_incl_tax + $shippingCost;
     $transactionId = uniqid();
     // Gets the current date and time (UTC).
     $now = JFactory::getDate()->toSql();
-
 
     // Creates the transaction.
     // N.B: Payment results can only be ok with offline payment methods since there's
     //      no web procedure to pass through.
 
     $columns = array('order_id', 'payment_mode', 'status', 'amount', 'result', 'transaction_id', 'created');
-    $values = array($order->id, $db->Quote('chequepayment'), $db->Quote('pending'), $totalAmount, $db->Quote('success'),
+    $values = array($order->id, $db->Quote('chequepayment'), $db->Quote('pending'), $order->amounts->total_amount, $db->Quote('success'),
 		    $db->Quote($transactionId), $db->Quote($now));
 
     $query->clear()
@@ -103,8 +93,6 @@ class plgKetshoppaymentChequepayment extends JPlugin
     $db->execute();
 
     // Tells the payment controller that the transaction is done. 
-    $url = UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success&payment_mode=chequepayment', false);
-
-    return $url;
+    return UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success&payment_mode=chequepayment&order_id='.$order->id, false);
   }
 }

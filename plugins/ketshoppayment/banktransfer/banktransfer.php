@@ -47,7 +47,7 @@ class plgKetshoppaymentBanktransfer extends JPlugin
    */
   public function onKetshopPaymentBanktransfer($order, $settings)
   {
-    $html = '<form action="'.JRoute::_('index.php?option=com_ketshop&task=payment.trigger&suffix=transaction&payment_mode=banktransfer', false).'" method="post" id="ketshop_cheque_payment">';
+    $html = '<form action="'.JRoute::_('index.php?option=com_ketshop&task=payment.trigger&suffix=transaction&payment_mode=banktransfer&order_id='.$order->id, false).'" method="post" id="ketshop_cheque_payment">';
     $html .= '<div class="amount-to-be-paid">';
     $html .= JText::sprintf('PLG_KETSHOPPAYMENT_BANK_TRANSFER_AMOUNT_TO_BE_PAID', $order->amounts->total_amount, $order->currency_code);
     $html .= '</div>';
@@ -68,9 +68,9 @@ class plgKetshoppaymentBanktransfer extends JPlugin
    * @param   object   $order		The current order object.
    * @param   object   $settings	The shop settings.
    *
-   * @return  string			A return url.
+   * @return  null|string		A return url or null.
    */
-  public function onKetshopPaymentBanktransferTransaction($order, $settings)
+  public function onKetshopPaymentBanktransferTransaction($order, $settings): ?string
   {
     $db = JFactory::getDbo();
     $transactionId = uniqid();
@@ -94,8 +94,6 @@ class plgKetshoppaymentBanktransfer extends JPlugin
     $db->execute();
 
     // Tells the payment controller that the transaction is done. 
-    $url = UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success', false);
-
-    return $url;
+    return UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success&payment_mode=chequepayment&order_id='.$order->id, false);
   }
 }

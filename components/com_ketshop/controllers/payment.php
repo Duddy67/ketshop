@@ -18,29 +18,12 @@ JLoader::register('ShippingTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/
  */
 class KetshopControllerPayment extends JControllerForm
 {
-  use ShippingTrait;
-
-
   /**
    * The order model.
    *
    * @var    object
    */
   protected $order_model = null;
-
-  /**
-   * The current order.
-   *
-   * @var    object
-   */
-  protected $order = null;
-
-  /**
-   * The current user.
-   *
-   * @var    object
-   */
-  protected $user = null;
 
 
   /**
@@ -58,67 +41,33 @@ class KetshopControllerPayment extends JControllerForm
 
     // Sets some common variables.
     $this->order_model = $this->getModel('Order', 'KetshopModel');
-    $this->order = $this->order_model->getCurrentOrder();
-    $this->user = JFactory::getUser();
   }
 
 
   /**
-   * Stores the shipping data in the current order then redirect to the payment view.
-   *
-   * @return  void
-   */
-  public function proceed()
-  {
-    // Gets the needed ids from GET.
-    $shippingId = $this->input->get('shipping_id', 0, 'uint');
-    $paymentId = $this->input->get('payment_id', 0, 'uint');
-
-    $shippings = $this->getShippingsFromPlugins($this->order);
-
-    // Searches for the shipping selected by the customer.
-    foreach($shippings as $shipping) {
-      if($shipping->id == $shippingId) {
-	$shipping->status = 'pending';
-	$this->order_model->setShipping($shipping, $this->order);
-	break;
-      }
-    }
-
-    // Redirects to the payment view in order to displays the payment form.
-    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=payment&payment_id='.(int)$paymentId, false));
-  }
-
-
-  /**
-   * Triggers a given plugin then redirects according to the url returned by the plugin. 
+   * Triggers a given plugin function then redirects according to the url returned by the plugin. 
    *
    * @return  void
    */
   public function trigger()
   {
-    $suffix = $this->input->get('suffix', '', 'string');
-    $paymentMode = $this->input->get('payment_mode', '', 'string');
-    $extraData = $this->input->get('extra_data', null, 'string');
-    $settings = UtilityHelper::getShopSettings($this->user->get('id'));
-    $order = $this->getCompleteOrder($this->order);
+    $suffix = $this->input->get->get('suffix', '', 'string');
+    $paymentMode = $this->input->get->get('payment_mode', '', 'string');
+    $orderId = $this->input->get->get('order_id', 0, 'int');
+    // Optional parameters.
+    $extraData = $this->input->get->get('extra_data', null, 'string');
+
+    $order = $this->order_model->getCompleteOrder($orderId);
+    $settings = UtilityHelper::getShopSettings($order->customer_id);
 
     $event = 'onKetshopPayment'.ucfirst($paymentMode).ucfirst($suffix);
     JPluginHelper::importPlugin('ketshoppayment');
     $dispatcher = JDispatcher::getInstance();
-
     $results = $dispatcher->trigger($event, array($order, $settings));
 
-    $this->setRedirect($results[0], false);
-  }
-
-
-  public function async()
-  {
-    $suffix = $this->input->get('suffix', '', 'string');
-    $paymentMode = $this->input->get('payment_mode', '', 'string');
-    $orderId = $this->input->get('order_id', 0, 'int');
-    $extraData = $this->input->get('extra_data', null, 'string');
+    if(!empty($results) && $results[0] !== null) {
+      $this->setRedirect($results[0], false);
+    }
   }
 
 
@@ -132,14 +81,16 @@ class KetshopControllerPayment extends JControllerForm
     // Gets the result sent from the payment plugin.
     $result = $this->input->get('result', '', 'string');
     $paymentMode = $this->input->get('payment_mode', '', 'string');
+    $orderId = $this->input->get->get('order_id', 0, 'int');
     // Sets the order status.
     $status = ($result == 'success') ? 'pending' : $result;
     JFactory::getApplication()->enqueueMessage(JText::_('COM_KETSHOP_ORDERING_CONFIRMATION_'.strtoupper($result)), 'message');
 
-    $this->order_model->finalizeOrder($status, $this->order);
-    $this->order_model->sendOrderConfirmation($this->order);
+    $order = $this->order_model->getCompleteOrder($orderId);
+    $this->order_model->finalizeOrder($status, $order);
+    $this->order_model->sendOrderConfirmation($order);
 
-    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=order&o_id='.(int)$this->order->id, false));
+    $this->setRedirect(JRoute::_('index.php?option=com_ketshop&view=order&o_id='.(int)$order->id, false));
   }
 }
 
