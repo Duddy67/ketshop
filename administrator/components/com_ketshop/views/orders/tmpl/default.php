@@ -27,6 +27,7 @@ $status = array();
 $status['completed'] = 'COM_KETSHOP_OPTION_COMPLETED_STATUS';
 $status['pending'] = 'COM_KETSHOP_OPTION_PENDING_STATUS';
 $status['pending_payment'] = 'COM_KETSHOP_OPTION_PENDING_PAYMENT_STATUS';
+$status['payment_accepted'] = 'COM_KETSHOP_OPTION_PAYMENT_ACCEPTED_STATUS';
 $status['other'] = 'COM_KETSHOP_OPTION_OTHER_STATUS';
 $status['cancelled'] = 'COM_KETSHOP_OPTION_CANCELLED_STATUS';
 $status['refunded'] = 'COM_KETSHOP_OPTION_REFUNDED_STATUS';

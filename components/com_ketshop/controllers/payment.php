@@ -53,17 +53,12 @@ class KetshopControllerPayment extends JControllerForm
   {
     $suffix = $this->input->get->get('suffix', '', 'string');
     $paymentMode = $this->input->get->get('payment_mode', '', 'string');
-    $orderId = $this->input->get->get('order_id', 0, 'int');
-    // Optional parameters.
-    $extraData = $this->input->get->get('extra_data', null, 'string');
-
-    $order = $this->order_model->getCompleteOrder($orderId);
-    $settings = UtilityHelper::getShopSettings($order->customer_id);
 
     $event = 'onKetshopPayment'.ucfirst($paymentMode).ucfirst($suffix);
     JPluginHelper::importPlugin('ketshoppayment');
     $dispatcher = JDispatcher::getInstance();
-    $results = $dispatcher->trigger($event, array($order, $settings));
+
+    $results = $dispatcher->trigger($event);
 
     if(!empty($results) && $results[0] !== null) {
       $this->setRedirect($results[0], false);
@@ -82,8 +77,8 @@ class KetshopControllerPayment extends JControllerForm
     $result = $this->input->get('result', '', 'string');
     $paymentMode = $this->input->get('payment_mode', '', 'string');
     $orderId = $this->input->get->get('order_id', 0, 'int');
-    // Sets the order status.
-    $status = ($result == 'success') ? 'pending' : $result;
+    $status = $this->input->get->get('status', '', 'string');
+
     JFactory::getApplication()->enqueueMessage(JText::_('COM_KETSHOP_ORDERING_CONFIRMATION_'.strtoupper($result)), 'message');
 
     $order = $this->order_model->getCompleteOrder($orderId);

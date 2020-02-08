@@ -9,11 +9,48 @@
 defined('_JEXEC') or die('Restricted access');
 
 JLoader::register('UtilityHelper', JPATH_ADMINISTRATOR.'/components/com_ketshop/helpers/utility.php');
+JLoader::register('OrderTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/order.php');
 
 
 class plgKetshoppaymentBanktransfer extends JPlugin
 {
+  use OrderTrait;
+
+  /**
+   * Load the language file on instantiation.
+   *
+   * @var    boolean
+   * @since  3.1
+   */
   protected $autoloadLanguage = true;
+
+  /**
+   * @var    array	The GET global variable.
+   */
+  protected $GET = null;
+
+  /**
+   * @var    integer	The id of the order to be processed.
+   */
+  protected $order_id = null;
+
+
+  /**
+   * Constructor.
+   *
+   * @param   object  &$subject  The object to observe
+   * @param   array   $config    An optional associative array of configuration settings.
+   *
+   * @since   3.7.0
+   */
+  public function __construct(&$subject, $config)
+  {
+    // Gets the GET data array.
+    $this->GET = JFactory::getApplication()->input->get->getArray();
+    $this->order_id = (isset($this->GET['order_id'])) ? $this->GET['order_id'] : null;
+
+    parent::__construct($subject, $config);
+  }
 
 
   /**
@@ -70,13 +107,13 @@ class plgKetshoppaymentBanktransfer extends JPlugin
    *
    * @return  null|string		A return url or null.
    */
-  public function onKetshopPaymentBanktransferTransaction($order, $settings): ?string
+  public function onKetshopPaymentBanktransferTransaction(): ?string
   {
     $db = JFactory::getDbo();
     $transactionId = uniqid();
     // Gets the current date and time (UTC).
     $now = JFactory::getDate()->toSql();
-
+    $order = $this->getCompleteOrder($this->order_id);
 
     // Creates the transaction.
     // N.B: Payment results can only be ok with offline payment methods since there's
@@ -94,6 +131,7 @@ class plgKetshoppaymentBanktransfer extends JPlugin
     $db->execute();
 
     // Tells the payment controller that the transaction is done. 
-    return UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success&payment_mode=chequepayment&order_id='.$order->id, false);
+    return UtilityHelper::getRootUrl().JRoute::_('index.php?option=com_ketshop&task=payment.end&result=success&payment_mode=chequepayment&status=pending_payment&order_id='.$order->id, false);
   }
 }
+
