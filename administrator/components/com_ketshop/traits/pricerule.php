@@ -209,7 +209,7 @@ trait PriceruleTrait
    *
    * @return  string		     The coupon query.
    */
-  private static function setCouponQuery($coupons)
+  private function setCouponQuery($coupons)
   {
     // By default the coupon price rules are ruled out.
     $couponQuery = '(pr.behavior!="CPN_AND" AND pr.behavior!="CPN_XOR")';
@@ -259,6 +259,13 @@ trait PriceruleTrait
   }
 
 
+  /**
+   * Adds conditions to the given price rules.
+   *
+   * @param   array	&$priceRules     The price rule object array to check.
+   *
+   * @return  void
+   */
   private function getPriceRuleConditions(&$priceRules)
   {
     $ids = array();

@@ -110,6 +110,8 @@ class plgKetshoppaymentBanktransfer extends JPlugin
   public function onKetshopPaymentBanktransferTransaction(): ?string
   {
     $db = JFactory::getDbo();
+    $query = $db->getQuery(true);
+
     $transactionId = uniqid();
     // Gets the current date and time (UTC).
     $now = JFactory::getDate()->toSql();
@@ -123,8 +125,7 @@ class plgKetshoppaymentBanktransfer extends JPlugin
     $values = array($order->id, $db->Quote('banktransfer'), $db->Quote('pending'), $order->amounts->total_amount, $db->Quote('success'),
 		    $db->Quote($transactionId), $db->Quote($now));
 
-    $query->clear()
-	  ->insert('#__ketshop_order_transaction')
+    $query->insert('#__ketshop_order_transaction')
 	  ->columns($columns)
 	  ->values(implode(',', $values));
     $db->setQuery($query);

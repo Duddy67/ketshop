@@ -133,11 +133,11 @@ class KetshopControllerCheckout extends JControllerForm
 
 
   /**
-   * Stores the shipping data in the current order then redirect to the payment view.
+   * Stores the shipping data in the current order then redirects to the payment view.
    *
    * @return  void
    */
-  public function proceed()
+  public function pay()
   {
     // Gets the needed ids from GET.
     $shippingId = $this->input->get('shipping_id', 0, 'uint');

@@ -8,11 +8,14 @@
 // No direct access
 defined('_JEXEC') or die('Restricted access');
 
-// N.B: Contains OrderTrait.
-JLoader::register('ShippingTrait', JPATH_ADMINISTRATOR.'/components/com_ketshop/traits/shipping.php');
-
 
 /**
+ * This controller is called by the bank gateways during the transaction on the bank
+ * website.
+ * Since the controller is called remotely from the bank website there is no way to know
+ * the id of the current customer. Thus, the id of the current order has to be retrieve 
+ * through the GET variable or through the data sent by the bank gateway. 
+ *
  * @package     KetShop
  * @subpackage  com_ketshop
  */
@@ -39,7 +42,7 @@ class KetshopControllerPayment extends JControllerForm
   {
     parent::__construct($config);
 
-    // Sets some common variables.
+    // Sets the order model.
     $this->order_model = $this->getModel('Order', 'KetshopModel');
   }
 

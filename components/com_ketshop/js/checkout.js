@@ -6,7 +6,7 @@
 
     $('[name="shipping"]').change( function() { $.fn.setTotalAmount(); });
     $('[name="payment_mode"]').change( function() { $.fn.setPaymentId(); });
-    //$('#proceed').click( function(e) { $.fn.recap(e); });
+    //$('#pay').click( function(e) { $.fn.recap(e); });
 
     $.fn.setTotalAmount();
     $.fn.setPaymentId();
@@ -23,22 +23,22 @@
     $('#total-amount').text(totalAmount);
 
     // Updates the shipping id.
-    $.fn.setProceedLink('shipping_id', shippingId);
+    $.fn.setPayLink('shipping_id', shippingId);
   };
 
 
   $.fn.setPaymentId = function() {
     let paymentId = $('input[name="payment_mode"]:checked').val();
     // Updates the payment id.
-    $.fn.setProceedLink('payment_id', paymentId);
+    $.fn.setPayLink('payment_id', paymentId);
   };
 
 
-  $.fn.setProceedLink = function(type, id) {
-    let link = $('#proceed').attr('href');
+  $.fn.setPayLink = function(type, id) {
+    let link = $('#pay').attr('href');
     let regex = new RegExp(type+'=[0-9]+');
     link = link.replace(regex, type+'='+id);
-    $('#proceed').attr('href', link);
+    $('#pay').attr('href', link);
   };
 
   $.fn.recap = function(e) {
